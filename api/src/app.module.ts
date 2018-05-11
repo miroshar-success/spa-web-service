@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { ContactsModule } from './contacts/contacts.module';
+import { ContactsModule } from './modules/contacts/contacts.module';
 
 @Module({
     modules: [ContactsModule],
