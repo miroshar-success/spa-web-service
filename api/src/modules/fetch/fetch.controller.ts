@@ -11,14 +11,13 @@ export class FetchController {
     constructor(private readonly fetchService: FetchService) {}
 
     @Post('/explore')
-    async fetch(@Body() fetchExploreDto: FetchExploreDto) {
-        console.log(fetchExploreDto);
-        this.fetchService.doIt();
+    async fetchExplore(@Body() fetchExploreDto: FetchExploreDto) {
+        this.fetchService.fetchExploreCreate(fetchExploreDto);
     }
 
     @Post()
-    async guard(@Body() guardDto: FetchDto) {
-        console.log(guardDto);
+    async fetch(@Body() fetch: FetchDto) {
+        console.log(fetch);
     }
 
 }

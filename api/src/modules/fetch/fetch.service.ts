@@ -1,33 +1,40 @@
 import {Component, Inject} from '@nestjs/common';
 
 import {Channel, connect, Connection} from 'amqplib';
+import {FetchExploreDto} from "./fetch.dto";
 
 @Component()
 export class FetchService {
-    constructor(
-      @Inject('rabbitMqConnection') private readonly connection: Connection
-    ) {}
 
-    public async doIt() {
+    public static FETCH_EXPLORE_MQ_NAME = "fetch.explore";
+    private fetchExploreChanel: Channel;
 
-        let q = "tasks";
+    constructor(@Inject('rabbitMqConnection') private readonly connection: Connection) {
+        // init consumer
+        this.callFetchExploreChanel(this.fetchExploreResultConsumer);
+    }
 
-        let chanel1 : Channel =  await this.connection.createChannel();
-        chanel1.assertQueue(q);
+    public async fetchExploreCreate(fetchExploreDto: FetchExploreDto) {
+        this.callFetchExploreChanel(channel => {
+            channel.sendToQueue(FetchService.FETCH_EXPLORE_MQ_NAME, new Buffer(JSON.stringify(fetchExploreDto)));
+        })
+    }
 
-        chanel1.consume(q, function(msg) {
+    private async fetchExploreResultConsumer(channel: Channel) {
+        channel.consume(FetchService.FETCH_EXPLORE_MQ_NAME, function (msg) {
             if (msg !== null) {
                 console.log(msg.content.toString());
-
             }
         });
+    }
 
-
-
-        let chanel2 : Channel = await this.connection.createChannel();
-        chanel2.assertQueue(q);
-        chanel2.sendToQueue(q, new Buffer('something to do'));
-
+    private async callFetchExploreChanel(callFunction:(arg:Channel)=>void) {
+        if(this.fetchExploreChanel == null) {
+            let fetchExploreChanel: Channel = await this.connection.createChannel();
+            fetchExploreChanel.assertQueue(FetchService.FETCH_EXPLORE_MQ_NAME);
+            this.fetchExploreChanel = fetchExploreChanel;
+        }
+        callFunction(this.fetchExploreChanel);
     }
 
 }
