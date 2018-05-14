@@ -1,17 +1,19 @@
 import {ApiModelProperty} from '@nestjs/swagger';
 
+import {PersonDto} from "../person/person.dto";
 
-export class FetchDto {
+
+export class FetchExploreDto {
+
     @ApiModelProperty()
     readonly path: string;
 
-    //TODO ADD REAL PERSON TYPE
     @ApiModelProperty()
-    readonly person: Object;
+    readonly person: PersonDto;
 
 }
 
-export class GuardDto extends FetchDto {
+export class FetchDto extends FetchExploreDto {
 
     @ApiModelProperty()
     readonly selector: string;
