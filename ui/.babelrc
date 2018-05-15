@@ -1,0 +1,74 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false
+      }
+    ],
+    "react",
+    "stage-2",
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 2 versions",
+            "ie >= 9"
+          ]
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "lodash"
+    ],
+    [
+      "transform-class-properties",
+      {
+        "spec": true
+      }
+    ],
+    [
+      "transform-es2015-destructuring"
+    ],
+    [
+      "transform-es2015-parameters"
+    ],
+    [
+      "transform-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
+    [
+      "transform-es2015-classes"
+    ],
+    [
+      "transform-es2015-modules-commonjs",
+      {
+        "allowTopLevelThis": true
+      }
+    ],
+    [
+      "transform-export-default-name"
+    ],
+    [
+      "transform-runtime",
+      {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
+    ],
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "css"
+      }
+    ]
+  ]
+}

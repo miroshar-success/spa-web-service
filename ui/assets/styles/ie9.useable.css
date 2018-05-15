@@ -1,0 +1,14 @@
+.ant-checkbox-checked .ant-checkbox-inner::after {
+  transform: none;
+  position: absolute;
+  display: table;
+  margin-left: -3px;
+  border: none;
+  color: white;
+  content: "✓";
+  transition: none;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner::after {
+  color: black;
+}

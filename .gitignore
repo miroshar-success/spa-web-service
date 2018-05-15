@@ -4,6 +4,7 @@
 *.iml
 /.idea/
 .idea/
+.vscode/
 
 
 # Logs
