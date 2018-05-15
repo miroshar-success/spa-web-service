@@ -1,11 +1,12 @@
 import {Model} from 'mongoose';
-import {Component, Inject} from '@nestjs/common';
+import {Body, Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
 
 import {Channel, connect, Connection} from 'amqplib';
-import {FetchExploreDto} from "./fetch.dto";
-import {FetchModel} from "./fetch.model";
+import {FetchDto, FetchExploreDto} from "./fetch.dto";
+import {FetchExploreSelectorsModel, FetchModel} from "./fetch.model";
 import {FetchClientName} from "./fetch.enums";
 import {FetchExploreMqDto} from "./fetch.mq.dto";
+
 
 @Component()
 export class FetchService {
@@ -23,11 +24,15 @@ export class FetchService {
         this.callFetchExploreChanel(this.fetchExploreResultConsumer);
     }
 
+
+    // init new fetch
     public async fetchExploreCreate(fetchExploreDto: FetchExploreDto) {
 
         let personKey: string = fetchExploreDto.person.personKey;
         let clientName: FetchClientName = fetchExploreDto.clientName;
         let fetchUrl: string = fetchExploreDto.fetchUrl;
+
+        // TODO MERGE USER IN USER SERVICE
 
         // get current job if exists
         let currentFetchModel = await this.fetchModel.findOne({
@@ -59,6 +64,48 @@ export class FetchService {
             channel.sendToQueue(FetchService.FETCH_EXPLORE_MQ_NAME, new Buffer(JSON.stringify(fetchExploreMqDto)));
         })
     }
+
+
+    // apply fetch
+    public async fetch(fetch: FetchDto) {
+
+        let personKey: string = fetch.person.personKey;
+        let clientName: FetchClientName = fetch.clientName;
+        let fetchUrl: string = fetch.fetchUrl;
+        let sampleUrl: string = fetch.sampleUrl;
+
+        // get current job if exists
+        let targetFetchModel: FetchModel = await this.fetchModel.findOne({
+            'personKey': personKey,
+            'clientName': clientName,
+            'fetchUrl': fetchUrl
+        }).exec();
+
+        if (!targetFetchModel) {
+            // TODO ADD CUSTOM EXCEPTIONS
+            throw new HttpException('error targetFetchModel is null', HttpStatus.FORBIDDEN);
+        }
+
+        let selectors: [FetchExploreSelectorsModel] = targetFetchModel.selectors;
+
+        if (!selectors || selectors.length < 1) {
+            throw new HttpException('selector not found', HttpStatus.FORBIDDEN);
+        }
+
+        let selectorModel = selectors.find(selector => selector.sampleUrl == sampleUrl);
+
+        if (selectorModel && selectorModel.selector) {
+            targetFetchModel.selector = selectorModel.selector;
+            targetFetchModel.active = true;
+            this.fetchModel(targetFetchModel).save();
+            // todo init new fetch job now
+        }
+        else {
+            throw new HttpException('selector not found', HttpStatus.FORBIDDEN);
+        }
+
+    }
+
 
     private async fetchExploreResultConsumer(channel: Channel) {
         channel.consume(FetchService.FETCH_EXPLORE_MQ_NAME, function (msg) {

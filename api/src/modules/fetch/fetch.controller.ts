@@ -8,16 +8,17 @@ import {FetchService} from "./fetch.service";
 @Controller('fetch')
 export class FetchController {
 
-    constructor(private readonly fetchService: FetchService) {}
+    constructor(private readonly fetchService: FetchService) {
+    }
 
     @Post('/explore')
     async fetchExplore(@Body() fetchExploreDto: FetchExploreDto) {
-        this.fetchService.fetchExploreCreate(fetchExploreDto);
+        await this.fetchService.fetchExploreCreate(fetchExploreDto);
     }
 
     @Post()
     async fetch(@Body() fetch: FetchDto) {
-        console.log(fetch);
+        await this.fetchService.fetch(fetch);
     }
 
 }

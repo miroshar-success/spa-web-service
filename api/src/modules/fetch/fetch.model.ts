@@ -18,9 +18,10 @@ export interface FetchModel extends Document {
     readonly personKey: string;
     readonly fetchUrl: string;
     readonly createDate: Date;
-    readonly active: Boolean,
-    readonly selector: String
-    readonly selectors: [FetchExploreSelectorsModel]
+
+    active: Boolean,
+    selector: String
+    selectors: [FetchExploreSelectorsModel]
 }
 
 export const FetchSchema = new mongoose.Schema(
@@ -29,7 +30,7 @@ export const FetchSchema = new mongoose.Schema(
         personKey: {type: String, require: true},
         fetchUrl: {type: String, require: true},
         createDate: {type: Date, require: true},
-        active: {type: Boolean, require: true},
+        active: Boolean,
         selector: String,
         selectors: [FetchExploreSelectorsSchema]
     }

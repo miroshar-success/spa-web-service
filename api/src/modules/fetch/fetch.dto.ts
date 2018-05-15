@@ -23,7 +23,7 @@ export class FetchExploreDto extends BaseFetchDto{
 export class FetchDto extends FetchExploreDto {
 
     @ApiModelProperty()
-    readonly selector: string;
+    readonly sampleUrl: string;
 
 }
 
