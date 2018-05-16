@@ -1,4 +1,5 @@
-import { take, call, put, fork } from 'redux-saga/effects';
+import { take, call, put, fork, cancel } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import {
   PersonKeys,
   Person,
@@ -16,8 +17,8 @@ const fetchPersons = (url: string) => {
 // worker sagas
 function* loadPersons(url: string, currentPage: number): IterableIterator<any> {
   try {
+    yield call(delay, 500);
     const { docs: persons, total } = yield call(fetchPersons, url);
-    console.log(persons)
     yield put({
       type: PersonKeys.LOAD_PERSONS_SUCCESS,
       payload: {
@@ -52,9 +53,13 @@ export function* loadPersonsSaga(): IterableIterator<any> {
 }
 
 export function* searchPersonSaga(): IterableIterator<any> {
+  let task
   while (true) {
     const { payload: { value } } = yield take(PersonKeys.SEARCH_PERSON);
-    yield fork(loadPersons, buildUrlForLoadUsers(value), 1);
+    if (task) {
+      yield cancel(task)
+    }
+    task = yield fork(loadPersons, buildUrlForLoadUsers(value), 1);
   }
 }
 
