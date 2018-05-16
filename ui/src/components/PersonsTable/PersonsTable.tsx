@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Table } from 'antd';
+import { Table, Popover, Icon } from 'antd';
 import { Person, Pagination } from '@redux/persons/types';
+import { ColumnProps } from 'antd/lib/table';
 
 export interface PersonsTableProps {
   persons: Array<Person>;
@@ -10,18 +11,44 @@ export interface PersonsTableProps {
   loadPersons: (pagination: Pagination) => any;
 }
 
-class PersonsTable extends React.Component<PersonsTableProps> {
+export default class PersonsTable extends React.Component<PersonsTableProps> {
 
-  private readonly columns: any = [
+  private readonly columns: ColumnProps<Person>[] = [
     {
-      title: 'Идентификатор',
-      dataIndex: 'personId',
-      key: 'personId',
+      title: 'Тип клиента',
+      dataIndex: 'clientName',
+      key: 'clientName',
     },
     {
-      title: 'Тип',
-      dataIndex: 'personType',
-      key: 'personType',
+      title: 'Идентификатор',
+      dataIndex: 'personKey',
+      key: 'personKey',
+    },
+    {
+      title: 'Имя',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record) => <span>{record.personInfo.name}</span>
+    },
+    {
+      title: 'Фамилия',
+      dataIndex: 'surname',
+      key: 'surname',
+      render: (text, record) => <span>{record.personInfo.surname}</span>
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      render: (text, record) => {
+        const PersonInfo: React.ReactNode = <div>{JSON.stringify(record.personInfo, null, 2)}</div>
+        return (
+          <Popover placement='top' content={PersonInfo} trigger='click'>
+            <a href="#">
+              More <Icon type='down' />
+            </a>
+          </Popover>
+        )
+      }
     }
   ]
 
@@ -46,23 +73,19 @@ class PersonsTable extends React.Component<PersonsTableProps> {
       loading,
       pagination,
       persons,
-    } = this.props
+    } = this.props;
 
     return (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Table
-          bordered
-          columns={this.columns}
-          dataSource={persons}
-          loading={loading}
-          pagination={pagination}
-          size='small'
-          style={{ width: 800, marginTop: 100, lineHeight: 1.8 }}
-          onChange={this.handleTableChange}
-        />
-      </div>
+      <Table
+        bordered
+        columns={this.columns}
+        dataSource={persons}
+        loading={loading}
+        pagination={pagination}
+        size='small'
+        style={{ width: 800, lineHeight: 1.8 }}
+        onChange={this.handleTableChange}
+      />
     )
   }
 }
-
-export default PersonsTable;

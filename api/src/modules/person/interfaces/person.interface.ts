@@ -1,7 +1,13 @@
 import { Document } from 'mongoose';
 import PersonTypes from '../person.type';
 
+export interface PersonInfo {
+  readonly name?: string;
+  readonly surname?: string;
+}
+
 export default interface Person extends Document {
-  readonly personType: PersonTypes;
-  readonly personId: string;
+  readonly clientName: PersonTypes;
+  readonly personKey: string;
+  readonly personInfo: PersonInfo;
 }

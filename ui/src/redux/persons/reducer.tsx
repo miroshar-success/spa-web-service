@@ -31,7 +31,10 @@ function personsReducer(state: PersonState = initialState, action: PersonActionT
       return {
         ...state,
         persons,
-        pagination,
+        pagination: {
+          ...state.pagination,
+          ...pagination,
+        },
         loading: false,
         error: '',
       }
@@ -42,6 +45,12 @@ function personsReducer(state: PersonState = initialState, action: PersonActionT
         ...state,
         loading: false,
         error,
+      }
+    }
+    case PersonKeys.SEARCH_PERSON: {
+      return {
+        ...state,
+        loading: true,
       }
     }
     default: return state;

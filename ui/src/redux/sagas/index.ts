@@ -1,5 +1,9 @@
-import loadPersonsSaga from './personsSaga';
+import { loadPersonsSaga, searchPersonSaga } from './personsSaga';
+import { fork, all } from 'redux-saga/effects';
 
-export {
-  loadPersonsSaga,
+export default function* rootSaga() {
+  yield all([
+    fork(loadPersonsSaga),
+    fork(searchPersonSaga),
+  ])
 }

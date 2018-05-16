@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   Query,
+  Res,
 } from '@nestjs/common';
 
 import PersonService from './person.service';
@@ -20,7 +21,12 @@ export default class PersonController {
   }
 
   @Get()
-  async find(@Query() params: any, offset: number, limit: number): Promise<Person[]> {
+  async find(@Query() params: any): Promise<Person[]> {
     return await this.personService.find(+params.offset, +params.limit);
+  }
+
+  @Get('find')
+  findPerson(@Query('search') search: string, @Res() response): void {
+    this.personService.findPerson(search, response);
   }
 }

@@ -13,20 +13,22 @@ const fetchPersons = (url: string) => {
     .catch(error => error)
 }
 
-function* loadPersons({ pageSize, current }: Pagination): IterableIterator<any> {
+// worker sagas
+function* loadPersons(url: string, currentPage: number): IterableIterator<any> {
   try {
-    const { docs: persons, limit, total } = yield call(fetchPersons, `/person?offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`);
+    const { docs: persons, total } = yield call(fetchPersons, url);
+    console.log(persons)
     yield put({
       type: PersonKeys.LOAD_PERSONS_SUCCESS,
       payload: {
-        persons: persons.map(({ _id, personType, personId }: Person) => ({
-          key: _id,
-          personType,
-          personId,
+        persons: persons.map(({ clientName, personKey, personInfo }: Person) => ({
+          key: personKey,
+          clientName,
+          personKey,
+          personInfo,
         })),
         pagination: {
-          pageSize: limit,
-          current,
+          current: currentPage,
           total,
         }
       },
@@ -41,9 +43,28 @@ function* loadPersons({ pageSize, current }: Pagination): IterableIterator<any> 
   }
 }
 
-export default function* loadPersonsSaga(): IterableIterator<any> {
+// watcher sagas
+export function* loadPersonsSaga(): IterableIterator<any> {
   while (true) {
     const { payload: { pagination } } = yield take(PersonKeys.LOAD_PERSONS);
-    yield fork(loadPersons, pagination);
+    yield fork(loadPersons, buildUrlForLoadUsers(pagination), pagination.current);
+  }
+}
+
+export function* searchPersonSaga(): IterableIterator<any> {
+  while (true) {
+    const { payload: { value } } = yield take(PersonKeys.SEARCH_PERSON);
+    yield fork(loadPersons, buildUrlForLoadUsers(value), 1);
+  }
+}
+
+// helpers
+const buildUrlForLoadUsers = (params: Pagination | string): string => {
+  const prefix = '/person';
+  if (typeof params === 'string') {
+    return `${prefix}/find?search=${params}`
+  } else {
+    const { pageSize, current } = params;
+    return `${prefix}?offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`
   }
 }
