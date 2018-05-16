@@ -132,19 +132,12 @@ export class FetchService {
 
     private async initFetchWatcher() {
 
-
-        // FIXME
-        this.agenda.cancel({name: 'greet the world2'});
-
         this.agenda.define('greet the world2', function(job, done) {
             console.log(job.attrs.data.time, 'hello world!');
             done();
         });
 
-
-        this.agenda.every('1 seconds', 'greet the world2', {time: new Date()});
-
-
+        this.agenda.every('10 seconds', 'greet the world2', {time: new Date()});
     }
 
 }
