@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 import {FetchClientName} from "./fetch.enums";
 
 export interface FetchExploreSelectorsModel extends Document {
-    readonly sampleUrl: string;
-    readonly selector: string;
+    readonly sampleUrl: string
+    readonly selector: string
 }
 
 export const FetchExploreSelectorsSchema = new mongoose.Schema(
@@ -14,12 +14,11 @@ export const FetchExploreSelectorsSchema = new mongoose.Schema(
 );
 
 export interface FetchModel extends Document {
-    readonly clientName: FetchClientName;
-    readonly personKey: string;
-    readonly fetchUrl: string;
-    readonly createDate: Date;
-
-    active: Boolean,
+    readonly clientName: FetchClientName
+    readonly personKey: string
+    readonly fetchUrl: string
+    readonly createDate: Date
+    active: Boolean
     selector: String
     selectors: [FetchExploreSelectorsModel]
 }
@@ -35,7 +34,3 @@ export const FetchSchema = new mongoose.Schema(
         selectors: [FetchExploreSelectorsSchema]
     }
 );
-
-
-
-
