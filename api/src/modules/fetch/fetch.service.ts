@@ -47,7 +47,7 @@ export class FetchService {
                 clientName: clientName,
                 personKey: personKey,
                 fetchUrl: fetchUrl,
-                createData: Date.now()
+                createDate: Date.now()
             }).save();
         }
 

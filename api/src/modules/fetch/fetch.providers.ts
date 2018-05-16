@@ -5,7 +5,7 @@ export const fetchProviders = [
     {
         provide: 'fetchModelToken',
         useFactory: (connection: Connection) =>
-            connection.model('FetchSchema', FetchSchema),
+            connection.model('Fetch', FetchSchema),
         inject: ['DbConnectionToken']
     },
 
