@@ -6,6 +6,8 @@ import {FetchDto, FetchExploreDto} from "./fetch.dto";
 import {FetchExploreSelectorsModel, FetchModel} from "./fetch.model";
 import {FetchClientName} from "./fetch.enums";
 import {FetchExploreMqDto} from "./fetch.mq.dto";
+import * as Agenda from "agenda";
+import {MongoClient} from "mongodb";
 
 
 @Component()
@@ -19,11 +21,14 @@ export class FetchService {
     private fetchExploreResultChanel: Channel;
 
     constructor(@Inject('rabbitMqConnection') private readonly connection: Connection,
-                @Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>) {
+                @Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>,
+                @Inject('agendaModelToken') private readonly agenda: Agenda) {
         // init consumer
         this.callFetchExploreChanel(this.fetchExploreResultConsumer);
-    }
 
+        this.initFetchWatcher();
+
+    }
 
     // init new fetch
     public async fetchExploreCreate(fetchExploreDto: FetchExploreDto) {
@@ -122,6 +127,24 @@ export class FetchService {
             this.fetchExploreChanel = fetchExploreChanel;
         }
         callFunction(this.fetchExploreChanel);
+    }
+
+
+    private async initFetchWatcher() {
+
+
+        // FIXME
+        this.agenda.cancel({name: 'greet the world2'});
+
+        this.agenda.define('greet the world2', function(job, done) {
+            console.log(job.attrs.data.time, 'hello world!');
+            done();
+        });
+
+
+        this.agenda.every('1 seconds', 'greet the world2', {time: new Date()});
+
+
     }
 
 }
