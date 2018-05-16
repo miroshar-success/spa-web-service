@@ -1,9 +1,7 @@
 import {Body, Controller, Post} from '@nestjs/common';
 
 import {FetchExploreDto, FetchDto} from './fetch.dto';
-import {ContactsService} from "../contacts/contacts.service";
 import {FetchService} from "./fetch.service";
-
 
 @Controller('fetch')
 export class FetchController {
