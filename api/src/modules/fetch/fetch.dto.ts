@@ -1,6 +1,6 @@
-import {ApiModelProperty} from '@nestjs/swagger';
+import { ApiModelProperty } from '@nestjs/swagger';
 
-import {PersonDto} from "../person/person.dto";
+import CreatePersonDto from '../person/dto/create-person.dto';
 
 
 export class FetchExploreDto {
@@ -9,7 +9,7 @@ export class FetchExploreDto {
     readonly path: string;
 
     @ApiModelProperty()
-    readonly person: PersonDto;
+    readonly person: CreatePersonDto;
 
 }
 

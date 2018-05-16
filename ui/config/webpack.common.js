@@ -17,6 +17,9 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx', '.json', '.css', 'html'],
+    alias: {
+      '@redux': path.resolve(__dirname, '../src/redux')
+    }
   },
 
   stats: { warnings: false },
