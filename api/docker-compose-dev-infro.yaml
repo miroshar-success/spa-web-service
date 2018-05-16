@@ -2,8 +2,16 @@ version: "2"
 services:
   mongo:
     image: mongo
+    hostname: mongo
     ports:
     - "27017:27017"
+
+  mongoexpress:
+      image: mongo-express
+      ports:
+          - "8081:8081"
+      links:
+          - mongo
 
   rabbit-mq:
     image: "rabbitmq:3-management"

@@ -1,21 +1,29 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import {ApiModelProperty} from '@nestjs/swagger';
 
-import CreatePersonDto from '../person/dto/create-person.dto';
+import {PersonDto} from "../person/person.dto";
+import {FetchClientName} from "./fetch.enums";
 
-
-export class FetchExploreDto {
-
-    @ApiModelProperty()
-    readonly path: string;
+export class BaseFetchDto {
 
     @ApiModelProperty()
-    readonly person: CreatePersonDto;
+    readonly clientName: FetchClientName;
+
+}
+
+export class FetchExploreDto extends BaseFetchDto{
+
+    @ApiModelProperty()
+    readonly fetchUrl: string;
+
+    @ApiModelProperty()
+    readonly person: PersonDto;
 
 }
 
 export class FetchDto extends FetchExploreDto {
 
     @ApiModelProperty()
-    readonly selector: string;
+    readonly sampleUrl: string;
 
 }
+
