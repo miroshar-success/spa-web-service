@@ -3,10 +3,7 @@ import { Store, createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer, { RootState } from '@redux/rootReducer';
-// import {
-//   helloSaga,
-// } from './sagas/helloSaga';
-import * as sagas from '@redux/sagas/';
+import rootSaga from '@redux/sagas/';
 
 export default function configureStore(initialState?: RootState): Store<RootState> {
   const sagaMiddleware = createSagaMiddleware();
@@ -31,7 +28,7 @@ export default function configureStore(initialState?: RootState): Store<RootStat
     });
   }
 
-  sagaMiddleware.run(sagas.loadPersonsSaga);
+  sagaMiddleware.run(rootSaga);
 
   return store;
 

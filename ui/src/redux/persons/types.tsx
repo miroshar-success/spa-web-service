@@ -2,9 +2,19 @@ import { Action } from 'redux';
 
 // define initial state shape
 export interface Person {
-  _id?: string;
-  personType: string;
-  personId: string
+  clientName: ClientType;
+  personKey: string;
+  personInfo: PersonInfo;
+}
+
+export interface PersonInfo {
+  name?: string;
+  surname?: string;
+}
+
+export enum ClientType {
+  Telegram = 'Telegram',
+  Viber = 'Viber',
 }
 
 export interface Pagination {
@@ -25,6 +35,7 @@ export enum PersonKeys {
   LOAD_PERSONS = "@@persons/LOAD_PERSONS",
   LOAD_PERSONS_SUCCESS = "@@persons/LOAD_PERSONS_SUCCESS",
   LOAD_PERSONS_FAILURE = "@@persons/LOAD_PERSONS_FAILURE",
+  SEARCH_PERSON = '@@persons/SEARCH_PERSON',
 }
 
 // declare actions types using interface
@@ -50,7 +61,15 @@ export interface LoadPersonsFailureAction extends Action {
   }
 }
 
+export interface SearchPersonAction extends Action {
+  type: PersonKeys.SEARCH_PERSON,
+  payload: {
+    value: string,
+  }
+}
+
 export type PersonActionTypes =
   | LoadPersonsAction
   | LoadPersonsSuccessAction
   | LoadPersonsFailureAction
+  | SearchPersonAction

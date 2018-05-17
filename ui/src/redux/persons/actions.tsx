@@ -4,18 +4,17 @@ import {
   LoadPersonsAction,
   LoadPersonsSuccessAction,
   LoadPersonsFailureAction,
-  Pagination,
-  Person,
+  SearchPersonAction,
 } from './types';
 
-export const loadPersons: ActionCreator<LoadPersonsAction> = (pagination: Pagination) => ({
+export const loadPersons: ActionCreator<LoadPersonsAction> = (pagination) => ({
   type: PersonKeys.LOAD_PERSONS,
   payload: {
     pagination,
   }
 })
 
-export const loadPersonsSuccess: ActionCreator<LoadPersonsSuccessAction> = (persons: Array<Person>, pagination: Pagination) => ({
+export const loadPersonsSuccess: ActionCreator<LoadPersonsSuccessAction> = (persons, pagination) => ({
   type: PersonKeys.LOAD_PERSONS_SUCCESS,
   payload: {
     persons,
@@ -23,9 +22,16 @@ export const loadPersonsSuccess: ActionCreator<LoadPersonsSuccessAction> = (pers
   }
 })
 
-export const loadPersonsFailure: ActionCreator<LoadPersonsFailureAction> = (error: string) => ({
+export const loadPersonsFailure: ActionCreator<LoadPersonsFailureAction> = (error) => ({
   type: PersonKeys.LOAD_PERSONS_FAILURE,
   payload: {
     error,
+  }
+})
+
+export const searchPerson: ActionCreator<SearchPersonAction> = (value) => ({
+  type: PersonKeys.SEARCH_PERSON,
+  payload: {
+    value,
   }
 })

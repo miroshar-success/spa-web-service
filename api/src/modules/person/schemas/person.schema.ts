@@ -4,17 +4,33 @@ import * as mongoosePaginate from 'mongoose-paginate'
 
 export const PersonSchema = new mongoose.Schema(
   {
-    personType: {
+    clientName: {
       type: String,
       enum: [PersonType.Telegram, PersonType.Viber],
       required: true,
     },
-    personId: {
+    personKey: {
       type: String,
       required: true,
+      unique: true,
     },
+    personInfo: {
+      name: {
+        type: String,
+      },
+      surname: {
+        type: String,
+      }
+    }
   },
 )
+
+PersonSchema.index({
+  clientName: 'text',
+  personKey: 'text',
+  'personInfo.name': 'text',
+  'personInfo.surname': 'text',
+})
 
 PersonSchema.plugin(mongoosePaginate);
 

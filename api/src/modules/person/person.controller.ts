@@ -4,7 +4,9 @@ import {
   Get,
   Post,
   Query,
+  Res,
 } from '@nestjs/common';
+import { ApiImplicitQuery } from '@nestjs/swagger';
 
 import PersonService from './person.service';
 import CreatePersonDto from './dto/create-person.dto';
@@ -19,8 +21,16 @@ export default class PersonController {
     this.personService.create(createPersonDto);
   }
 
+  @ApiImplicitQuery({ name: "offset", required: true, type: Number })
+  @ApiImplicitQuery({ name: "limit", required: true, type: Number })
   @Get()
-  async find(@Query() params: any, offset: number, limit: number): Promise<Person[]> {
+  async find(@Query() params: any): Promise<Person[]> {
     return await this.personService.find(+params.offset, +params.limit);
+  }
+
+  @ApiImplicitQuery({ name: "search", required: false, type: String })
+  @Get('find')
+  findPerson(@Query('search') search: string, @Res() response): void {
+    this.personService.findPerson(search, response);
   }
 }
