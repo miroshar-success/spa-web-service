@@ -15,9 +15,12 @@ const fetchPersons = (url: string) => {
 }
 
 // worker sagas
-function* loadPersons(url: string, currentPage: number): IterableIterator<any> {
+function* loadPersons(url: string, currentPage: number, needDelay: boolean): IterableIterator<any> {
   try {
-    yield call(delay, 500);
+    if (needDelay) {
+      yield call(delay, 500);
+    }
+
     const { docs: persons, total } = yield call(fetchPersons, url);
     yield put({
       type: PersonKeys.LOAD_PERSONS_SUCCESS,
@@ -48,7 +51,7 @@ function* loadPersons(url: string, currentPage: number): IterableIterator<any> {
 export function* loadPersonsSaga(): IterableIterator<any> {
   while (true) {
     const { payload: { pagination } } = yield take(PersonKeys.LOAD_PERSONS);
-    yield fork(loadPersons, buildUrlForLoadUsers(pagination), pagination.current);
+    yield fork(loadPersons, buildUrlForLoadUsers(pagination), pagination.current, false);
   }
 }
 
@@ -59,7 +62,7 @@ export function* searchPersonSaga(): IterableIterator<any> {
     if (task) {
       yield cancel(task)
     }
-    task = yield fork(loadPersons, buildUrlForLoadUsers(value), 1);
+    task = yield fork(loadPersons, buildUrlForLoadUsers(value), 1, true);
   }
 }
 
