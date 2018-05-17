@@ -5,11 +5,12 @@ import {Channel, connect, Connection} from 'amqplib';
 import {FetchDto, FetchExploreDto, PersonFetchDto} from "./fetch.dto";
 import {FetchExploreSelectorModel, FetchModel} from "./fetch.model";
 import {FetchClientName, FetchState} from "./fetch.enums";
-import {FetchExploreMqDto} from "./fetch.mq.dto";
+import {FetchExploreMqDto} from "./fetch.dto.mq";
 import * as Agenda from "agenda";
 import PersonModel from "../person/schemas/person.schema";
 import {ScannerService} from "../scanner/scanner.service";
 import {SampleList} from "../scanner/scanner.csspath";
+import {async} from "rxjs/scheduler/async";
 
 @Component()
 export class FetchService {
@@ -83,8 +84,8 @@ export class FetchService {
         })
 
         // TODO move to another method
-        let preInitFetchModel: FetchModel = await this.fetchModel.find({"_id": fetchId});
-        preInitFetchModel.updateDate = new Date();
+        let preInitFetchModel: FetchModel = await this.fetchModel.findOne({"_id": fetchId});
+        preInitFetchModel.updateDate = new Date(-8640000000000000);
         preInitFetchModel.state = FetchState.active;
         preInitFetchModel.selectors = selectors;
         this.fetchModel(preInitFetchModel).save();
@@ -204,12 +205,32 @@ export class FetchService {
     }
 
     private async initFetchWatcher() {
-        this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, function (job, done) {
-
-
+        this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, async (job, done) => {
+            await this.initWatch();
             done();
         });
         this.agenda.every('10 seconds', FetchService.FETCH_WATCH_JOB_NAME);
     }
+
+    private async initWatch() {
+        let currentFetches: FetchModel[] = await this.fetchModel.find({
+            'state': FetchState.active,
+            'updateDate': {"$lt": new Date(Date.now() - 10000)}
+        }).sort({'updateDate': -1}).limit(100).exec();
+
+        if (currentFetches && currentFetches.length > 0) {
+
+            // init watch and
+            currentFetches.forEach(fetch => {
+                // send to queue
+                // TODO ADD TO QUEUE
+                console.log('send to queue:' + fetch.fetchUrl);
+                this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}).exec();
+            })
+
+            this.initWatch();
+        }
+    }
+
 
 }
