@@ -2,10 +2,11 @@
 import { Store, createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer, { RootState } from './rootReducer';
-import {
-  helloSaga,
-} from './sagas/helloSaga';
+import rootReducer, { RootState } from '@redux/rootReducer';
+// import {
+//   helloSaga,
+// } from './sagas/helloSaga';
+import * as sagas from '@redux/sagas/';
 
 export default function configureStore(initialState?: RootState): Store<RootState> {
   const sagaMiddleware = createSagaMiddleware();
@@ -24,13 +25,13 @@ export default function configureStore(initialState?: RootState): Store<RootStat
   );
 
   if (module.hot) {
-    module.hot.accept('./rootReducer', () => {
-      const nextRootReducer = require('./rootReducer').default;
+    module.hot.accept('@redux/rootReducer', () => {
+      const nextRootReducer = require('@redux/rootReducer').default;
       store.replaceReducer(nextRootReducer);
     });
   }
 
-  sagaMiddleware.run(helloSaga);
+  sagaMiddleware.run(sagas.loadPersonsSaga);
 
   return store;
 

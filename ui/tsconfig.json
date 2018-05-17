@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    // "baseUrl": "./",
-    // "paths": { // define absolute path mappings
-    //   "redux": ["typings/redux.d.ts"],
-    //   "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
-    //   // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
-    // },
+    "baseUrl": "./",
+    "paths": { // define absolute path mappings
+      // "redux": ["typings/redux.d.ts"],
+      // "@src/*": ["src/*"] // will enable -> import { ... } from '@src/components'
+      // // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
+      "@redux/*": [
+        "src/redux/*"
+      ]
+    },
     "outDir": "dist/",
     "allowSyntheticDefaultImports": true,
     "declaration": false,
