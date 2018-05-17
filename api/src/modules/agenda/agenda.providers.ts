@@ -11,7 +11,6 @@ export const agendaProviders = [
             agenda.start();
 
             function failGracefully() {
-                console.log('Something is gonna blow up.');
                 agenda.stop(() => process.exit(0));
             }
 

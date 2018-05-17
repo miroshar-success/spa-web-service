@@ -14,7 +14,7 @@ export const FetchExploreSelectorsSchema = new mongoose.Schema(
 );
 
 export interface FetchModel extends Document {
-    readonly _id: String,
+    readonly _id: string,
     readonly clientName: FetchClientName
     readonly personKey: string
     readonly fetchUrl: string
@@ -22,10 +22,10 @@ export interface FetchModel extends Document {
     state: FetchState
     selectors: FetchExploreSelectorModel[]
 
-    selector: String
+    selector: string
 
     updateDate: Date
-    lastResult: [String]
+    lastResult: [string]
 }
 
 export const FetchSchema = new mongoose.Schema(

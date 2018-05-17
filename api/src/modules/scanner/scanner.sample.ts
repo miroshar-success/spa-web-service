@@ -2,7 +2,7 @@ import {CssPath} from './scanner.csspath';
 import * as path from 'url';
 
 export class SampleList {
-    constructor(private readonly sample: Sample[]) {
+    constructor(readonly sample: Sample[]) {
     }
 
     static fromPaths(paths: CssPath[], deep: number = 1): SampleList {
