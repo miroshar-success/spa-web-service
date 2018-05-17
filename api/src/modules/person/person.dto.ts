@@ -8,7 +8,7 @@ export class PersonDto {
     readonly personType: PersonType;
 
     @ApiModelProperty()
-    readonly personKey: String;
+    readonly personKey: string;
 
 
 }

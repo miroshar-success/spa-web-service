@@ -24,7 +24,7 @@ export class ScannerService {
         const html = (await this.download(url)).body;
         const cheerioInstance: ScannerInstance = this.parse(html);
         const listNodes: CheerioElement[] = cheerioInstance.select(selector).toArray();
-        const urls: string[] =  listNodes.map(x => this.resolveRelativeUrl(x.attribs.href, url));
+        const urls: string[] = listNodes.map(x => this.resolveRelativeUrl(x.attribs.href, url));
         const uniqueUrls = urls.filter((value, index, self) => self.indexOf(value) === index);
         return uniqueUrls;
     }

@@ -14,8 +14,8 @@ async function bootstrap() {
     const promises = allExamples.sample.map(async example =>  {
         return await scanner.fetchOne(url, example.selector);
     });
-    const allDetails = await Promise.all(promises);
-    const app = await NestFactory.create(ApplicationModule);*/
+    const allDetails = await Promise.all(promises); **/
+    const app = await NestFactory.create(ApplicationModule);
 
     // VALIDATION CONFIG
     app.use(bodyParser.json());
