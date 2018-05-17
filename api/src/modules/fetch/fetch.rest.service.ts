@@ -3,7 +3,7 @@ import {Body, Component, HttpStatus, Inject, HttpException, Post} from '@nestjs/
 
 import {Channel, connect, Connection} from 'amqplib';
 import {FetchDto, FetchExploreDto, PersonFetchDto} from "./fetch.dto";
-import {FetchExploreSelectorsModel, FetchModel} from "./fetch.model";
+import {FetchExploreSelectorModel, FetchModel} from "./fetch.model";
 import {FetchClientName} from "./fetch.enums";
 import {FetchExploreMqDto} from "./fetch.mq.dto";
 import * as Agenda from "agenda";
