@@ -20,6 +20,7 @@
     "@nestjs/swagger": "1.2.2",
     "@nestjs/testing": "^4.5.5",
     "@nestjs/websockets": "^4.5.8",
+    "@types/agenda": "^1.0.3",
     "@types/amqplib": "^0.5.7",
     "amqplib": "^0.5.2",
     "body-parser": "^1.18.2",
