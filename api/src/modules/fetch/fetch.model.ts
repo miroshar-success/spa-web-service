@@ -23,6 +23,8 @@ export interface FetchModel extends Document {
     selectors: [FetchExploreSelectorsModel]
 
     selector: String
+
+    updateDate: Date
     lastResult: [String]
 }
 
@@ -37,6 +39,7 @@ export const FetchSchema = new mongoose.Schema(
         selectors: [FetchExploreSelectorsSchema],
 
         selector: String,
+        updateDate: {type: Date, require: true},
         lastResult: [String]
     }
 );
