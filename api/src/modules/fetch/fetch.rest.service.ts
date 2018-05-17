@@ -5,7 +5,7 @@ import {Channel, connect, Connection} from 'amqplib';
 import {FetchDto, FetchExploreDto, PersonFetchDto} from "./fetch.dto";
 import {FetchExploreSelectorModel, FetchModel} from "./fetch.model";
 import {FetchClientName} from "./fetch.enums";
-import {FetchExploreMqDto} from "./fetch.mq.dto";
+import {FetchExploreMqDto} from "./fetch.dto.mq";
 import * as Agenda from "agenda";
 
 @Component()

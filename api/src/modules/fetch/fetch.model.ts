@@ -34,7 +34,7 @@ export const FetchSchema = new mongoose.Schema(
         personKey: {type: String, require: true},
         fetchUrl: {type: String, require: true},
         createDate: {type: Date, require: true},
-        state: String,
+        state: {type: String, require: true},
         selectors: [FetchExploreSelectorsSchema],
 
         selector: String,
