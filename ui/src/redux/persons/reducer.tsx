@@ -20,6 +20,7 @@ export const initialState: PersonState = {
 
 function personsReducer(state: PersonState = initialState, action: PersonActionTypes) {
   switch (action.type) {
+    case PersonKeys.SEARCH_PERSON:
     case PersonKeys.LOAD_PERSONS: {
       return {
         ...state,
@@ -45,12 +46,6 @@ function personsReducer(state: PersonState = initialState, action: PersonActionT
         ...state,
         loading: false,
         error,
-      }
-    }
-    case PersonKeys.SEARCH_PERSON: {
-      return {
-        ...state,
-        loading: true,
       }
     }
     default: return state;

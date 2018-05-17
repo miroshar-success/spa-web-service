@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { Input } from 'antd';
+import { SearchPersonsBarProps } from './FilterablePersonsTable';
 
-export interface SearchPersonsBarProps {
-  searchPerson: (value: string) => any;
-}
-
-export default class SearchPersonsBar extends React.Component<SearchPersonsBarProps> {
+export default class SearchPersonsBar extends React.PureComponent<SearchPersonsBarProps> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.props.searchPerson(event.target.value);

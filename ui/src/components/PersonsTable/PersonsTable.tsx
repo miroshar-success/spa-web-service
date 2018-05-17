@@ -2,14 +2,7 @@ import * as React from 'react';
 import { Table, Popover, Icon } from 'antd';
 import { Person, Pagination } from '@redux/persons/types';
 import { ColumnProps } from 'antd/lib/table';
-
-export interface PersonsTableProps {
-  persons: Array<Person>;
-  pagination: Pagination;
-  loading: boolean;
-  error: string;
-  loadPersons: (pagination: Pagination) => any;
-}
+import { PersonsTableProps } from './FilterablePersonsTable';
 
 export default class PersonsTable extends React.Component<PersonsTableProps> {
 

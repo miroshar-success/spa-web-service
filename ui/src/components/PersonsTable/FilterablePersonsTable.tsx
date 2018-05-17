@@ -9,10 +9,15 @@ export interface PersonsTableProps {
   loading: boolean;
   error: string;
   loadPersons: (pagination: Pagination) => any;
+}
+
+export interface SearchPersonsBarProps {
   searchPerson: (value: string) => any;
 }
 
-export default class FilterablePersonsTable extends React.Component<PersonsTableProps> {
+type FilterablePersonsTableProps = PersonsTableProps & SearchPersonsBarProps;
+
+export default class FilterablePersonsTable extends React.Component<FilterablePersonsTableProps> {
 
   render() {
     const {
