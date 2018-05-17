@@ -5,7 +5,7 @@ import {FetchService} from "./fetch.service";
 
 import {MqApiServer, Controller1, Controller2} from "./mq";
 
-@Controller('fetch')
+@Controller('fetchmq')
 export class FetchController {
 
     constructor(private readonly fetchService: FetchService) {

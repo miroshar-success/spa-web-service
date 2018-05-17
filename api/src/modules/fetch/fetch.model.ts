@@ -14,23 +14,29 @@ export const FetchExploreSelectorsSchema = new mongoose.Schema(
 );
 
 export interface FetchModel extends Document {
+    readonly _id: String,
     readonly clientName: FetchClientName
     readonly personKey: string
     readonly fetchUrl: string
     readonly createDate: Date
     active: Boolean
-    selector: String
     selectors: [FetchExploreSelectorsModel]
+
+    selector: String
+    lastResult: [String]
 }
 
 export const FetchSchema = new mongoose.Schema(
     {
+        _id: Number,
         clientName: {type: String, require: true},
         personKey: {type: String, require: true},
         fetchUrl: {type: String, require: true},
         createDate: {type: Date, require: true},
         active: Boolean,
+        selectors: [FetchExploreSelectorsSchema],
+
         selector: String,
-        selectors: [FetchExploreSelectorsSchema]
+        lastResult: [String]
     }
 );
