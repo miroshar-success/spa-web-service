@@ -7,6 +7,9 @@
       // // in webpack you need to add -> resolve: { alias: { '@src': PATH_TO_SRC } }
       "@redux/*": [
         "src/redux/*"
+      ],
+      "@components/*": [
+        "src/components/*",
       ]
     },
     "outDir": "dist/",

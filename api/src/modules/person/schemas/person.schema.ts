@@ -15,12 +15,7 @@ export const PersonSchema = new mongoose.Schema(
       unique: true,
     },
     personInfo: {
-      name: {
-        type: String,
-      },
-      surname: {
-        type: String,
-      }
+      type: Object
     }
   },
 )

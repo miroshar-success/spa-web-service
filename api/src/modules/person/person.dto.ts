@@ -1,6 +1,6 @@
-import {ApiModelProperty} from '@nestjs/swagger';
+import { ApiModelProperty } from '@nestjs/swagger';
 
-import {PersonType} from './person.type';
+import { PersonType } from './person.type';
 
 export class PersonDto {
 
@@ -9,6 +9,5 @@ export class PersonDto {
 
     @ApiModelProperty()
     readonly personId: Object;
-
 
 }

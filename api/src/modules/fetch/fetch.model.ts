@@ -30,7 +30,6 @@ export interface FetchModel extends Document {
 
 export const FetchSchema = new mongoose.Schema(
     {
-        _id: Number,
         clientName: {type: String, require: true},
         personKey: {type: String, require: true},
         fetchUrl: {type: String, require: true},

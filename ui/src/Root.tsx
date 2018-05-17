@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { LocaleProvider } from 'antd';
+import { LocaleProvider, Divider } from 'antd';
 import { Provider } from 'react-redux';
+import { Route, Link, BrowserRouter as Router, } from 'react-router-dom';
 import ru from 'antd/es/locale-provider/ru_RU';
-// import { BrowserRouter as Router, } from 'react-router-dom'
-// import LoginForm from './components/LoginForm/LoginForm'
-// import CounterContainer from './containers/CounterContainer';
 import PersonsTableContainer from './containers/PersonsTableContainer';
 
 import { Store } from 'redux';
@@ -13,33 +11,33 @@ import { RootState } from '@redux/rootReducer';
 
 // Available pathes
 export const Path = {
-
+  root: '/',
+  persons: '/persons',
+  fetch: '/fetch',
 }
-
-/*
-  We give each route a target component.
-  The <Switch> will iterate over its children elements (the routes) 
-  and only render the first one that matches the current pathname.
-*/
-// export default () => (
-//   <LocaleProvider locale={ru} >
-//     <Router>
-//       <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
-//         <LoginForm />
-//       </div>
-//     </Router>
-//   </LocaleProvider>
-// )
 
 const store: Store<RootState> = configureStore()
 
 export default () => (
   <LocaleProvider locale={ru} >
     <Provider store={store}>
-      <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
-        {/* <LoginForm /> */}
-        <PersonsTableContainer />
-      </div>
+      <Router>
+        <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column', marginTop: 20 }}>
+          <ul style={{ display: 'flex', listStyle: 'none' }}>
+            <li><Link to='/'>Home</Link></li>
+            <Divider type='vertical' style={{ marginTop: 5 }} />
+            <li><Link to='/persons'>Persons</Link></li>
+            <Divider type='vertical' style={{ marginTop: 5 }} />
+            <li><Link to='/fetch'>Fetch</Link></li>
+          </ul>
+          <Divider style={{ marginTop: 0 }} />
+          <main style={{ display: 'flex', justifyContent: 'center' }}>
+            <Route exact path={Path.root} render={() => <h1>Home Page</h1>} />
+            <Route path={Path.persons} component={PersonsTableContainer} />
+            <Route path={Path.fetch} render={() => <h1>Fetch Component</h1>} />
+          </main>
+        </div>
+      </Router>
     </Provider>
   </LocaleProvider>
 )
