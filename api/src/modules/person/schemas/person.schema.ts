@@ -10,24 +10,17 @@ export const PersonSchema = new mongoose.Schema(
       required: true,
     },
     personKey: {
-      type: String,
+      type: Object,
       required: true,
-      unique: true,
     },
     personInfo: {
-      name: {
-        type: String,
-      },
-      surname: {
-        type: String,
-      }
+      type: Object
     }
   },
 )
 
 PersonSchema.index({
   clientName: 'text',
-  personKey: 'text',
   'personInfo.name': 'text',
   'personInfo.surname': 'text',
 })

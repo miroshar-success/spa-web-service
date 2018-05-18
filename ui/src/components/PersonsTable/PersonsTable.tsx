@@ -16,6 +16,7 @@ export default class PersonsTable extends React.Component<PersonsTableProps> {
       title: 'Идентификатор',
       dataIndex: 'personKey',
       key: 'personKey',
+      render: (text, record) => <span>{JSON.stringify(record.personKey)}</span>
     },
     {
       title: 'Имя',

@@ -12,21 +12,14 @@ export class FetchControllerMq {
 
     @Post('/explore')
     async fetchExplore(@Body() fetchExploreDtoMq: FetchExploreDtoMq) {
-        await this.fetchService.fetchExploreCreate(
-            fetchExploreDtoMq.clientName,
-            fetchExploreDtoMq.person.personKey,
-            fetchExploreDtoMq.fetchUrl);
+        await this.fetchService.fetchExploreCreate(fetchExploreDtoMq);
     }
 
     // TODO ADD RESULT
 
     @Post('/fetch')
     async fetch(@Body() fetchDtoMq: FetchDtoMq) {
-        await this.fetchService.fetch(
-            fetchDtoMq.person.personKey,
-            fetchDtoMq.clientName,
-            fetchDtoMq.fetchUrl,
-            fetchDtoMq.sampleUrl);
+        await this.fetchService.fetch(fetchDtoMq);
     }
 
 

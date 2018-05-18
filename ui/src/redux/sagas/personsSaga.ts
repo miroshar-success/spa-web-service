@@ -1,10 +1,11 @@
-import { take, call, put, fork, cancel } from 'redux-saga/effects';
+import { take, call, put, fork, cancel, select } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import {
   PersonKeys,
   Person,
   Pagination,
 } from '@redux/persons/types';
+import { getSearchString } from '@redux/persons/reducer';
 
 import axios from 'axios';
 
@@ -25,8 +26,8 @@ function* loadPersons(url: string, currentPage: number, needDelay: boolean): Ite
     yield put({
       type: PersonKeys.LOAD_PERSONS_SUCCESS,
       payload: {
-        persons: persons.map(({ clientName, personKey, personInfo }: Person) => ({
-          key: personKey,
+        persons: persons.map(({ _id, clientName, personKey, personInfo }: Person) => ({
+          key: _id,
           clientName,
           personKey,
           personInfo,
@@ -51,7 +52,8 @@ function* loadPersons(url: string, currentPage: number, needDelay: boolean): Ite
 export function* loadPersonsSaga(): IterableIterator<any> {
   while (true) {
     const { payload: { pagination } } = yield take(PersonKeys.LOAD_PERSONS);
-    yield fork(loadPersons, buildUrlForLoadUsers(pagination), pagination.current, false);
+    const searchString = yield select(getSearchString);
+    yield fork(loadPersons, buildUrlForLoadUsers(pagination, searchString), pagination.current, false);
   }
 }
 
@@ -67,12 +69,12 @@ export function* searchPersonSaga(): IterableIterator<any> {
 }
 
 // helpers
-const buildUrlForLoadUsers = (params: Pagination | string): string => {
-  const prefix = '/person';
+const buildUrlForLoadUsers = (params: Pagination | string, searchString?: string): string => {
+  const prefix = 'data/person';
   if (typeof params === 'string') {
-    return `${prefix}/find?search=${params}`
+    return `${prefix}/find?search=${encodeURIComponent(params)}`
   } else {
     const { pageSize, current } = params;
-    return `${prefix}?offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`
+    return `${prefix}?value=${searchString}&offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`
   }
 }

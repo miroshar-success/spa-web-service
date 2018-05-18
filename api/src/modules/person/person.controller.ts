@@ -12,7 +12,7 @@ import PersonService from './person.service';
 import CreatePersonDto from './dto/create-person.dto';
 import Person from './interfaces/person.interface';
 
-@Controller('person')
+@Controller('data/person')
 export default class PersonController {
   constructor(private readonly personService: PersonService) { }
 
@@ -25,12 +25,12 @@ export default class PersonController {
   @ApiImplicitQuery({ name: "limit", required: true, type: Number })
   @Get()
   async find(@Query() params: any): Promise<Person[]> {
-    return await this.personService.find(+params.offset, +params.limit);
+    return await this.personService.find(+params.offset, +params.limit, params.value);
   }
 
   @ApiImplicitQuery({ name: "search", required: false, type: String })
   @Get('find')
-  findPerson(@Query('search') search: string, @Res() response): void {
-    this.personService.findPerson(search, response);
+  async search(@Query('search') search: string): Promise<Person[]> {
+    return await this.personService.search(search);
   }
 }

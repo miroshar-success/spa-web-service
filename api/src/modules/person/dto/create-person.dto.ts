@@ -1,7 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 import PersonTypes from '../person.type';
-import { PersonInfo } from '../interfaces/person.interface';
 
 export default class CreatePersonDto {
 
@@ -9,9 +8,9 @@ export default class CreatePersonDto {
   readonly clientName: PersonTypes;
 
   @ApiModelProperty()
-  readonly personKey: string;
+  readonly personKey: object;
 
   @ApiModelProperty()
-  readonly personInfo: PersonInfo;
+  readonly personInfo: object;
 
 }

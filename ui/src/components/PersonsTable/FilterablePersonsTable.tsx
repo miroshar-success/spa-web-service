@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PersonsTable from './PersonsTable';
-import SearchPersonsBar from './SearchPersonsBar';
+import SearchBar from '@components/common/SearchBar/SearchBar';
 import { Person, Pagination } from '@redux/persons/types';
 
 export interface PersonsTableProps {
@@ -11,11 +11,11 @@ export interface PersonsTableProps {
   loadPersons: (pagination: Pagination) => any;
 }
 
-export interface SearchPersonsBarProps {
-  searchPerson: (value: string) => any;
+export interface SearchBarProps {
+  [functionName: string]: (value: string) => any;
 }
 
-type FilterablePersonsTableProps = PersonsTableProps & SearchPersonsBarProps;
+type FilterablePersonsTableProps = PersonsTableProps & SearchBarProps;
 
 export default class FilterablePersonsTable extends React.Component<FilterablePersonsTableProps> {
 
@@ -31,7 +31,7 @@ export default class FilterablePersonsTable extends React.Component<FilterablePe
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <SearchPersonsBar searchPerson={searchPerson} />
+        <SearchBar onSearch={searchPerson} />
         <PersonsTable
           persons={persons}
           pagination={pagination}
