@@ -11,12 +11,13 @@ describe('scanner test', () => {
     const cssPath = JSON.parse(fs.readFileSync('./__mocks__/__mockData__/csspaths.json'));
     const selectorPath = [ 'html', 'body', 'div', 'div', 'div', 'ul', 'li', 'a' ];
     const urlPath = 'https://www.tut.by/resource/';
+    const defaultHtml = fs.readFileSync('./__mocks__/__mockData__/scanner.html', 'utf8');
     beforeAll(() => {
         scannerService = new ScannerService();
     });
     describe('download', () => {
         it('should return string containing html', async () => {
-            const html = (await scannerService.download()).body;
+            const html = (await scannerService.download(urlPath)).body;
             expect(typeof html).toBe('string');
             expect(html.length).toBeGreaterThan(0);
         });
@@ -24,7 +25,7 @@ describe('scanner test', () => {
 
     describe('parse', () => {
         it('should return cheerio static object', async () => {
-            const html = (await scannerService.download()).body;
+            const html = defaultHtml;
             const cheerioObject = scannerService.parse(html);
             expect(cheerioObject.parseHTML).not.toBeUndefined();
         });
@@ -32,7 +33,7 @@ describe('scanner test', () => {
 
     describe('fetchAll', () => {
         it('should return list Cheerio Element containings only links with href', async () => {
-            const html = (await scannerService.download()).body;
+            const html = defaultHtml;
             const cheerioObject = scannerService.parse(html);
             const listNodes = ScannerInstance.fromCheerio(cheerioObject,SELECTORS.LINKS).instance;
             expect(listNodes.length).toBeGreaterThan(0);
@@ -41,7 +42,7 @@ describe('scanner test', () => {
         });
 
         it('should build CssPath from scanner instance', async () => {
-            const html = (await scannerService.download()).body;
+            const html = defaultHtml;
             const cheerioObject = scannerService.parse(html);
             const csspath = ScannerInstance.fromCheerio(cheerioObject,SELECTORS.LINKS).getPaths();
             expect(csspath[0].path).toEqual(selectorPath);
@@ -97,7 +98,7 @@ describe('scanner test', () => {
         });
 
         it('should find all samples', async () => {
-            const allSamples = await scannerService.fetchAll();
+            const allSamples = await scannerService.fetchAll(urlPath);
             expect(allSamples.sample.length).toBe(17);
         });
     });

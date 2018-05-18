@@ -1,16 +1,19 @@
 import * as cheerio from 'cheerio';
 import * as needle from 'needle';
 import * as path from 'url';
+import * as jsdom from 'jsdom'
 import {Component} from '@nestjs/common';
 import {SELECTORS, ScannerInstance} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
 import {SampleList, SampleResponse} from './scanner.sample';
 
+const {JSDOM} = jsdom;
+
 @Component()
 export class ScannerService {
 
     fetchAll = async (url: string): Promise<SampleList> => {
-        const cssPaths: CssPath[] = await this.getPathsByUrl(url,SELECTORS.LINKS);
+        const cssPaths: CssPath[] = await this.getPathsByUrl(url, SELECTORS.LINKS);
         const listPaths: SampleList = SampleList.fromPaths(cssPaths, 0)
             .groupBy('selector')
             .distinct()
@@ -22,7 +25,7 @@ export class ScannerService {
 
     fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
         const response: SampleResponse = new SampleResponse();
-        const cssPaths: CssPath[] = await this.getPathsByUrl(url,selector);
+        const cssPaths: CssPath[] = await this.getPathsByUrl(url, selector);
         const urls: string[] = cssPaths.map(x => x.value);
         if (urls.length === 0)
             response.isSelectorEmpty = true;
@@ -39,10 +42,10 @@ export class ScannerService {
         return response;
     };
 
-    getPathsByUrl = async (url: string, selector: string):Promise<CssPath[]> => {
+    getPathsByUrl = async (url: string, selector: string): Promise<CssPath[]> => {
         const html = (await this.download(url)).body;
         const cheerioObject: CheerioStatic = this.parse(html);
-        const scannerInstance: ScannerInstance = ScannerInstance.fromCheerio(cheerioObject,selector);
+        const scannerInstance: ScannerInstance = ScannerInstance.fromCheerio(cheerioObject, selector);
         return scannerInstance.getPaths();
     };
 
@@ -52,6 +55,28 @@ export class ScannerService {
     };
 
     download = async (url: string): Promise<any> => {
-        return needle('get', url);
+        const request = (await needle('get', url));
+        const html = request.body;
+        const domHtml = await (new Promise((resolve, reject) => {
+            jsdom.env({
+                html,
+                features: {
+                    FetchExternalResources: false,
+                    ProcessExternalResources: ['script'],
+                    SkipExternalResources: false
+                },
+                // proxy: 'https://api.enthought.com/',
+                done: function (err, window) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        const output = jsdom.serializeDocument(window.document);
+                        window.close();
+                        resolve(output);
+                    }
+                },
+            });
+        }));
+        return {body: domHtml};
     };
 }
