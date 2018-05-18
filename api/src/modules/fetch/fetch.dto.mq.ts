@@ -59,5 +59,7 @@ export class FetchScannerDto extends BaseFetchModelDto{
 }
 
 export class FetchScannerResultDto extends BaseFetchModelDto{
-    readonly resultUrls: string[];
+    readonly resultUrls: string[] = [];
+    readonly isSelectorEmpty: boolean = false;
+    readonly isSampleUrlNotFound: boolean = false;
 }

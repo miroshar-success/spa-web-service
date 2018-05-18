@@ -24,7 +24,7 @@ export class ScannerClientMq implements OnModuleInit {
                 private readonly scannerService: ScannerService) {
     }
 
-    // FIXME ADD REAL CALL
+    // FIXME - ADD REAL CALL
     public async fetchExploreProduce(fetchExploreScannerDto: FetchExploreScannerDto) {
 
         let samples: FetchExploreScannerSampleDto[] = (await this.scannerService.fetchAll(fetchExploreScannerDto.fetchUrl))
@@ -48,13 +48,22 @@ export class ScannerClientMq implements OnModuleInit {
 
     /********** FETCH ********/
 
-
+    // FIXME ADD MQ CALL
     public async fetchProduce(fetchScannerDto: FetchScannerDto) {
-        console.log();
+
+        let reslut = await this.scannerService.fetchOne(fetchScannerDto.fetchUrl, fetchScannerDto.selector, fetchScannerDto.lastResult);
+        this.fetchConsume(
+            {
+                fetchId: fetchScannerDto.fetchId,
+                fetchUrl: fetchScannerDto.fetchUrl,
+                resultUrls: reslut.sampleUrl,
+                isSampleUrlNotFound: reslut.isSampleUrlNotFound,
+                isSelectorEmpty: reslut.isSelectorEmpty
+            });
     }
 
     private async fetchConsume(fetchScannerResultDto: FetchScannerResultDto) {
-
+        this.fetchService.fetchResultConsumer(fetchScannerResultDto);
     }
 
 }
