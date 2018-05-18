@@ -3,6 +3,7 @@ import {Body, Controller, Get, Post} from '@nestjs/common';
 import {FetchService} from "./fetch.service";
 import {FetchDto, FetchExploreDto} from "./fetch.dto";
 import PersonCoreDto from "../person/person.dto";
+import {Delete} from "@nestjs/common/utils/decorators/request-mapping.decorator";
 
 @Controller('fetch')
 export class FetchController {
@@ -12,21 +13,22 @@ export class FetchController {
 
     @Post('/explore')
     async fetchExplore(@Body() fetchExploreDto: FetchExploreDto) {
-        await this.fetchService.fetchExploreCreate(fetchExploreDto);
+        await this.fetchService.fetchExplore(fetchExploreDto);
     }
 
-    @Post('/fetch')
+    @Post('')
     async fetch(@Body() fetchDto: FetchDto) {
         await this.fetchService.fetch(fetchDto);
     }
 
-    @Post('/delete')
+    @Delete('/delete')
     async deleteFetch(@Body() fetchExploreDto: FetchExploreDto) {
         await this.fetchService.fetchDelete(fetchExploreDto);
     }
+
     @Post('/get')
     async getUserFetches(@Body() personCoreDto: PersonCoreDto): Promise<FetchExploreDto[]> {
-        return await this.fetchService.getUserFetches(personCoreDto);
+        return await this.fetchService.fetchGet(personCoreDto);
     }
 
 }

@@ -1,6 +1,7 @@
 import {
+    FetchExploreSamplesDto,
     FetchExploreScannerDto, FetchExploreScannerResultDto,
-    FetchExploreScannerSampleDto, FetchScannerDto, FetchScannerResultDto
+    FetchScannerDto, FetchScannerResultDto
 } from "./fetch.dto";
 import {Component, OnModuleInit} from "@nestjs/common";
 import {ScannerService} from "../scanner/scanner.service";
@@ -27,7 +28,7 @@ export class ScannerClient implements OnModuleInit {
     // FIXME - ADD REAL CALL
     public async fetchExploreProduce(fetchExploreScannerDto: FetchExploreScannerDto) {
 
-        let samples: FetchExploreScannerSampleDto[] = (await this.scannerService.fetchAll(fetchExploreScannerDto.fetchUrl))
+        let samples: FetchExploreSamplesDto[] = (await this.scannerService.fetchAll(fetchExploreScannerDto.fetchUrl))
             .sample
             .map(value => {
                 return {sampleUrl: value.sampleUrl[0], selector: value.selector};

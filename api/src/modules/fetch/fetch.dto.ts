@@ -15,42 +15,51 @@ export class FetchExploreDto  extends CoreFetchDto{
     readonly fetchUrl: string;
 }
 
+// mq response
+export class FetchExploreResultDto extends FetchExploreDto {
+    readonly selectors:FetchExploreSamplesDto[]
+}
+
+export class FetchExploreSamplesDto {
+    readonly selector: string;
+    readonly sampleUrl: string;
+}
+
 export class FetchDto extends FetchExploreDto {
     @ApiModelProperty()
     readonly sampleUrl: string;
+}
+
+//mq response
+export class FetchResultDto extends CoreFetchDto {
+    readonly resultUrls: string[] = [];
 }
 
 /** SCANNER DTO **/
 
 // COMMON
 
-class BaseFetchModelDto {
+class BaseFetchScannerModelDto {
     readonly fetchId: string;
     readonly fetchUrl: string;
 }
 
+// SCANNER FETCH EXPLORE
 
-// FETCH EXPLORE
-
-export class FetchExploreScannerDto extends BaseFetchModelDto{}
+export class FetchExploreScannerDto extends BaseFetchScannerModelDto{}
 
 export class FetchExploreScannerResultDto extends FetchExploreScannerDto {
-    readonly selectors:FetchExploreScannerSampleDto[]
+    readonly selectors:FetchExploreSamplesDto[]
 }
 
-export class FetchExploreScannerSampleDto {
-    readonly selector: string;
-    readonly sampleUrl: string;
-}
+// SCANNER FETCH
 
-// FETCH
-
-export class FetchScannerDto extends BaseFetchModelDto{
+export class FetchScannerDto extends BaseFetchScannerModelDto{
     readonly selector: string;
     readonly lastResult: string;
 }
 
-export class FetchScannerResultDto extends BaseFetchModelDto{
+export class FetchScannerResultDto extends BaseFetchScannerModelDto{
     readonly resultUrls: string[] = [];
     readonly isSelectorEmpty: boolean = false;
     readonly isSampleUrlNotFound: boolean = false;
