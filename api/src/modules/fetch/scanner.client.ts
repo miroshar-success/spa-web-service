@@ -1,7 +1,7 @@
 import {
     FetchExploreScannerDto, FetchExploreScannerResultDto,
     FetchExploreScannerSampleDto, FetchScannerDto, FetchScannerResultDto
-} from "./fetch.dto.mq";
+} from "./fetch.dto";
 import {Component, OnModuleInit} from "@nestjs/common";
 import {ScannerService} from "../scanner/scanner.service";
 import {FetchService} from "./fetch.service";
@@ -12,7 +12,7 @@ import {ModuleRef} from "@nestjs/core";
 
 
 @Component()
-export class ScannerClientMq implements OnModuleInit {
+export class ScannerClient implements OnModuleInit {
 
     private fetchService: FetchService;
 

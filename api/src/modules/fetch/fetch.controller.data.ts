@@ -13,7 +13,7 @@ import {
 import { ApiImplicitQuery } from '@nestjs/swagger';
 import { FetchModel } from './fetch.model';
 import FetchDataService from './fetch.service.data';
-import { FetchRestDto } from './fetch.dto';
+import { FetchDtoData } from './fetch.dto.data';
 
 @Controller('data/fetch')
 export default class FetchDataController {
@@ -21,8 +21,8 @@ export default class FetchDataController {
   constructor(private readonly fetchDataService: FetchDataService) { }
 
   @Post()
-  async create(@Body() fetchRestDto: FetchRestDto): Promise<void> {
-    this.fetchDataService.create(fetchRestDto);
+  async create(@Body() fetchDtoData: FetchDtoData): Promise<void> {
+    this.fetchDataService.create(fetchDtoData);
   }
 
   @ApiImplicitQuery({ name: "offset", required: true, type: Number })
