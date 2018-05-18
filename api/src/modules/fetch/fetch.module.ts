@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { FetchController } from './fetch.controller';
+import { FetchController } from './fetch.mqcontroller';
 import {FetchService} from "./fetch.service";
 import {rabbitMqModule} from "../rabbit-mq/rabbit-mq.module";
 import {fetchProviders} from "./fetch.providers";

@@ -3,20 +3,20 @@ import {ApiModelProperty} from '@nestjs/swagger';
 import {PersonDto} from "../person/person.dto";
 import {FetchClientName} from "./fetch.enums";
 
-export class BaseFetchDto {
+export class PersonFetchDto {
 
     @ApiModelProperty()
     readonly clientName: FetchClientName;
 
+    @ApiModelProperty()
+    readonly person: PersonDto;
+
 }
 
-export class FetchExploreDto extends BaseFetchDto{
+export class FetchExploreDto extends PersonFetchDto {
 
     @ApiModelProperty()
     readonly fetchUrl: string;
-
-    @ApiModelProperty()
-    readonly person: PersonDto;
 
 }
 

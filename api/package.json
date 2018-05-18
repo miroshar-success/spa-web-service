@@ -26,8 +26,8 @@
     "amqplib": "^0.5.2",
     "body-parser": "^1.18.2",
     "mongoose": "^4.13.4",
-    "mq-decorator-api": "file:../mq-decorator-api",
     "redis": "^2.7.1",
+    "mongoose-paginate": "^5.0.3",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.6",
     "typescript": "^2.6.2"
