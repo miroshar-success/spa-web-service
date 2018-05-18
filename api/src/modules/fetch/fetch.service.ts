@@ -182,15 +182,16 @@ export class FetchService {
 
     private async initFetchWatcher() {
 
+        // define agenda task wit h timer
         this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, async (job, done) => {
             await this.initWatch(new Date(Date.now() - FetchService.FETCH_REINIT_MQ_PERIOD));
             done();
         });
 
-        this.agenda.on('ready', () => {
-            this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
-        })
-
+        // await agenda ready
+        await new Promise(resolve => this.agenda.once('ready', resolve));
+        // start fetch task
+        this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
     }
 
     private async initWatch(initDate: Date) {
