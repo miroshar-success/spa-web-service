@@ -29,7 +29,7 @@ export class SampleList {
         return new SampleList(sample);
     }
 
-    orderByAsc = (): SampleList => {
+    orderByDesc = (): SampleList => {
         const result = [...this.sample].sort((x, y) => y.sampleUrl.length - x.sampleUrl.length);
         return new SampleList(result);
     }

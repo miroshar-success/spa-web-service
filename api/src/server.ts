@@ -8,14 +8,14 @@ import {ScannerService} from './modules/scanner/scanner.service';
 
 async function bootstrap() {
 
-    /*const scanner: ScannerService = new ScannerService();
+    const scanner: ScannerService = new ScannerService();
     const url = 'https://news.tut.by/world/';
     const allExamples = await scanner.fetchAll(url);
     const promises = allExamples.sample.map(async example =>  {
-        return scanner.fetchOne(url, example.selector);
+        return scanner.fetchOne(url, example.selector + 'ggggggggg');
     });
     const allDetails = await Promise.all(promises);
-    const news = await scanner.fetchOne(url,allExamples.sample[2].selector,'https://news.tut.by/world/593004.html');*/
+    const news = await scanner.fetchOne(url,allExamples.sample[2].selector,'https://news.tut.by/world/593004.html');
     const app = await NestFactory.create(ApplicationModule);
 
     // VALIDATION CONFIG
