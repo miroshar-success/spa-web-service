@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Inject, Component, HttpException } from '@nestjs/common';
 import FetchSchema, { FetchModel } from './fetch.model';
-import { FetchRestDto } from './fetch.dto';
+import { FetchRestDto } from './fetch.dto.data';
 
 @Component()
 export default class FetchDataService {
