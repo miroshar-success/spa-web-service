@@ -8,7 +8,7 @@ import {IsEnum} from 'class-validator';
 /** FETCH DTO **/
 
 // TODO REMOVE API PROPERTY
-export class PersonFetchDtoMq {
+export class PersonFetchDto {
 
     @IsEnum(FetchClientName)
     @ApiModelProperty()
@@ -18,12 +18,12 @@ export class PersonFetchDtoMq {
     readonly person: PersonDto;
 }
 
-export class FetchExploreDtoMq extends PersonFetchDtoMq {
+export class FetchExploreDto extends PersonFetchDto {
     @ApiModelProperty()
     readonly fetchUrl: string;
 }
 
-export class FetchDtoMq extends FetchExploreDtoMq {
+export class FetchDto extends FetchExploreDto {
     @ApiModelProperty()
     readonly sampleUrl: string;
 }
