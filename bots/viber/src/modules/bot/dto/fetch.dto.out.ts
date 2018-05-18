@@ -20,10 +20,10 @@ export class FetchDtoOut extends FetchExploreDtoOut {
 }
 
 export class Person {
-    readonly personKey: string;
+    readonly personKey: object;
     readonly personInfo: PersonInfo;
 
-    constructor(personKey: string, personInfo: PersonInfo){
+    constructor(personKey: object, personInfo: PersonInfo){
         this.personKey = personKey;
         this.personInfo = personInfo;
     }

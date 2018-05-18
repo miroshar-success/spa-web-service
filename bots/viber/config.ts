@@ -5,7 +5,7 @@ export const VIBER_AUTH_TOKEN = '47db81400427d715-40a40993922709f7-335314142337e
 export const VIBER_BOT_NAME = 'Beagle';
 export const VIBER_BOT_AVATAR_URL = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvm9NnT04pHQNngfU6Rn49L9nzLDoYvYfEWTp_oQ3Vq0tFCiKc';
 export const FETCH_COMMAND = '/fetch';
-export const FETCH_EXPLORE_COMMAND = '/explore';
+export const EXPLORE_COMMAND = '/explore';
 
 
 //Beagle One 47db81400427d715-40a40993922709f7-335314142337e9da

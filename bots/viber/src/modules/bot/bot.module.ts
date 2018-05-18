@@ -6,7 +6,7 @@ import {BotEventService} from './services/bot.event.service';
 
 @Module({
     imports: [],
-    controllers: [BotController],
+    controllers: [],
     providers: [BotInitService, BotEventHandler, BotEventService],
 })
 export class BotModule {
