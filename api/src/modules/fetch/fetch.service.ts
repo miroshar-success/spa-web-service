@@ -72,12 +72,14 @@ export class FetchService {
 
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
 
+
+            let sampleUrls = selectors.map(selector => selector.sampleUrl);
             // send to person
             this.fetchResultsGw.publishFetchExplore(
                 {
                     person: personCoreDto,
                     fetchUrl: fetchModel.fetchUrl,
-                    selectors: selectors
+                    sampleUrls: sampleUrls
                 })
         } else {
             console.log('fetchModel is null - OK')
@@ -131,8 +133,8 @@ export class FetchService {
                 }
             }).exec();
 
-            // TODO ADD TO MQ and IF isSelectorEmpty and isSampleUrlNotFound send messages
-            console.log('found: ' + new Date() + resultUrls);
+            let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
+            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls:resultUrls});
         }
     }
 

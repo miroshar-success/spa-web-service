@@ -7,11 +7,11 @@ export class FetchResultsGw {
     constructor() {}
 
     async publishFetchExplore(fetchExploreResultDto: FetchExploreResultDto) {
-        console.log("publishFetchExplore")
+        console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto))
     }
 
     async publishFetchResult(fetchResultDto: FetchResultDto) {
-        console.log("publishFetchResult")
+        console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
     }
 
 }

@@ -17,7 +17,7 @@ export class FetchExploreDto  extends CoreFetchDto{
 
 // mq response
 export class FetchExploreResultDto extends FetchExploreDto {
-    readonly selectors:FetchExploreSamplesDto[]
+    readonly sampleUrls:string[]
 }
 
 export class FetchExploreSamplesDto {
