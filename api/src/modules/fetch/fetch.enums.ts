@@ -1,3 +1,10 @@
 export enum FetchClientName {
-    viber
+    viber = 'viber'
+}
+
+export enum FetchState {
+    new = 'new',
+    init = 'init',
+    active = 'active',
+    failed = 'failed'
 }

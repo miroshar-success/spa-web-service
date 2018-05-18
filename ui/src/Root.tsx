@@ -4,11 +4,12 @@ import { Provider } from 'react-redux';
 import ru from 'antd/es/locale-provider/ru_RU';
 // import { BrowserRouter as Router, } from 'react-router-dom'
 // import LoginForm from './components/LoginForm/LoginForm'
-import CounterContainer from './containers/CounterContainer';
+// import CounterContainer from './containers/CounterContainer';
+import PersonsTableContainer from './containers/PersonsTableContainer';
 
 import { Store } from 'redux';
-import configureStore from './redux/store';
-import { RootState } from './redux/rootReducer';
+import configureStore from '@redux/store';
+import { RootState } from '@redux/rootReducer';
 
 // Available pathes
 export const Path = {
@@ -37,7 +38,7 @@ export default () => (
     <Provider store={store}>
       <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column' }}>
         {/* <LoginForm /> */}
-        <CounterContainer />
+        <PersonsTableContainer />
       </div>
     </Provider>
   </LocaleProvider>
