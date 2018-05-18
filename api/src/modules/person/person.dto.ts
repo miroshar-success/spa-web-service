@@ -1,13 +1,17 @@
-import {ApiModelProperty} from '@nestjs/swagger';
+import { ApiModelProperty } from '@nestjs/swagger';
 
-import { PersonType } from './person.type';
 
-export class PersonDto {
+import {ClientName} from "../clients/clients.enums";
 
-    @ApiModelProperty()
-    readonly personType: PersonType;
+export default class PersonCoreDto {
 
-    @ApiModelProperty()
-    readonly personKey: object;
+  @ApiModelProperty()
+  readonly clientName: ClientName;
+
+  @ApiModelProperty()
+  readonly personKey: object;
+
+  @ApiModelProperty()
+  readonly personInfo: object;
 
 }
