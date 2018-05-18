@@ -3,7 +3,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 import {ClientName} from "../clients/clients.enums";
 
-export default class PersonDto {
+export default class PersonCoreDto {
 
   @ApiModelProperty()
   readonly clientName: ClientName;
