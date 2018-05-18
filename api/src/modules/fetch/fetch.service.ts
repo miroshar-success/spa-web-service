@@ -10,6 +10,7 @@ import {ScannerService} from "../scanner/scanner.service";
 import {async} from "rxjs/scheduler/async";
 import {ScannerClientMq} from "./scanner.client.mq";
 import {FetchDtoMq, FetchExploreScannerDto, FetchExploreScannerResultDto} from "./fetch.dto.mq";
+import {Connection} from "amqplib";
 
 @Component()
 export class FetchService {
@@ -181,11 +182,15 @@ export class FetchService {
 
     private async initFetchWatcher() {
 
-        // this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, async (job, done) => {
-        //     await this.initWatch(new Date(Date.now() - FetchService.FETCH_REINIT_MQ_PERIOD));
-        //     done();
-        // });
-        // this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
+        this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, async (job, done) => {
+            await this.initWatch(new Date(Date.now() - FetchService.FETCH_REINIT_MQ_PERIOD));
+            done();
+        });
+
+        this.agenda.on('ready', () => {
+            this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
+        })
+
     }
 
     private async initWatch(initDate: Date) {
