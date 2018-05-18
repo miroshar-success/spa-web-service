@@ -11,30 +11,27 @@ export const FILTERS = {
 };
 
 export class ScannerInstance {
-    constructor(private readonly _instance: Cheerio) {
+    constructor(private readonly instance: Cheerio) {
     }
 
     select = (...linkTypes: string[]): ScannerInstance => {
-        return new ScannerInstance(this._instance(...linkTypes));
+        return new ScannerInstance(this.instance(...linkTypes));
     }
     filter = (predicate: (node: Cheerio) => ScannerInstance, params: any): ScannerInstance => {
         return predicate(this, params);
     }
     filterChild = (predicate: (node: Cheerio) => boolean): ScannerInstance => {
-        const result = this._instance.filter((index, node) => {
+        const result = this.instance.filter((index, node) => {
             return node.children !== undefined ? !node.children.some(child => predicate(child)) : false;
         });
         return new ScannerInstance(result);
     }
     filterAttr = (predicate: (node: Cheerio) => boolean): ScannerInstance => {
-        const result = this._instance.filter((index, node) => node.attribs !== undefined ? !predicate(node.attribs) : false);
+        const result = this.instance.filter((index, node) => node.attribs !== undefined ? !predicate(node.attribs) : false);
         return new ScannerInstance(result);
-    }
-    get instance(): CheerioElement[]{
-        return this._instance;
     }
 
     toArray(): CheerioElement[]{
-        return this._instance.toArray();
+        return this.instance.toArray();
     }
 }

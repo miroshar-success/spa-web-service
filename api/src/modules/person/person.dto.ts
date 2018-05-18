@@ -1,4 +1,4 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import {ApiModelProperty} from '@nestjs/swagger';
 
 import { PersonType } from './person.type';
 

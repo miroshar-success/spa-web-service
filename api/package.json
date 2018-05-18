@@ -9,7 +9,7 @@
     "start:dev": "nodemon",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "node dist/main.js",
-    "test": "jest",
+    "test": "jest --rootDir",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
@@ -63,7 +63,7 @@
     "rootDir": "src",
     "testRegex": ".spec.ts$",
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "<rootDir>/preprocessor.js"
     },
     "coverageDirectory": "../coverage"
   }
