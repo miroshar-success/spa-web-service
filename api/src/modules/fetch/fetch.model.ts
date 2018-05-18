@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate'
-import { FetchClientName, FetchState } from "./fetch.enums";
+import { FetchState } from "./fetch.enums";
+import {ClientName} from "../clients/clients.enums";
 
 export interface FetchExploreSelectorModel {
   readonly sampleUrl: string
@@ -16,7 +17,7 @@ export const FetchExploreSelectorsSchema = new mongoose.Schema(
 
 export interface FetchModel extends Document {
   readonly _id: string,
-  readonly clientName: FetchClientName
+  readonly clientName: ClientName
   readonly personKey: Object
   readonly fetchUrl: string
   readonly createDate: Date

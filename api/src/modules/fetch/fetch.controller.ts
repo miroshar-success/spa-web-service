@@ -1,8 +1,7 @@
 import {Body, Controller, Get, Post} from '@nestjs/common';
 
 import {FetchService} from "./fetch.service";
-import {FetchDto, FetchExploreDto, PersonFetchDto} from "./fetch.dto";
-import {FetchClientName} from "./fetch.enums";
+import {FetchDto, FetchExploreDto} from "./fetch.dto";
 
 @Controller('fetchmq')
 export class FetchController {

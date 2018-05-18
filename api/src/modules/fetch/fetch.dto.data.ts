@@ -1,13 +1,14 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
-import { FetchClientName, FetchState } from "./fetch.enums";
+import { FetchState } from "./fetch.enums";
 import { IsEnum } from 'class-validator';
+import {ClientName} from "../clients/clients.enums";
 
 export class FetchDtoData {
 
-  @IsEnum(FetchClientName)
-  @ApiModelProperty({ enum: Object.keys(FetchClientName) })
-  readonly clientName: FetchClientName;
+  @IsEnum(ClientName)
+  @ApiModelProperty({ enum: Object.keys(ClientName) })
+  readonly clientName: ClientName;
 
   @ApiModelProperty()
   readonly personKey: string;

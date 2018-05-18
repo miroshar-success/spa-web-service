@@ -2,7 +2,7 @@ import {Model} from 'mongoose';
 import {Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
 
 import {FetchExploreSelectorModel, FetchModel} from "./fetch.model";
-import {FetchClientName, FetchState} from "./fetch.enums";
+import {FetchState} from "./fetch.enums";
 import * as Agenda from "agenda";
 
 
@@ -12,6 +12,7 @@ import {
     FetchDto, FetchExploreDto, FetchExploreScannerDto, FetchExploreScannerResultDto,
     FetchScannerResultDto
 } from "./fetch.dto";
+import {ClientName} from "../clients/clients.enums";
 
 
 @Component()
@@ -28,19 +29,19 @@ export class FetchService {
         this.initFetchWatcher();
     }
 
+    /********* PUBLIC METHODS *********/
+
+    /** FETCH EXPLORE **/
+
     // fetchExplore request
-    public async fetchExploreCreate({clientName, person, fetchUrl}: FetchExploreDto) {
-
+    public async fetchExploreCreate({person, fetchUrl}: FetchExploreDto) {
+        let clientName
         let personKey: Object = person.personKey;
-
-        // get current job if exists
-        let currentFetchModel = await this.getFetch(personKey, clientName, fetchUrl);
-
+        let currentFetchModel = await this.getFetchByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
         if (currentFetchModel != null) {
             // TODO MOVE METHOD TO DATA SERVICE
-            await this.fetchModel.deleteOne({_id: currentFetchModel._id}).exec();
+            await this.deleteFetch(currentFetchModel);
         }
-
         currentFetchModel = await this.fetchModel({
             clientName: clientName,
             personKey: personKey,
@@ -51,12 +52,9 @@ export class FetchService {
 
         let fetchId: string = currentFetchModel._id.toString();
         this.scannerClient.fetchExploreProduce({fetchId: fetchId, fetchUrl: fetchUrl})
-
     }
 
     public async fetchExploreResultConsumer({fetchId, selectors}: FetchExploreScannerResultDto) {
-
-
         let fetchModel: FetchModel = await this.getFetchById(fetchId);
         await  this.fetchModel.updateOne(fetchModel, {
             $set: {
@@ -64,23 +62,15 @@ export class FetchService {
                 state: FetchState.init
             }
         }).exec();
-
         // FIXME SEND TO CONSUMER
-    }
-
-    // TODO MOVE METHOD TO DATA SERVICE
-    private getFetchById(fetchId: string) {
-        return this.fetchModel.findOne({"_id": fetchId});
     }
 
     /********* FETCH ********/
 
-    public async fetch({person, clientName, fetchUrl, sampleUrl}: FetchDto) {
-
-        let personKey = person.personKey;
+    public async fetch({person: {personKey}, person: {clientName}, fetchUrl, sampleUrl}: FetchDto) {
 
         // get current job if exists
-        let fetchModel = await this.getFetch(personKey, clientName, fetchUrl);
+        let fetchModel = await this.getFetchByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
         if (!fetchModel || fetchModel.state != FetchState.init) {
             // TODO ADD CUSTOM ERROR
             throw new Error('model not found or wrong state');
@@ -109,9 +99,7 @@ export class FetchService {
                 updateDate: new Date(-8640000000000000)
             }
         }).exec();
-
     }
-
 
     // TODO ADD CHECK OF isSelectorEmpty and isSampleUrlNotFound
     public async fetchResultConsumer({fetchUrl, fetchId, resultUrls, isSelectorEmpty, isSampleUrlNotFound}: FetchScannerResultDto) {
@@ -129,62 +117,46 @@ export class FetchService {
         }
     }
 
-
     // // delete fetch
-    // public async fetchDelete(fetchExploreDto: FetchExploreDto) {
-    //     let personKey: string = fetchExploreDto.person.personKey;
-    //     let clientName: FetchClientName = fetchExploreDto.clientName;
-    //     let fetchUrl: string = fetchExploreDto.fetchUrl;
-    //
-    //     // TODO MERGE USER IN USER SERVICE
-    //
-    //     // get current job if exists
-    //     let currentFetchModel = await this.fetchModel.findOne({
-    //         'personKey': personKey,
-    //         'clientName': clientName,
-    //         'fetchUrl': fetchUrl
-    //     }).exec();
-    //
-    //
-    //     if (currentFetchModel == null) {
-    //         throw new HttpException("", HttpStatus.FORBIDDEN);
-    //     }
-    //
-    //     this.fetchModel.delete(currentFetchModel);
-    //
-    // }
-    //
+    public async fetchDelete({clientName, person, fetchUrl}) {
 
-    // public async getUserFetch(personFetchDto: PersonFetchDto): Promise<FetchExploreDto[]> {
-    //
-    //     let personKey: string = personFetchDto.person.personKey;
-    //     let clientName: FetchClientName = personFetchDto.clientName;
-    //
-    //     let userFetches: FetchModel[] = await this.getUserFetches(personKey, clientName);
-    //
-    //     return userFetches.map(value => {
-    //         return {
-    //             clientName: clientName,
-    //             person: personFetchDto.person,
-    //             fetchUrl: value.fetchUrl
-    //         }
-    //     })
-    // }
+        let personKey = person.personKey;
+
+        // TODO SEND USER TO USER SERVICE
+
+        // get current job if exists
+        let currentFetchModel = await this.getFetchByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
+
+        if (currentFetchModel == null) {
+            throw new HttpException("fetch not found", HttpStatus.FORBIDDEN);
+        }
+
+        await this.deleteFetch(currentFetchModel);
+
+    }
+
+
+    public async getUserFetch(personFetchDto: PersonFetchDto): Promise<FetchExploreDto[]> {
+
+        let personKey: string = personFetchDto.person.personKey;
+        let clientName: ClientName = personFetchDto.clientName;
+
+        let userFetches: FetchModel[] = await this.getUserFetches(personKey, clientName);
+
+        return userFetches.map(value => {
+            return {
+                clientName: clientName,
+                person: personFetchDto.person,
+                fetchUrl: value.fetchUrl
+            }
+        })
+    }
     //
     // /** PRIVATE METHODS **/
     //
 
-    // TODO MOVE TO DATA SERVICE
-    private async getFetch(personKey: Object, clientName: FetchClientName, fetchUrl: string): Promise<FetchModel> {
-        return this.fetchModel.findOne({
-            'personKey': personKey,
-            'clientName': clientName,
-            'fetchUrl': fetchUrl
-        }).exec();
-    }
 
-    //
-    // private async getUserFetches(personKey: string, clientName: FetchClientName) {
+    // private async getUserFetches(personKey: string, clientName: ClientName) {
     //     // get current job if exists
     //     let currentFetchModel = await this.fetchModel.find({
     //         'personKey': personKey,
@@ -256,6 +228,25 @@ export class FetchService {
 
             this.initWatch(initDate);
         }
+    }
+
+
+    /** COMMON PRIVATE METHODS **/
+
+    private getFetchById(fetchId: string) {
+        return this.fetchModel.findOne({"_id": fetchId});
+    }
+
+    private async deleteFetch(currentFetchModel: FetchModel) {
+        await this.fetchModel.deleteOne({_id: currentFetchModel._id}).exec();
+    }
+
+    private async getFetchByPersonKeyClientNameFetchUrl(personKey: Object, clientName: ClientName, fetchUrl: string): Promise<FetchModel> {
+        return this.fetchModel.findOne({
+            'personKey': personKey,
+            'clientName': clientName,
+            'fetchUrl': fetchUrl
+        }).exec();
     }
 
 

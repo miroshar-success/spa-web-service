@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { Component, Inject } from '@nestjs/common';
 import Person from './interfaces/person.interface';
-import CreatePersonDto from './dto/create-person.dto';
+import CreatePersonDto from './person.dto';
 
 @Component()
 export default class PersonService {
