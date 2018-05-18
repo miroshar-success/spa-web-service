@@ -16,7 +16,7 @@ const fetchFetchs = (url: string) => {
 }
 
 const removeFetchRequest = (personKey: string) => {
-  return axios.delete(`/fetch/${personKey}`)
+  return axios.delete(`data/fetch/${personKey}`)
 }
 
 // worker sagas
@@ -27,6 +27,7 @@ function* loadFetchs(url: string, currentPage: number, needDelay: boolean): Iter
     }
 
     const { docs: fetchs, total } = yield call(fetchFetchs, url);
+
     yield put({
       type: FetchKeys.LOAD_FETCHS_SUCCESS,
       payload: {
@@ -63,7 +64,7 @@ function* removeFetch(id: string): IterableIterator<any> {
   try {
     yield call(removeFetchRequest, id);
     const pagination = yield select(getPagination);
-    yield call(loadFetchs, buildUrlForLoadFetchs(pagination), pagination.current, false)
+    yield call(loadFetchs, buildUrlForLoadFetchs(pagination, ''), pagination.current, false)
   } catch (error) {
     yield put({
       type: FetchKeys.LOAD_FETCHS_FAILURE,

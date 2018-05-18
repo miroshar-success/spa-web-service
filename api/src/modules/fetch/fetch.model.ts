@@ -15,18 +15,18 @@ export const FetchExploreSelectorsSchema = new mongoose.Schema(
 );
 
 export interface FetchModel extends Document {
-    readonly _id: string,
-    readonly clientName: FetchClientName
-    readonly personKey: Object
-    readonly fetchUrl: string
-    readonly createDate: Date
-    state: FetchState
-    selectors: FetchExploreSelectorModel[]
+  readonly _id: string,
+  readonly clientName: FetchClientName
+  readonly personKey: Object
+  readonly fetchUrl: string
+  readonly createDate: Date
+  state: FetchState
+  selectors: FetchExploreSelectorModel[]
 
-    selector: string
+  selector: string
 
-    updateDate: Date
-    lastResult: [string]
+  updateDate: Date
+  lastResult: [string]
 }
 
 export const FetchSchema = new mongoose.Schema(
@@ -37,11 +37,6 @@ export const FetchSchema = new mongoose.Schema(
     createDate: { type: Date, require: true },
     state: { type: String, require: true },
     selectors: [FetchExploreSelectorsSchema],
-    // selectors: [{
-    //   sampleUrl: String,
-    //   selector: String,
-    // }],
-
 
     selector: String,
     updateDate: { type: Date, require: true },

@@ -27,6 +27,7 @@ export default class FetchDataController {
 
   @ApiImplicitQuery({ name: "offset", required: true, type: Number })
   @ApiImplicitQuery({ name: "limit", required: true, type: Number })
+  @ApiImplicitQuery({ name: "value", required: false, type: String })
   @Get()
   async find(@Query() params: any): Promise<FetchModel[]> {
     return await this.fetchDataService.find(+params.offset, +params.limit, params.value);
