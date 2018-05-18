@@ -3,7 +3,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import { FetchClientName, FetchState } from "./fetch.enums";
 import { IsEnum } from 'class-validator';
 
-export class FetchRestDto {
+export class FetchDtoData {
 
   @IsEnum(FetchClientName)
   @ApiModelProperty({ enum: Object.keys(FetchClientName) })

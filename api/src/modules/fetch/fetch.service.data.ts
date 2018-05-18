@@ -1,19 +1,19 @@
 import { Model } from 'mongoose';
 import { Inject, Component, HttpException } from '@nestjs/common';
 import FetchSchema, { FetchModel } from './fetch.model';
-import { FetchRestDto } from './fetch.dto.data';
+import { FetchDtoData } from './fetch.dto.data';
 
 @Component()
 export default class FetchDataService {
 
   constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>) { }
 
-  async create(fetchRestDto: FetchRestDto): Promise<FetchModel> {
+  async create(fetchDtoData: FetchDtoData): Promise<FetchModel> {
     const {
       createDate,
       updateDate,
       ...rest,
-    } = fetchRestDto;
+    } = fetchDtoData;
 
     const fetchRestDtoMongoose = {
       createDate: new Date(createDate),
