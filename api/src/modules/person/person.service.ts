@@ -1,13 +1,7 @@
 import { Model } from 'mongoose';
 import { Component, Inject } from '@nestjs/common';
 import Person from './interfaces/person.interface';
-import PersonModel from './schemas/person.schema';
 import CreatePersonDto from './dto/create-person.dto';
-
-export interface Response {
-  docs: Array<CreatePersonDto>;
-  total: number;
-}
 
 @Component()
 export default class PersonService {
@@ -29,30 +23,19 @@ export default class PersonService {
     return await createdPerson.save();
   }
 
-  async find(offset: number, limit: number): Promise<Person[]> {
-    return await PersonModel.paginate({}, { offset, limit })
-      .then(result => result)
-      .catch(error => console.log(error))
+  async find(offset: number, limit: number, value: string): Promise<Person[]> {
+    if (value.length > 0) {
+      return await this.personModel.paginate({ $text: { $search: value } }, { offset, limit })
+    }
+    return await this.personModel.paginate({}, { offset, limit });
   }
 
-  findPerson(searchString, response): void {
+  async search(searchString): Promise<Person[]> {
     if (searchString.length === 0) {
-      PersonModel.find({}).exec((err, persons) => {
-        response.send(this.getResponse(persons));
-      })
+      return await this.personModel.paginate({}, { limit: 10 })
     } else {
-      PersonModel.find({ $text: { $search: searchString } }).exec((err, persons) => {
-        if (!err) {
-          response.send(this.getResponse(persons));
-        }
-      })
+      return await this.personModel.paginate({ $text: { $search: searchString } }, { limit: 10 })
     }
   }
 
-  private getResponse(persons): Response {
-    return {
-      docs: persons.slice(0, 10).filter(Boolean),
-      total: persons.length,
-    }
-  }
 }

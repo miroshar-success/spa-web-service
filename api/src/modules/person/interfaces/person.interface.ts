@@ -8,6 +8,6 @@ import PersonTypes from '../person.type';
 
 export default interface Person extends Document {
   readonly clientName: PersonTypes;
-  readonly personKey: string;
+  readonly personKey: object;
   readonly personInfo: object;
 }

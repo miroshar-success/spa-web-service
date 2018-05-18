@@ -8,7 +8,7 @@ export interface SearchBarProps {
 export default class SearchBar extends React.PureComponent<SearchBarProps> {
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.search(event.target.value);
+    this.props.onSearch(event.target.value);
   }
 
   render() {

@@ -2,10 +2,12 @@ import { Action } from 'redux';
 
 // define initial state shape
 export interface Fetch {
+  _id: string;
   clientName: ClientType;
   personKey: string;
   fetchUrl: string,
-  createData: string;
+  createDate: string;
+  state: string;
   selectors: Array<FetchExploreSelectors>;
   selector: string;
   updateDate: string;
@@ -31,16 +33,18 @@ export interface FetchExploreSelectors {
 export interface FetchState {
   fetchs: Array<Fetch>;
   pagination: Pagination;
+  searchString: string;
   loading: boolean;
   error: string;
 }
 
 // define action types
 export enum FetchKeys {
-  LOAD_FETCHS = "@@fetch/LOAD_PERSONS",
+  LOAD_FETCHS = "@@fetch/LOAD_FETCHS",
   LOAD_FETCHS_SUCCESS = "@@fetch/LOAD_FETCHS_SUCCESS",
   LOAD_FETCHS_FAILURE = "@@fetch/LOAD_FETCHS_FAILURE",
   SEARCH_FETCHS = '@@fetch/SEARCH_FETCHS',
+  REMOVE_FETCH = '@@fetch/REMOVE_FETCH',
 }
 
 // declare actions types using interface
@@ -73,8 +77,16 @@ export interface SearchFetchAction extends Action {
   }
 }
 
+export interface RemoveFetchAction extends Action {
+  type: FetchKeys.REMOVE_FETCH,
+  payload: {
+    id: string,
+  }
+}
+
 export type FetchActionTypes =
   | LoadFetchsAction
   | LoadFetchsSuccessAction
   | LoadFetchsFailureAction
   | SearchFetchAction
+  | RemoveFetchAction

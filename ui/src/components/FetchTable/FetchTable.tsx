@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Table, Popover, Icon } from 'antd';
-import { Person, Pagination } from '@redux/persons/types';
+import { Table, Button, Icon } from 'antd';
+import { Fetch, Pagination } from '@redux/fetch/types';
 import { ColumnProps } from 'antd/lib/table';
-import { PersonsTableProps } from './FilterablePersonsTable';
+import { FetchTableProps } from './FilterableFetchTable';
 
-export default class FetchTable extends React.Component<PersonsTableProps> {
+export default class FetchTable extends React.Component<FetchTableProps> {
 
-  private readonly columns: ColumnProps<Person>[] = [
+  private readonly columns: ColumnProps<Fetch>[] = [
     {
       title: 'Тип клиента',
       dataIndex: 'clientName',
@@ -16,33 +16,79 @@ export default class FetchTable extends React.Component<PersonsTableProps> {
       title: 'Идентификатор',
       dataIndex: 'personKey',
       key: 'personKey',
+      render: (text, record) => <span>{JSON.stringify(record.personKey)}</span>
     },
     {
-      title: 'Имя',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => <span>{record.personInfo.name}</span>
+      title: 'Адрес загрузки',
+      dataIndex: 'fetchUrl',
+      key: 'fetchUrl',
     },
     {
-      title: 'Фамилия',
-      dataIndex: 'surname',
-      key: 'surname',
-      render: (text, record) => <span>{record.personInfo.surname}</span>
+      title: 'Дата создания',
+      dataIndex: 'createDate',
+      key: 'createDate',
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
+      title: 'Состояние',
+      dataIndex: 'state',
+      key: 'state',
+    },
+    {
+      title: 'Селекторы',
+      dataIndex: 'selectors',
+      key: 'selectors',
       render: (text, record) => {
-        const PersonInfo: React.ReactNode = <div>{JSON.stringify(record.personInfo, null, 2)}</div>
         return (
-          <Popover placement='top' content={PersonInfo} trigger='click'>
-            <a href="#">
-              More <Icon type='down' />
-            </a>
-          </Popover>
+          <ul>
+            {
+              record.selectors.map(({ sampleUrl, selector }) => (
+                <li key={Math.random()}>{sampleUrl} - {selector}</li>
+              ))
+            }
+          </ul>
         )
       }
-    }
+    },
+    {
+      title: 'Селектор',
+      dataIndex: 'selector',
+      key: 'selector',
+    },
+    {
+      title: 'Дата обновления',
+      dataIndex: 'updateDate',
+      key: 'updateDate',
+    },
+    {
+      title: 'Последний результат',
+      dataIndex: 'lastResult',
+      key: 'lastResult',
+      render: (text, record) => {
+        return (
+          <ul>
+            {
+              record.lastResult.map(result => (
+                <li key={Math.random()}>{result}</li>
+              ))
+            }
+          </ul>
+        )
+      }
+    },
+    {
+      title: 'Последний результат',
+      dataIndex: 'Action',
+      render: (text, record) => {
+        return (
+          <Button
+            type='danger'
+            onClick={() => this.removeFetch(record._id)}
+          >
+            Remove <Icon type='delete' />
+          </Button>
+        )
+      }
+    },
   ]
 
   componentDidMount() {
@@ -51,32 +97,36 @@ export default class FetchTable extends React.Component<PersonsTableProps> {
         pageSize,
         current,
       },
-      loadPersons,
+      loadFetchs,
     } = this.props;
 
-    loadPersons({ pageSize, current });
+    loadFetchs({ pageSize, current });
   }
 
   handleTableChange = ({ pageSize, current }: Pagination) => {
-    this.props.loadPersons({ pageSize, current });
+    this.props.loadFetchs({ pageSize, current });
+  }
+
+  removeFetch = (id: string) => {
+    this.props.removeFetch(id);
   }
 
   render() {
     const {
       loading,
       pagination,
-      persons,
+      fetchs,
     } = this.props;
 
     return (
       <Table
         bordered
         columns={this.columns}
-        dataSource={persons}
+        dataSource={fetchs}
         loading={loading}
         pagination={pagination}
         size='small'
-        style={{ width: 800, lineHeight: 1.8 }}
+        style={{ width: '100%', lineHeight: 1.8 }}
         onChange={this.handleTableChange}
       />
     )

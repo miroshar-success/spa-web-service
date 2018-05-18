@@ -14,13 +14,13 @@ export const initialState: PersonState = {
     pageSize: 10,
     current: 1,
   },
+  searchString: '',
   loading: false,
   error: '',
 }
 
 function personsReducer(state: PersonState = initialState, action: PersonActionTypes) {
   switch (action.type) {
-    case PersonKeys.SEARCH_PERSON:
     case PersonKeys.LOAD_PERSONS: {
       return {
         ...state,
@@ -48,6 +48,14 @@ function personsReducer(state: PersonState = initialState, action: PersonActionT
         error,
       }
     }
+    case PersonKeys.SEARCH_PERSON: {
+      const { value } = action.payload;
+      return {
+        ...state,
+        loading: true,
+        searchString: value,
+      }
+    }
     default: return state;
   }
 }
@@ -55,6 +63,7 @@ function personsReducer(state: PersonState = initialState, action: PersonActionT
 // selectors
 export const getPersons = (state: RootState) => state.persons.persons
 export const getPagination = (state: RootState) => state.persons.pagination
+export const getSearchString = (state: RootState) => state.persons.searchString
 export const getLoadingStatus = (state: RootState) => state.persons.loading
 export const getError = (state: RootState) => state.persons.error
 

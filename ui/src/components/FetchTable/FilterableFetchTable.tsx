@@ -9,6 +9,7 @@ export interface FetchTableProps {
   loading: boolean;
   error: string;
   loadFetchs: (pagination: Pagination) => any;
+  removeFetch: (personKey: string) => any;
 }
 
 export interface SearchBarProps {
@@ -26,18 +27,20 @@ export default class FilterableFetchTable extends React.Component<FilterablePers
       loading,
       error,
       loadFetchs,
-      searchFetchs,
+      searchFetch,
+      removeFetch,
     } = this.props
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <SearchBar onSearch={searchFetchs} />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <SearchBar onSearch={searchFetch} />
         <FetchTable
           fetchs={fetchs}
           pagination={pagination}
           loading={loading}
           error={error}
           loadFetchs={loadFetchs}
+          removeFetch={removeFetch}
         />
       </div>
     )

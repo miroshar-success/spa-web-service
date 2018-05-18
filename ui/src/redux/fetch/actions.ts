@@ -5,6 +5,7 @@ import {
   LoadFetchsSuccessAction,
   LoadFetchsFailureAction,
   SearchFetchAction,
+  RemoveFetchAction,
 } from './types';
 
 export const loadFetchs: ActionCreator<LoadFetchsAction> = (pagination) => ({
@@ -33,5 +34,12 @@ export const searchFetch: ActionCreator<SearchFetchAction> = (value) => ({
   type: FetchKeys.SEARCH_FETCHS,
   payload: {
     value,
+  }
+})
+
+export const removeFetch: ActionCreator<RemoveFetchAction> = (id) => ({
+  type: FetchKeys.REMOVE_FETCH,
+  payload: {
+    id,
   }
 })

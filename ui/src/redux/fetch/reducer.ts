@@ -14,13 +14,14 @@ export const initialState: FetchState = {
     pageSize: 10,
     current: 1,
   },
+  searchString: '',
   loading: false,
   error: '',
 }
 
 function fetchsReducer(state: FetchState = initialState, action: FetchActionTypes) {
   switch (action.type) {
-    case FetchKeys.SEARCH_FETCHS:
+    case FetchKeys.REMOVE_FETCH:
     case FetchKeys.LOAD_FETCHS: {
       return {
         ...state,
@@ -48,14 +49,23 @@ function fetchsReducer(state: FetchState = initialState, action: FetchActionType
         error,
       }
     }
+    case FetchKeys.SEARCH_FETCHS: {
+      const { value } = action.payload;
+      return {
+        ...state,
+        searchString: value,
+        loading: true,
+      }
+    }
     default: return state;
   }
 }
 
 // selectors
 export const getFetchs = (state: RootState) => state.fetch.fetchs
-export const getPagination = (state: RootState) => state.persons.pagination
-export const getLoadingStatus = (state: RootState) => state.persons.loading
-export const getError = (state: RootState) => state.persons.error
+export const getSearchString = (state: RootState) => state.fetch.searchString
+export const getPagination = (state: RootState) => state.fetch.pagination
+export const getLoadingStatus = (state: RootState) => state.fetch.loading
+export const getError = (state: RootState) => state.fetch.error
 
 export default fetchsReducer;

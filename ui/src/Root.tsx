@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Route, Link, BrowserRouter as Router, } from 'react-router-dom';
 import ru from 'antd/es/locale-provider/ru_RU';
 import PersonsTableContainer from './containers/PersonsTableContainer';
+import FilterableFetchsContainer from './containers/FetchsTableContainer';
 
 import { Store } from 'redux';
 import configureStore from '@redux/store';
@@ -22,7 +23,7 @@ export default () => (
   <LocaleProvider locale={ru} >
     <Provider store={store}>
       <Router>
-        <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column', marginTop: 20 }}>
+        <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column', width: '100%', marginTop: 20 }}>
           <ul style={{ display: 'flex', listStyle: 'none' }}>
             <li><Link to='/'>Home</Link></li>
             <Divider type='vertical' style={{ marginTop: 5 }} />
@@ -31,10 +32,11 @@ export default () => (
             <li><Link to='/fetch'>Fetch</Link></li>
           </ul>
           <Divider style={{ marginTop: 0 }} />
-          <main style={{ display: 'flex', justifyContent: 'center' }}>
+          <main style={{ display: 'flex', justifyContent: 'center', margin: '0 50px' }}>
             <Route exact path={Path.root} render={() => <h1>Home Page</h1>} />
+            <Route path={Path.fetch} component={FilterableFetchsContainer} />
             <Route path={Path.persons} component={PersonsTableContainer} />
-            <Route path={Path.fetch} render={() => <h1>Fetch Component</h1>} />
+
           </main>
         </div>
       </Router>

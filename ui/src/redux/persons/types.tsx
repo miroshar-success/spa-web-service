@@ -2,8 +2,9 @@ import { Action } from 'redux';
 
 // define initial state shape
 export interface Person {
+  _id: string;
   clientName: ClientType;
-  personKey: string;
+  personKey: object;
   personInfo: PersonInfo;
 }
 
@@ -26,6 +27,7 @@ export interface Pagination {
 export interface PersonState {
   persons: Array<Person>;
   pagination: Pagination;
+  searchString: string;
   loading: boolean;
   error: string;
 }
