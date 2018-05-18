@@ -1,5 +1,5 @@
 import { Connection } from 'mongoose';
-import { PersonSchema } from './schemas/person.schema';
+import { PersonSchema } from './person.schema';
 
 const personProvider = [
   {

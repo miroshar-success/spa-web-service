@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { Component, Inject } from '@nestjs/common';
-import Person from './interfaces/person.interface';
+import Person from './person.interface';
 import CreatePersonDto from './person.dto';
 
 @Component()
@@ -8,18 +8,7 @@ export default class PersonService {
   constructor(@Inject('PersonModelToken') private readonly personModel: Model<Person>) { }
 
   async create(createPersonDto: CreatePersonDto): Promise<Person> {
-    const {
-      clientName: { type },
-      personKey,
-      personInfo,
-    } = createPersonDto;
-
-    const createPersonDtoForMongoose = {
-      clientName: type,
-      personKey,
-      personInfo,
-    }
-    const createdPerson = new this.personModel(createPersonDtoForMongoose);
+    const createdPerson = new this.personModel(createPersonDto);
     return await createdPerson.save();
   }
 

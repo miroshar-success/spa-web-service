@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
-import { PersonType } from '../person.type';
+import { ClientName } from '../clients/clients.enums';
 import * as mongoosePaginate from 'mongoose-paginate'
 
 export const PersonSchema = new mongoose.Schema(
   {
     clientName: {
       type: String,
-      enum: [PersonType.Telegram, PersonType.Viber],
+      enum: [...Object.keys(ClientName)],
       required: true,
     },
     personKey: {

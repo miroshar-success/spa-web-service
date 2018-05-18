@@ -10,7 +10,7 @@ import { ApiImplicitQuery } from '@nestjs/swagger';
 
 import PersonService from './person.service';
 import CreatePersonDto from './person.dto';
-import Person from './interfaces/person.interface';
+import Person from './person.interface';
 
 @Controller('data/person')
 export default class PersonController {
