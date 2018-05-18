@@ -55,7 +55,7 @@ interface MqApiConfig{
 // basepath.[client].[root].[call].req|resp
 class MqApiServer{
 
-    constructor({basePath, clients, connection}: MqApiConfig, private controllers: any[] ){
+    constructor({basePath, clients, connection}: MqApiConfig, private controllers: C[] ){
         const PATHS = Array<string>();
         clients
             .map((client: string) => basePath + '.' + client)

@@ -1,0 +1,15 @@
+{
+  "name": "mq",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "tsc",
+    "run": "(tsc -w &) && nodemon ./dist/index.js"
+  },
+  "dependencies": {
+    "@types/reflect-metadata": "^0.1.0",
+    "reflect-metadata": "^0.1.12"
+  },
+  "devDependencies": {
+  }
+}
