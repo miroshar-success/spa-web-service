@@ -70,7 +70,7 @@ export function* searchPersonSaga(): IterableIterator<any> {
 
 // helpers
 const buildUrlForLoadUsers = (params: Pagination | string, searchString?: string): string => {
-  const prefix = '/person';
+  const prefix = 'data/person';
   if (typeof params === 'string') {
     return `${prefix}/find?search=${encodeURIComponent(params)}`
   } else {

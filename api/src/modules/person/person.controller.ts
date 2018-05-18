@@ -12,7 +12,7 @@ import PersonService from './person.service';
 import CreatePersonDto from './dto/create-person.dto';
 import Person from './interfaces/person.interface';
 
-@Controller('person')
+@Controller('data/person')
 export default class PersonController {
   constructor(private readonly personService: PersonService) { }
 
