@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "tsc",
-    "run": "(tsc -w &) && nodemon ./dist/index.js"
+    "up": "(tsc -w &) && nodemon ./dist/index.js"
   },
   "dependencies": {
     "@types/reflect-metadata": "^0.1.0",
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.12",
+    "@types/amqplib": "^0.5.7"
   },
   "devDependencies": {
   }
