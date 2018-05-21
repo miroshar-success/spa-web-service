@@ -57,7 +57,9 @@
      "suppressImplicitAnyIndexErrors": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "dist/mq-api-starter/src/service/mq.api.proxy.service.d.ts",
+    "dist/mq-api-starter/src/service/mq.api.proxy.service.d.ts"
   ],
   "exclude": [
     "node_modules",
