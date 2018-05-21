@@ -25,22 +25,24 @@ class MqApiProxyService implements MqApiProducer, MqApiConsumer {
 
     produce(target: Function) {
         const proxy = this;
-        return function (...args: any[]) {
+        return  (...args: any[]) => {
             console.log(`Produce to ${proxy.root}.${proxy.clients} with connection ${proxy.connection}`);
             const result = target.apply(this, args);
-            console.log("DATA:", result)
+            console.log("DATA:", result);
             return result;
         };
     }
     consume(target: Function) {
         const proxy = this;
-        return function (...args: any[]) {
+        return (...args: any[]) =>  {
             console.log(`Consume from ${proxy.root}.${proxy.clients} with connection ${proxy.connection}`);
             const result = target.apply(this, args);
-            console.log("DATA:", result)
+            console.log("DATA:", result);
             return result;
         };
     }
 }
 
 export default MqApiProxyService;
+
+
