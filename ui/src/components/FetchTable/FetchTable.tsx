@@ -38,17 +38,15 @@ export default class FetchTable extends React.Component<FetchTableProps> {
       title: 'Селекторы',
       dataIndex: 'selectors',
       key: 'selectors',
-      render: (text, record) => {
-        return (
-          <ul>
-            {
-              record.selectors.map(({ sampleUrl, selector }) => (
-                <li key={Math.random()}>{sampleUrl} - {selector}</li>
-              ))
-            }
-          </ul>
-        )
-      }
+      render: (text, record) => (
+        <ul>
+          {
+            record.selectors.map(({ _id, sampleUrl, selector }) => (
+              <li key={_id}>{sampleUrl} - {selector}</li>
+            ))
+          }
+        </ul>
+      )
     },
     {
       title: 'Селектор',
@@ -64,17 +62,16 @@ export default class FetchTable extends React.Component<FetchTableProps> {
       title: 'Последний результат',
       dataIndex: 'lastResult',
       key: 'lastResult',
-      render: (text, record) => {
-        return (
-          <ul>
-            {
-              record.lastResult.map(result => (
-                <li key={Math.random()}>{result}</li>
-              ))
-            }
-          </ul>
-        )
-      }
+      // TODO: Last result type?
+      render: (text, record) => (
+        <ul>
+          {
+            record.lastResult.map(result => (
+              <li key={Math.random()}>{result}</li>
+            ))
+          }
+        </ul>
+      )
     },
     {
       title: 'Последний результат',

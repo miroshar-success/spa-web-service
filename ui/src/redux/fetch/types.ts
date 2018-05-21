@@ -17,6 +17,7 @@ export interface Fetch {
 }
 
 export interface FetchExploreSelectors {
+  _id: string,
   sampleUrl: string;
   selector: string;
 }
