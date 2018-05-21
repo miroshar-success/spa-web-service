@@ -11,10 +11,11 @@ import { ScannerModule } from "../scanner/scanner.module";
 import FetchDataController from "./fetch.controller.data";
 import { ScannerClient } from "./scanner.client";
 import FetchDataService from "./fetch.service.data";
+import {FetchResultsGw} from "./fetch.mq.gw";
 
 @Module({
   modules: [AgendaModule, rabbitMqModule, ScannerModule, DatabaseModule],
   controllers: [FetchController, FetchDataController],
-  components: [FetchService, ScannerClient, ...fetchProviders, FetchDataService]
+  components: [FetchService, ScannerClient, ...fetchProviders, FetchDataService, FetchResultsGw]
 })
 export class FetchModuleModule { }

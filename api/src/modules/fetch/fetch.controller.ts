@@ -2,8 +2,10 @@ import {Body, Controller, Get, Post} from '@nestjs/common';
 
 import {FetchService} from "./fetch.service";
 import {FetchDto, FetchExploreDto} from "./fetch.dto";
+import PersonCoreDto from "../person/person.dto";
+import {Delete} from "@nestjs/common/utils/decorators/request-mapping.decorator";
 
-@Controller('fetchmq')
+@Controller('fetch')
 export class FetchController {
 
     constructor(private readonly fetchService: FetchService) {
@@ -11,28 +13,22 @@ export class FetchController {
 
     @Post('/explore')
     async fetchExplore(@Body() fetchExploreDto: FetchExploreDto) {
-        await this.fetchService.fetchExploreCreate(fetchExploreDto);
+        await this.fetchService.fetchExplore(fetchExploreDto);
     }
 
-    // TODO ADD RESULT
-
-    @Post('/fetch')
+    @Post('')
     async fetch(@Body() fetchDto: FetchDto) {
         await this.fetchService.fetch(fetchDto);
     }
 
+    @Delete('/delete')
+    async deleteFetch(@Body() fetchExploreDto: FetchExploreDto) {
+        await this.fetchService.fetchDelete(fetchExploreDto);
+    }
 
-
-    // @Post('/delete')
-    // async deleteFetch(@Body() fetchExploreDtoMq: FetchExploreDto) {
-    //     await this.fetchService.fetchDelete(fetchExploreDtoMq);
-    // }
-    //
-
-    //
-    // @Post('/get')
-    // async getUserFetch(@Body() personFetchDtoMq: PersonFetchDto): Promise<FetchExploreDto[]> {
-    //     return await this.fetchService.getUserFetch(personFetchDtoMq);
-    // }
+    @Post('/get')
+    async getUserFetches(@Body() personCoreDto: PersonCoreDto): Promise<FetchExploreDto[]> {
+        return await this.fetchService.fetchGet(personCoreDto);
+    }
 
 }
