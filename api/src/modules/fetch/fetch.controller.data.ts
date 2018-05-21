@@ -15,7 +15,7 @@ import { FetchModel } from './fetch.model';
 import FetchDataService from './fetch.service.data';
 import { FetchDtoData } from './fetch.dto.data';
 
-@Controller('data/fetch')
+@Controller('data/fetchs')
 export default class FetchDataController {
 
   constructor(private readonly fetchDataService: FetchDataService) { }
@@ -34,8 +34,8 @@ export default class FetchDataController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    return await this.fetchDataService.delete(id);
+  async delete(@Param('id') id: string, @Query() params: any): Promise<any> {
+    return await this.fetchDataService.delete(id, params.searchString);
   }
 
   @Get('find')

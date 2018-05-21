@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Table, Popover, Icon } from 'antd';
-import { Person, Pagination } from '@redux/persons/types';
+import { Person } from '@redux/persons/types';
+import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { PersonsTableProps } from './FilterablePersonsTable';
 

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import FetchTable from './FetchTable';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import { Fetch, Pagination } from '@redux/fetch/types';
+import { Fetch } from '@redux/fetch/types';
+import { Pagination } from '@redux/common/table/types';
 
 export interface FetchTableProps {
   fetchs: Array<Fetch>;

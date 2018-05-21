@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Table, Button, Icon } from 'antd';
-import { Fetch, Pagination } from '@redux/fetch/types';
+import { Fetch } from '@redux/fetch/types';
+import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { FetchTableProps } from './FilterableFetchTable';
 

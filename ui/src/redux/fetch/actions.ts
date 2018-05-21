@@ -1,45 +1,15 @@
-import { ActionCreator } from 'redux';
 import {
-  FetchKeys,
-  LoadFetchsAction,
-  LoadFetchsSuccessAction,
-  LoadFetchsFailureAction,
-  SearchFetchAction,
-  RemoveFetchAction,
-} from './types';
+  loadData,
+  loadDataSuccess,
+  loadDataFailure,
+  searchData,
+  removeData,
+} from '@redux/common/table/actions';
 
-export const loadFetchs: ActionCreator<LoadFetchsAction> = (pagination) => ({
-  type: FetchKeys.LOAD_FETCHS,
-  payload: {
-    pagination,
-  }
-})
+const prefix = '@@fetchs';
 
-export const loadFetchsSuccess: ActionCreator<LoadFetchsSuccessAction> = (fetchs, pagination) => ({
-  type: FetchKeys.LOAD_FETCHS_SUCCESS,
-  payload: {
-    fetchs,
-    pagination,
-  }
-})
-
-export const loadFetchsFailure: ActionCreator<LoadFetchsFailureAction> = (error) => ({
-  type: FetchKeys.LOAD_FETCHS_FAILURE,
-  payload: {
-    error,
-  }
-})
-
-export const searchFetch: ActionCreator<SearchFetchAction> = (value) => ({
-  type: FetchKeys.SEARCH_FETCHS,
-  payload: {
-    value,
-  }
-})
-
-export const removeFetch: ActionCreator<RemoveFetchAction> = (id) => ({
-  type: FetchKeys.REMOVE_FETCH,
-  payload: {
-    id,
-  }
-})
+export const loadFetchs = loadData(prefix);
+export const loadFetchsSuccess = loadDataSuccess(prefix);
+export const loadFetchssFailure = loadDataFailure(prefix);
+export const searchFetch = searchData(prefix);
+export const removeFetch = removeData(prefix);
