@@ -12,6 +12,6 @@ export default class PersonCoreDto {
   readonly personKey: object;
 
   @ApiModelProperty()
-  readonly personInfo: object;
+  personInfo: object;
 
 }

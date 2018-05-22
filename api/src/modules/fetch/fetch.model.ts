@@ -16,7 +16,7 @@ export const FetchExploreSelectorsSchema = new mongoose.Schema(
 );
 
 export interface FetchModel extends Document {
-  readonly _id: string,
+  _id: string,
   readonly clientName: ClientName
   readonly personKey: Object
   readonly fetchUrl: string

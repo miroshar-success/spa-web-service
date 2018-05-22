@@ -1,7 +1,8 @@
 import * as React from 'react';
 import PersonsTable from './PersonsTable';
 import SearchBar from '@components/common/SearchBar/SearchBar';
-import { Person, Pagination } from '@redux/persons/types';
+import { Person } from '@redux/persons/types';
+import { Pagination } from '@redux/common/table/types';
 
 export interface PersonsTableProps {
   persons: Array<Person>;

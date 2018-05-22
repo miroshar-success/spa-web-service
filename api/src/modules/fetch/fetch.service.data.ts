@@ -31,8 +31,13 @@ export default class FetchDataService {
     return await this.fetchModel.paginate({}, { offset, limit });
   }
 
-  async delete(id: string): Promise<void> {
-    return await this.fetchModel.find({ _id: id }).remove().exec();
+  async delete(id: string, searchString: string): Promise<any> {
+    const query = await this.fetchModel.findByIdAndRemove({ _id: id });
+    if (searchString.length === 0) {
+      return await this.fetchModel.find().count();
+    } else {
+      return await this.fetchModel.paginate({ $text: { $search: searchString } }, { limit: 10 });
+    }
   }
 
   async search(searchString): Promise<FetchModel[]> {
