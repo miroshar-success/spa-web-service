@@ -19,6 +19,7 @@ import {ApiModelProperty} from "@nestjs/swagger";
 import {FetchExploreScannerResultDto, FetchScannerResultDto} from "./dto/scanner.dto";
 import {FetchMessage} from "./dto/fetch.message";
 import FetchDataService from "./fetch.service.data";
+import PersonService from "../person/person.service";
 
 
 @Component()
@@ -33,7 +34,8 @@ export class FetchService {
                 @Inject('agendaModelToken') private readonly agenda: Agenda,
                 private readonly scannerClient: ScannerClient,
                 private readonly fetchResultsGw: FetchResultsGw,
-                private readonly fetchDataService: FetchDataService) {
+                private readonly fetchDataService: FetchDataService,
+                private readonly personService: PersonService) {
         this.initFetchWatcher();
     }
 
@@ -42,7 +44,11 @@ export class FetchService {
     /** FETCH EXPLORE **/
 
     // fetchExplore request
-    public async fetchExplore({person: {clientName}, person: {personKey}, fetchUrl}: FetchExploreDto) {
+    public async fetchExplore({person, fetchUrl}: FetchExploreDto) {
+
+        this.personService.merge(person);
+
+        const {clientName, personKey} = person;
 
         let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
@@ -90,7 +96,7 @@ export class FetchService {
 
     public async fetch({person, fetchUrl, sampleUrl}: FetchDto) {
 
-        // TODO ADD MERGE PERSON
+        this.personService.merge(person);
 
         const {personKey, clientName} = person;
 
