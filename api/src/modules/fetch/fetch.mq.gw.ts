@@ -1,5 +1,7 @@
 import {Component} from "@nestjs/common";
-import {FetchExploreResultDto, FetchResultDto, MqMessageDto} from "./dto/fetch.dto";
+import {FetchExploreResultDto, FetchResultDto, FetchMessageDto} from "./dto/fetch.dto";
+import {FetchMessage} from "./dto/fetch.message";
+import PersonCoreDto from "../person/person.dto";
 
 @Component()
 export class FetchResultsGw {
@@ -14,8 +16,9 @@ export class FetchResultsGw {
         console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
     }
 
-    async publishMessage(mqMessageDto: MqMessageDto) {
-        console.log("message"+ JSON.stringify(mqMessageDto))
+    async publishMessage(message: FetchMessage, person: PersonCoreDto) {
+        let fetchMessage: FetchMessageDto = {message: message, person: person};
+        console.log("message"+ JSON.stringify(fetchMessage))
     }
 
 }

@@ -2,6 +2,7 @@ import {ApiModelProperty} from '@nestjs/swagger';
 
 
 import PersonDto from "../../person/person.dto";
+import {FetchMessage} from "./fetch.message";
 
 /** FETCH DTO **/
 
@@ -35,8 +36,12 @@ export class FetchResultDto extends CoreFetchDto {
     readonly resultUrls: string[] = [];
 }
 
+/** ME MESSAGE DTO **/
+
 //mq message
-export class MqMessageDto extends CoreFetchDto {
-    readonly messageKey: string;
-    readonly message?: string;
+export class FetchMessageDto extends CoreFetchDto {
+    readonly message: FetchMessage;
+    readonly messageText?: string;
 }
+
+

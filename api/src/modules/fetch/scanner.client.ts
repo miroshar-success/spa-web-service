@@ -43,11 +43,9 @@ export class ScannerClient implements OnModuleInit {
         });
     }
 
-    // ADD AS CONSUMER
     private fetchExploreConsumer(fetchExploreScannerResultDto: FetchExploreScannerResultDto) {
         this.fetchService.fetchExploreResultConsumer(fetchExploreScannerResultDto);
     }
-
 
     /********** FETCH ********/
 
