@@ -10,13 +10,16 @@ import {async} from "rxjs/scheduler/async";
 import {ScannerClient} from "./scanner.client";
 import {
     CoreFetchDto,
-    FetchDto, FetchExploreDto, FetchExploreSamplesDto, FetchExploreScannerDto, FetchExploreScannerResultDto,
-    FetchScannerResultDto
-} from "./fetch.dto";
+    FetchDto, FetchExploreDto, FetchExploreSamplesDto
+} from "./dto/fetch.dto";
 import {ClientName} from "../clients/clients.enums";
 import PersonCoreDto from "../person/person.dto";
 import {FetchResultsGw} from "./fetch.mq.gw";
 import {ApiModelProperty} from "@nestjs/swagger";
+import {FetchExploreScannerResultDto, FetchScannerResultDto} from "./dto/scanner.dto";
+import {FetchMessage} from "./dto/fetch.message";
+import FetchDataService from "./fetch.service.data";
+import PersonService from "../person/person.service";
 
 
 @Component()
@@ -30,7 +33,9 @@ export class FetchService {
     constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>,
                 @Inject('agendaModelToken') private readonly agenda: Agenda,
                 private readonly scannerClient: ScannerClient,
-                private readonly fetchResultsGw: FetchResultsGw) {
+                private readonly fetchResultsGw: FetchResultsGw,
+                private readonly fetchDataService: FetchDataService,
+                private readonly personService: PersonService) {
         this.initFetchWatcher();
     }
 
@@ -39,12 +44,16 @@ export class FetchService {
     /** FETCH EXPLORE **/
 
     // fetchExplore request
-    public async fetchExplore({person: {clientName}, person: {personKey}, fetchUrl}: FetchExploreDto) {
+    public async fetchExplore({person, fetchUrl}: FetchExploreDto) {
 
-        let currentFetchModel = await this.getFetchByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
+        this.personService.merge(person);
+
+        const {clientName, personKey} = person;
+
+        let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
         if (currentFetchModel != null) {
-            await this.deleteFetch(currentFetchModel);
+            await this.fetchDataService.delete(currentFetchModel._id);
         }
 
         currentFetchModel = await this.fetchModel({
@@ -60,9 +69,8 @@ export class FetchService {
     }
 
     public async fetchExploreResultConsumer({fetchId, selectors}: FetchExploreScannerResultDto) {
-        let fetchModel: FetchModel = await this.getFetchById(fetchId);
-
-        if(fetchModel) {
+        let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
+        if (fetchModel) {
             await this.fetchModel.updateOne(fetchModel, {
                 $set: {
                     selectors: selectors,
@@ -81,50 +89,43 @@ export class FetchService {
                     fetchUrl: fetchModel.fetchUrl,
                     sampleUrls: sampleUrls
                 })
-        } else {
-            console.log('fetchModel is null - OK')
         }
     }
 
     /********* FETCH ********/
 
-    public async fetch({person: {personKey}, person: {clientName}, fetchUrl, sampleUrl}: FetchDto) {
+    public async fetch({person, fetchUrl, sampleUrl}: FetchDto) {
+
+        this.personService.merge(person);
+
+        const {personKey, clientName} = person;
 
         // get current job if exists
-        let fetchModel = await this.getFetchByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
-        if (!fetchModel || fetchModel.state != FetchState.init) {
-            // TODO ADD CUSTOM ERROR
-            throw new Error('model not found or wrong state');
+        let fetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
+
+        if (!fetchModel) {
+            throw new HttpException(FetchMessage.FETCH_EXISTS_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
         let selectors: FetchExploreSelectorModel[] = fetchModel.selectors;
 
         if (!selectors || selectors.length < 1) {
-            // TODO ADD CUSTOM ERROR
-            throw new Error('selector not found');
+            throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
         let selectorModel = selectors.find(selector => selector.sampleUrl == sampleUrl);
 
         if (!selectorModel == null && selectorModel.selector) {
-            // TODO ADD CUSTOM ERROR
-            throw new Error('selector not found');
+            throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
-        // TODO MOVE TO DATA SERVICE
-        await this.fetchModel.updateOne(fetchModel, {
-            $set: {
-                selector: selectorModel.selector,
-                state: FetchState.active,
-                selectors: [],
-                updateDate: new Date(-8640000000000000)
-            }
-        }).exec();
+        await this.fetchDataService.updateFetchModelWithInitData(fetchModel, selectorModel.selector);
     }
+
 
     public async fetchResultConsumer({fetchUrl, fetchId, resultUrls, isSelectorEmpty, isSampleUrlNotFound}: FetchScannerResultDto) {
 
-        let fetchModel: FetchModel = await this.getFetchById(fetchId);
+        let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
 
         if (resultUrls && resultUrls.length > 0) {
             await this.fetchModel.updateOne(fetchModel, {
@@ -134,25 +135,21 @@ export class FetchService {
             }).exec();
 
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
-            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls:resultUrls});
+            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls});
         }
     }
 
-    // // delete fetch
     public async fetchDelete({person: {clientName, personKey}, fetchUrl}) {
-
         // get current job if exists
-        let currentFetchModel = await this.getFetchByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
-
-        if (currentFetchModel == null) {
-            throw new HttpException("fetch not found", HttpStatus.FORBIDDEN);
+        let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
+        if (currentFetchModel) {
+            await this.fetchDataService.delete(currentFetchModel._id);
         }
-        await this.deleteFetch(currentFetchModel);
     }
 
     public async fetchGet(person: PersonCoreDto): Promise<FetchExploreDto[]> {
         const {personKey, clientName} = person;
-        let userFetches: FetchModel[] = await this.getFetchesOfPerson(personKey, clientName);
+        let userFetches: FetchModel[] = await this.fetchDataService.getByPersonAndClientName(personKey, clientName);
 
         return userFetches.map(value => {
             return {
@@ -211,38 +208,10 @@ export class FetchService {
         }
     }
 
-
     /** COMMON PRIVATE METHODS **/
 
     private initPersonCoreDtoFromFetchModel({clientName, personKey}: FetchModel): PersonCoreDto {
         return {clientName: clientName, personKey: personKey, personInfo: null};
     }
-
-    private getFetchById(fetchId: string) {
-        return this.fetchModel.findOne({"_id": fetchId});
-    }
-
-    private async getFetchesOfPerson(personKey: object, clientName: ClientName) {
-        // get current job if exists
-        let currentFetchModel = await this.fetchModel.find({
-            'personKey': personKey,
-            'clientName': clientName
-        }).exec();
-        return currentFetchModel;
-    }
-
-
-    private async deleteFetch(currentFetchModel: FetchModel) {
-        await this.fetchModel.deleteOne({_id: currentFetchModel._id}).exec();
-    }
-
-    private async getFetchByPersonKeyClientNameFetchUrl(personKey: Object, clientName: ClientName, fetchUrl: string): Promise<FetchModel> {
-        return this.fetchModel.findOne({
-            'personKey': personKey,
-            'clientName': clientName,
-            'fetchUrl': fetchUrl
-        }).exec();
-    }
-
 
 }
