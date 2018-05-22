@@ -1,13 +1,15 @@
 import {
-    FetchExploreSamplesDto,
-    FetchExploreScannerDto, FetchExploreScannerResultDto,
-    FetchScannerDto, FetchScannerResultDto
-} from "./fetch.dto";
+    FetchExploreSamplesDto
+} from "./dto/fetch.dto";
 import {Component, OnModuleInit} from "@nestjs/common";
 import {ScannerService} from "../scanner/scanner.service";
 import {FetchService} from "./fetch.service";
 import {FetchExploreSelectorModel} from "./fetch.model";
 import {ModuleRef} from "@nestjs/core";
+import {
+    FetchExploreScannerDto, FetchExploreScannerResultDto, FetchScannerDto,
+    FetchScannerResultDto
+} from "./dto/scanner.dto";
 
 /** FETCH DTO **/
 

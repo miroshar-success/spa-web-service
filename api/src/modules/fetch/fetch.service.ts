@@ -8,15 +8,13 @@ import * as Agenda from "agenda";
 
 import {async} from "rxjs/scheduler/async";
 import {ScannerClient} from "./scanner.client";
-import {
-    CoreFetchDto,
-    FetchDto, FetchExploreDto, FetchExploreSamplesDto, FetchExploreScannerDto, FetchExploreScannerResultDto,
-    FetchScannerResultDto
-} from "./fetch.dto";
+import { CoreFetchDto,
+    FetchDto, FetchExploreDto, FetchExploreSamplesDto} from "./dto/fetch.dto";
 import {ClientName} from "../clients/clients.enums";
 import PersonCoreDto from "../person/person.dto";
 import {FetchResultsGw} from "./fetch.mq.gw";
 import {ApiModelProperty} from "@nestjs/swagger";
+import {FetchExploreScannerResultDto, FetchScannerResultDto} from "./dto/scanner.dto";
 
 
 @Component()

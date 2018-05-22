@@ -1,5 +1,5 @@
 import {Component} from "@nestjs/common";
-import {FetchExploreResultDto, FetchResultDto} from "./fetch.dto";
+import {FetchExploreResultDto, FetchResultDto, MqMessageDto} from "./dto/fetch.dto";
 
 @Component()
 export class FetchResultsGw {
@@ -12,6 +12,10 @@ export class FetchResultsGw {
 
     async publishFetchResult(fetchResultDto: FetchResultDto) {
         console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
+    }
+
+    async publishMessage(mqMessageDto: MqMessageDto) {
+        console.log("message"+ JSON.stringify(mqMessageDto))
     }
 
 }
