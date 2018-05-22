@@ -65,28 +65,28 @@ export class ScannerService {
     };
 
     download = async (url: string): Promise<any> => {
-        /*const request = (await needle('get', url));
-        const html = request.body;*/
-        const domHtml = await (new Promise((resolve, reject) => {
-            jsdom.env({
-                url,
-                features: {
-                    FetchExternalResources: ['script'],
-                    ProcessExternalResources: ['script'],
-                    SkipExternalResources: false
-                },
-                // proxy: 'https://api.enthought.com/',
-                done: function (err, window) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        const output = jsdom.serializeDocument(window.document);
-                        window.close();
-                        resolve(output);
-                    }
-                },
-            });
-        }));
-        return {body: domHtml};
+        const request = (await needle('get', url));
+        const html = request.body;
+        // const domHtml = await (new Promise((resolve, reject) => {
+        //     jsdom.env({
+        //         url,
+        //         features: {
+        //             FetchExternalResources: ['script'],
+        //             ProcessExternalResources: ['script'],
+        //             SkipExternalResources: false
+        //         },
+        //         // proxy: 'https://api.enthought.com/',
+        //         done: function (err, window) {
+        //             if (err) {
+        //                 reject(err);
+        //             } else {
+        //                 const output = jsdom.serializeDocument(window.document);
+        //                 window.close();
+        //                 resolve(output);
+        //             }
+        //         },
+        //     });
+        // }));
+        return {body: html};
     };
 }
