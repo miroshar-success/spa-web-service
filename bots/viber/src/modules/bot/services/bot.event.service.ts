@@ -35,6 +35,7 @@ export class BotEventService {
         this.fetchPost(fetchDtoOut);
     }
 
+
     //TODO url
     private async fetchPost(fetchDtoOut: FetchDtoOut) {
         await axios.post('http://localhost:3000/fetchmq/fetch', fetchDtoOut, {

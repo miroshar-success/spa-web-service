@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
     "start": "node index.js",
-    "start:dev": "nodemon",
+    "start:dev": "nodemon index.js",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "node dist/main.js",
     "test": "jest",
