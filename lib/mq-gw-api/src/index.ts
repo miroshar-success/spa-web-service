@@ -1,24 +1,24 @@
-import {MqApiDecorators} from "./decorators/mq.api.decorators";
+import {MqGwDecorators} from "./decorators/mq.gw.decorators";
 
 
-export default MqApiDecorators;
+export default MqGwDecorators;
 
 
 //
 // import {Connection} from "amqplib";
-// import MqConsumer = MqApiDecorators.MqConsumer;
-// import MqProducer = MqApiDecorators.MqProducer;
-// import EnableMqApi = MqApiDecorators.EnableMqApi;
+// import MqGwConsumer = MqGwDecorators.MqGwConsumer;
+// import MqGwProducer = MqGwDecorators.MqGwProducer;
+// import EnableMqGw = MqGwDecorators.EnableMqGw;
 // export class Service {
 //     constructor(public bar: string){
 //         console.log('INIT: ', bar);
 //     }
-//     @MqConsumer({name:'fetch', gateway:'clientKey'})
+//     @MqGwConsumer({name:'fetch', gateway:'clientKey'})
 //     call1(req: string){
 //         console.log('bar == ',this.bar);
 //         return "MQ 2-1: " + req;
 //     }
-//     @MqProducer({name:'fetch', gateway:'clintKey'})
+//     @MqGwProducer({name:'fetch', gateway:'clintKey'})
 //     call2(req: string){
 //         console.log('bar == ',this.bar);
 //         return "MQ 2-2: " + req;
@@ -28,7 +28,7 @@ export default MqApiDecorators;
 //         return 'foo';
 //     }
 // }
-// @EnableMqApi({
+// @EnableMqGw({
 //     root: 'root',
 //     clients:['telegram'],
 //     components:[Service, Number]
@@ -45,4 +45,4 @@ export default MqApiDecorators;
 // const service = new Service('serviceBar')
 // service.call1('test call1')
 // service.call2('test call2')
-
+//
