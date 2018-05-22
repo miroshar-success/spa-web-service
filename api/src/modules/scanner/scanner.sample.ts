@@ -1,9 +1,10 @@
 import {CssPath} from './scanner.csspath';
 import * as path from 'url';
+import {EuristicMeta, EuristicOrderService} from './scanner.euristic';
 
 export class SampleList {
     constructor(readonly sample: Sample[]) {
-    }
+    };
 
     static fromPaths(paths: CssPath[], deep: number = 1): SampleList {
         const sample = paths.map(x => {
@@ -14,7 +15,7 @@ export class SampleList {
             return group;
         });
         return new SampleList(sample);
-    }
+    };
 
     groupBy = (key: string = 'selector'): SampleList => {
         const sample = Array.from(this.sample.reduce(
@@ -27,12 +28,12 @@ export class SampleList {
             new Map()
         )).map(v => new Sample(v[0], v[1].map(link => link.sampleUrl[0])));
         return new SampleList(sample);
-    }
+    };
 
-    orderByAsc = (): SampleList => {
-        const result = [...this.sample].sort((x, y) => y.sampleUrl.length - x.sampleUrl.length);
+    orderByDesc = (meta: EuristicMeta): SampleList => {
+        const result = [...this.sample].sort((x, y) => EuristicOrderService.compare(y.sampleUrl,x.sampleUrl,meta));
         return new SampleList(result);
-    }
+    };
 
     take = (count: number = 1): SampleList => {
         const result = this.sample.map(x => {
@@ -41,14 +42,14 @@ export class SampleList {
             return new Sample(x.selector, x.sampleUrl.splice(0, count));
         });
         return new SampleList(result);
-    }
+    };
 
     distinct = (): SampleList => {
         const result = this.sample.map(sample=>{
             return new Sample(sample.selector,sample.sampleUrl.filter((value, index, self) => self.indexOf(value) === index));
         });
         return new SampleList(result);
-    }
+    };
 
     resolveRelativeUrl = (baseUrl: string): SampleList => {
         const result = this.sample.map(x => {
@@ -56,7 +57,7 @@ export class SampleList {
             return new Sample(x.selector, absUrls);
         });
         return new SampleList(result);
-    }
+    };
 }
 
 export class Sample {
