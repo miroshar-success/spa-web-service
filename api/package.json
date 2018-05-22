@@ -62,7 +62,7 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!lodash-es)"
     ],
-    "rootDir": "src",
+    "rootDir": "./",
     "testRegex": ".spec.ts$",
     "transform": {
       "^.+\\.(ts|tsx)$": "<rootDir>/preprocessor.js"

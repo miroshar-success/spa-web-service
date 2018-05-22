@@ -1,23 +1,31 @@
 import * as cheerio from 'cheerio';
 import * as needle from 'needle';
-import * as path from 'url';
+import {URL} from 'url';
 import * as jsdom from 'jsdom'
-import {Component} from '@nestjs/common';
+import {Component, Inject} from '@nestjs/common';
 import {SELECTORS, ScannerInstance} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
 import {SampleList, SampleResponse} from './scanner.sample';
+import {EuristicMeta} from './scanner.euristic';
 
 const {JSDOM} = jsdom;
 
 @Component()
 export class ScannerService {
 
+    constructor(){
+
+    }
+
     fetchAll = async (url: string): Promise<SampleList> => {
         const cssPaths: CssPath[] = await this.getPathsByUrl(url, SELECTORS.LINKS);
+        const sortEuristic: EuristicMeta = new EuristicMeta();
+        sortEuristic.url = new URL(url);
+
         const listPaths: SampleList = SampleList.fromPaths(cssPaths, 0)
             .groupBy('selector')
             .distinct()
-            .orderByDesc()
+            .orderByDesc(sortEuristic)
             .take(1)
             .resolveRelativeUrl(url);
         return listPaths;
@@ -57,7 +65,7 @@ export class ScannerService {
     download = async (url: string): Promise<any> => {
         const request = (await needle('get', url));
         const html = request.body;
-        const domHtml = await (new Promise((resolve, reject) => {
+       /* const domHtml = await (new Promise((resolve, reject) => {
             jsdom.env({
                 html,
                 features: {
@@ -76,7 +84,7 @@ export class ScannerService {
                     }
                 },
             });
-        }));
-        return {body: domHtml};
+        }));*/
+        return {body: html};
     };
 }

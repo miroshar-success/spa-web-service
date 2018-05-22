@@ -16,10 +16,11 @@ describe('scanner test', () => {
         scannerService = new ScannerService();
     });
     describe('download', () => {
-        it('should return string containing html', async () => {
+        it('should return string containing html and execute inline scripts', async () => {
             const html = (await scannerService.download(urlPath)).body;
             expect(typeof html).toBe('string');
             expect(html.length).toBeGreaterThan(0);
+            expect(defaultHtml.length).toBeGreaterThan(html.length);
         });
     });
 
