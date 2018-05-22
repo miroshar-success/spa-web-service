@@ -4,7 +4,7 @@ import {MqApiDecorators} from "./decorators/mq.api.decorators";
 export default MqApiDecorators;
 
 
-
+//
 // import {Connection} from "amqplib";
 // import MqConsumer = MqApiDecorators.MqConsumer;
 // import MqProducer = MqApiDecorators.MqProducer;
@@ -36,12 +36,13 @@ export default MqApiDecorators;
 // class Test {
 //     constructor(connection: Connection){}
 // }
+//
 // console.log('**********************************************************');
 // console.log('Test: ', Test);
 // const test = new Test(({} as Connection));
 // console.log('test: ', test);
 //
-// const service = new Service('servicE')
+// const service = new Service('serviceBar')
 // service.call1('test call1')
 // service.call2('test call2')
 

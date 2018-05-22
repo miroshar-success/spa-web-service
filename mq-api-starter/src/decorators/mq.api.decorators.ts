@@ -2,7 +2,7 @@ import "reflect-metadata";
 import {Connection} from "amqplib";
 import {MqApiTypes} from "../types/mq.api.types";
 import {MqApiConstants} from "../constants/mq.api.constants";
-import {MqApiConfiguration} from "../configurations/mq.api.configuration";
+import {MqApiConfiguration} from "../configuration/mq.api.configuration";
 import DecoratorParam = MqApiTypes.DecoratorParam;
 import ConfigurationParam = MqApiTypes.ConfigurationParam;
 import MQ_METHOD_NAME_METADATA = MqApiConstants.MQ_METHOD_NAME_METADATA;
