@@ -18,7 +18,8 @@ module.exports = {
     modules: ['node_modules'],
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx', '.json', '.css', 'html'],
     alias: {
-      '@redux': path.resolve(__dirname, '../src/redux')
+      '@redux': path.resolve(__dirname, '../src/redux'),
+      '@components': path.resolve(__dirname, '../src/components'),
     }
   },
 

@@ -1,20 +1,22 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
-import { loadPersons } from '@redux/persons/actions';
+import { loadPersons, searchPerson } from '@redux/persons/actions';
 import {
-  getPersons,
+  getData,
   getPagination,
   getLoadingStatus,
   getError,
-} from '@redux/persons/reducer';
+} from '@redux/common/table/reducer';
+import { TableReducerNameSubscribers } from '@redux/common/table/types';
+import FilterablePersonsTable from '../components/PersonsTable/FilterablePersonsTable';
 
-import PersonsTable from '../components/PersonsTable/PersonsTable';
+const prefix = TableReducerNameSubscribers.PERSONS;
 
 const mapStateToProps = (state: RootState) => ({
-  persons: getPersons(state),
-  pagination: getPagination(state),
-  loading: getLoadingStatus(state),
-  error: getError(state),
+  persons: getData(state, prefix),
+  pagination: getPagination(state, prefix),
+  loading: getLoadingStatus(state, prefix),
+  error: getError(state, prefix),
 })
 
-export default connect(mapStateToProps, { loadPersons })(PersonsTable);
+export default connect(mapStateToProps, { loadPersons, searchPerson })(FilterablePersonsTable);
