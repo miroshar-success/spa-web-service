@@ -1,42 +1,60 @@
 import * as mongoose from 'mongoose';
-import {FetchClientName} from "./fetch.enums";
+import * as mongoosePaginate from 'mongoose-paginate'
+import { FetchState } from "./fetch.enums";
+import {ClientName} from "../clients/clients.enums";
 
-export interface FetchExploreSelectorsModel extends Document {
-    readonly sampleUrl: string
-    readonly selector: string
+export interface FetchExploreSelectorModel {
+  readonly sampleUrl: string
+  readonly selector: string
 }
 
 export const FetchExploreSelectorsSchema = new mongoose.Schema(
-    {
-        sampleUrl: String,
-        selector: String
-    }
+  {
+    sampleUrl: String,
+    selector: String
+  }
 );
 
 export interface FetchModel extends Document {
-    readonly _id: String,
-    readonly clientName: FetchClientName
-    readonly personKey: string
-    readonly fetchUrl: string
-    readonly createDate: Date
-    active: Boolean
-    selectors: [FetchExploreSelectorsModel]
+  _id: string,
+  readonly clientName: ClientName
+  readonly personKey: Object
+  readonly fetchUrl: string
+  readonly createDate: Date
+  state: FetchState
+  selectors: FetchExploreSelectorModel[]
 
-    selector: String
-    lastResult: [String]
+  selector: string
+
+  updateDate: Date
+  lastResult: [string]
 }
 
 export const FetchSchema = new mongoose.Schema(
-    {
-        _id: Number,
-        clientName: {type: String, require: true},
-        personKey: {type: String, require: true},
-        fetchUrl: {type: String, require: true},
-        createDate: {type: Date, require: true},
-        active: Boolean,
-        selectors: [FetchExploreSelectorsSchema],
+  {
+    clientName: { type: String, require: true },
+    personKey: { type: Object, require: true },
+    fetchUrl: { type: String, require: true },
+    createDate: { type: Date, require: true },
+    state: { type: String, require: true },
+    selectors: [FetchExploreSelectorsSchema],
 
-        selector: String,
-        lastResult: [String]
-    }
+    selector: String,
+    updateDate: { type: Date, require: true },
+    lastResult: [String]
+  }
 );
+
+FetchSchema.index({
+  clientName: 'text',
+  fetchUrl: 'text',
+  createDate: 'text',
+  state: 'text',
+  selector: 'text',
+  updateDate: 'text',
+})
+
+
+FetchSchema.plugin(mongoosePaginate);
+
+export default mongoose.model('Fetch', FetchSchema);

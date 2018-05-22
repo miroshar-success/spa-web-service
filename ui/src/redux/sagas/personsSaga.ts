@@ -1,49 +1,25 @@
-import { take, call, put, fork } from 'redux-saga/effects';
-import {
-  PersonKeys,
-  Person,
-  Pagination,
-} from '@redux/persons/types';
+import { fork } from 'redux-saga/effects';
+import { Person } from '@redux/persons/types';
+import { loadDataSaga, searchDataSaga } from '@redux/common/table/sagas';
+import { TableReducerNameSubscribers } from '@redux/common/table/types';
 
-import axios from 'axios';
+const prefix = TableReducerNameSubscribers.PERSONS
 
-const fetchPersons = (url: string) => {
-  return axios.get(url)
-    .then(response => response.data)
-    .catch(error => error)
+// watcher sagas
+export function* loadPersonsSaga(): IterableIterator<any> {
+  yield fork(loadDataSaga, prefix, getSuccessPayload);
 }
 
-function* loadPersons({ pageSize, current }: Pagination): IterableIterator<any> {
-  try {
-    const { docs: persons, limit, total } = yield call(fetchPersons, `/person?offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`);
-    yield put({
-      type: PersonKeys.LOAD_PERSONS_SUCCESS,
-      payload: {
-        persons: persons.map(({ _id, personType, personId }: Person) => ({
-          key: _id,
-          personType,
-          personId,
-        })),
-        pagination: {
-          pageSize: limit,
-          current,
-          total,
-        }
-      },
-    })
-  } catch (error) {
-    yield put({
-      type: PersonKeys.LOAD_PERSONS_FAILURE,
-      payload: {
-        error: error.message,
-      }
-    })
-  }
+export function* searchPersonSaga(): IterableIterator<any> {
+  yield fork(searchDataSaga, prefix, getSuccessPayload);
 }
 
-export default function* loadPersonsSaga(): IterableIterator<any> {
-  while (true) {
-    const { payload: { pagination } } = yield take(PersonKeys.LOAD_PERSONS);
-    yield fork(loadPersons, pagination);
-  }
+// helpers
+const getSuccessPayload = (persons: Array<Person>) => {
+  return persons.map(({ _id, clientName, personKey, personInfo }: Person) => ({
+    key: _id,
+    clientName,
+    personKey,
+    personInfo,
+  }))
 }

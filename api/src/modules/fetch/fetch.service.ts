@@ -1,45 +1,59 @@
 import {Model} from 'mongoose';
-import {Body, Component, HttpStatus, Inject, HttpException, Post} from '@nestjs/common';
+import {Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
 
-import {Channel, connect, Connection} from 'amqplib';
-import {FetchDto, FetchExploreDto, PersonFetchDto} from "./fetch.dto";
-import {FetchExploreSelectorsModel, FetchModel} from "./fetch.model";
-import {FetchClientName} from "./fetch.enums";
-import {FetchExploreMqDto} from "./fetch.mq.dto";
+import {FetchExploreSelectorModel, FetchModel} from "./fetch.model";
+import {FetchState} from "./fetch.enums";
 import * as Agenda from "agenda";
+
+
+import {async} from "rxjs/scheduler/async";
+import {ScannerClient} from "./scanner.client";
+import {
+    CoreFetchDto,
+    FetchDto, FetchExploreDto, FetchExploreSamplesDto
+} from "./dto/fetch.dto";
+import {ClientName} from "../clients/clients.enums";
+import PersonCoreDto from "../person/person.dto";
+import {FetchResultsGw} from "./fetch.mq.gw";
+import {ApiModelProperty} from "@nestjs/swagger";
+import {FetchExploreScannerResultDto, FetchScannerResultDto} from "./dto/scanner.dto";
+import {FetchMessage} from "./dto/fetch.message";
+import FetchDataService from "./fetch.service.data";
+import PersonService from "../person/person.service";
+
 
 @Component()
 export class FetchService {
 
-    public static FETCH_EXPLORE_MQ_NAME = "fetch.explore";
-    private fetchExploreChanel: Channel;
+    private static FETCH_WATCH_JOB_NAME: string = "fetchWatcherJob";
+    private static FETCH_WATCH_JOB_REPEAT_TIME: string = '1 seconds';
 
-    // TODO ADD HANDLER OF THIS CHANEL WITH SELECTORS OF USER
-    public static FETCH_EXPLORE_RESULT_MQ_NAME = "fetch.explore.result";
-    private fetchExploreResultChanel: Channel;
+    private static FETCH_REINIT_PERIOD: number = 500;
 
-    constructor(@Inject('rabbitMqConnection') private readonly connection: Connection,
-                @Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>,
-                @Inject('agendaModelToken') private readonly agenda: Agenda) {
-        // init consumer
-        this.callFetchExploreChanel(this.fetchExploreResultConsumer);
-
+    constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>,
+                @Inject('agendaModelToken') private readonly agenda: Agenda,
+                private readonly scannerClient: ScannerClient,
+                private readonly fetchResultsGw: FetchResultsGw,
+                private readonly fetchDataService: FetchDataService,
+                private readonly personService: PersonService) {
         this.initFetchWatcher();
-
     }
 
-    // init new fetch
-    public async fetchExploreCreate(fetchExploreDto: FetchExploreDto) {
+    /********* PUBLIC METHODS *********/
 
-        let personKey: string = fetchExploreDto.person.personKey;
-        let clientName: FetchClientName = fetchExploreDto.clientName;
-        let fetchUrl: string = fetchExploreDto.fetchUrl;
+    /** FETCH EXPLORE **/
 
-        // get current job if exists
-        let currentFetchModel = await this.getFetch(personKey, clientName, fetchUrl);
+    // fetchExplore request
+    public async fetchExplore({person, fetchUrl}: FetchExploreDto) {
+
+        this.personService.merge(person);
+
+        const {clientName, personKey} = person;
+
+        let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
         if (currentFetchModel != null) {
-            throw new HttpException('fetch already exists', HttpStatus.FORBIDDEN);
+            await this.fetchDataService.delete(currentFetchModel._id);
         }
 
         currentFetchModel = await this.fetchModel({
@@ -47,144 +61,157 @@ export class FetchService {
             personKey: personKey,
             fetchUrl: fetchUrl,
             createDate: Date.now(),
-            active: false,
+            state: FetchState.new,
         }).save();
 
-        // sent new message to fetch.explore
-        let fetchId = currentFetchModel._id;
-
-        let fetchExploreMqDto: FetchExploreMqDto = <FetchExploreMqDto>{
-            clientName: clientName,
-            fetchId: fetchId,
-            fetchUrl: fetchUrl
-        };
-
-        //sent message to queue
-        this.callFetchExploreChanel(channel => {
-            channel.sendToQueue(FetchService.FETCH_EXPLORE_MQ_NAME, new Buffer(JSON.stringify(fetchExploreMqDto)));
-        })
+        let fetchId: string = currentFetchModel._id.toString();
+        this.scannerClient.fetchExploreProduce({fetchId: fetchId, fetchUrl: fetchUrl})
     }
 
-    // delete fetch
-    public async fetchDelete(fetchExploreDto: FetchExploreDto) {
-        let personKey: string = fetchExploreDto.person.personKey;
-        let clientName: FetchClientName = fetchExploreDto.clientName;
-        let fetchUrl: string = fetchExploreDto.fetchUrl;
+    public async fetchExploreResultConsumer({fetchId, selectors}: FetchExploreScannerResultDto) {
+        let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
+        if (fetchModel) {
+            await this.fetchModel.updateOne(fetchModel, {
+                $set: {
+                    selectors: selectors,
+                    state: FetchState.init
+                }
+            }).exec();
 
-        // TODO MERGE USER IN USER SERVICE
-
-        // get current job if exists
-        let currentFetchModel = await this.fetchModel.findOne({
-            'personKey': personKey,
-            'clientName': clientName,
-            'fetchUrl': fetchUrl
-        }).exec();
+            let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
 
 
-        if (currentFetchModel == null) {
-            throw new HttpException("", HttpStatus.FORBIDDEN);
+            let sampleUrls = selectors.map(selector => selector.sampleUrl);
+            // send to person
+            this.fetchResultsGw.publishFetchExplore(
+                {
+                    person: personCoreDto,
+                    fetchUrl: fetchModel.fetchUrl,
+                    sampleUrls: sampleUrls
+                })
         }
-
-        this.fetchModel.delete(currentFetchModel);
-
     }
 
-    // apply fetch
-    public async fetch(fetch: FetchDto) {
+    /********* FETCH ********/
 
-        let personKey: string = fetch.person.personKey;
-        let clientName: FetchClientName = fetch.clientName;
-        let fetchUrl: string = fetch.fetchUrl;
-        let sampleUrl: string = fetch.sampleUrl;
+    public async fetch({person, fetchUrl, sampleUrl}: FetchDto) {
+
+        this.personService.merge(person);
+
+        const {personKey, clientName} = person;
 
         // get current job if exists
-        let targetFetchModel = await this.getFetch(personKey, clientName, fetchUrl);
+        let fetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
-        if (!targetFetchModel) {
-            // TODO ADD CUSTOM EXCEPTIONS
-            throw new HttpException('error targetFetchModel is null', HttpStatus.FORBIDDEN);
+        if (!fetchModel) {
+            throw new HttpException(FetchMessage.FETCH_EXISTS_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
-        let selectors: [FetchExploreSelectorsModel] = targetFetchModel.selectors;
+        let selectors: FetchExploreSelectorModel[] = fetchModel.selectors;
 
         if (!selectors || selectors.length < 1) {
-            throw new HttpException('selector not found', HttpStatus.FORBIDDEN);
+            throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
         let selectorModel = selectors.find(selector => selector.sampleUrl == sampleUrl);
 
-        if (selectorModel && selectorModel.selector) {
-            targetFetchModel.selector = selectorModel.selector;
-            targetFetchModel.active = true;
-            this.fetchModel(targetFetchModel).save();
-        }
-        else {
-            throw new HttpException('selector not found', HttpStatus.FORBIDDEN);
+        if (!selectorModel == null && selectorModel.selector) {
+            throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
+        await this.fetchDataService.updateFetchModelWithInitData(fetchModel, selectorModel.selector);
     }
 
-    public async getUserFetch(personFetchDto: PersonFetchDto): Promise<FetchExploreDto[]> {
 
-        let personKey: string = personFetchDto.person.personKey;
-        let clientName: FetchClientName = personFetchDto.clientName;
+    public async fetchResultConsumer({fetchUrl, fetchId, resultUrls, isSelectorEmpty, isSampleUrlNotFound}: FetchScannerResultDto) {
 
-        let userFetches: FetchModel[] = await this.getUserFetches(personKey, clientName);
+        let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
+
+        if (resultUrls && resultUrls.length > 0) {
+            await this.fetchModel.updateOne(fetchModel, {
+                $set: {
+                    lastResult: resultUrls
+                }
+            }).exec();
+
+            let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
+            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls});
+        }
+    }
+
+    public async fetchDelete({person: {clientName, personKey}, fetchUrl}) {
+        // get current job if exists
+        let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
+        if (currentFetchModel) {
+            await this.fetchDataService.delete(currentFetchModel._id);
+        }
+    }
+
+    public async fetchGet(person: PersonCoreDto): Promise<FetchExploreDto[]> {
+        const {personKey, clientName} = person;
+        let userFetches: FetchModel[] = await this.fetchDataService.getByPersonAndClientName(personKey, clientName);
 
         return userFetches.map(value => {
             return {
                 clientName: clientName,
-                person: personFetchDto.person,
+                person: person,
                 fetchUrl: value.fetchUrl
             }
         })
     }
 
-    /** PRIVATE METHODS **/
-
-    private async getFetch(personKey: string, clientName: FetchClientName, fetchUrl: string) {
-        let targetFetchModel: FetchModel = await this.fetchModel.findOne({
-            'personKey': personKey,
-            'clientName': clientName,
-            'fetchUrl': fetchUrl
-        }).exec();
-        return targetFetchModel;
-    }
-
-    private async getUserFetches(personKey: string, clientName: FetchClientName) {
-        // get current job if exists
-        let currentFetchModel = await this.fetchModel.find({
-            'personKey': personKey,
-            'clientName': clientName
-        }).exec();
-        return currentFetchModel;
-    }
-
-    private async fetchExploreResultConsumer(channel: Channel) {
-        channel.consume(FetchService.FETCH_EXPLORE_MQ_NAME, function (msg) {
-            if (msg !== null) {
-                console.log(msg.content.toString());
-            }
-        });
-    }
-
-    private async callFetchExploreChanel(callFunction: (arg: Channel) => void) {
-        if (this.fetchExploreChanel == null) {
-            let fetchExploreChanel: Channel = await this.connection.createChannel();
-            fetchExploreChanel.assertQueue(FetchService.FETCH_EXPLORE_MQ_NAME);
-            this.fetchExploreChanel = fetchExploreChanel;
-        }
-        callFunction(this.fetchExploreChanel);
-    }
-
     private async initFetchWatcher() {
 
-        this.agenda.define('greet the world2', function (job, done) {
-            console.log(job.attrs.data.time, 'hello world!');
+        // define agenda task wit h timer
+        this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, async (job, done) => {
+            await this.initWatch(new Date(Date.now() - FetchService.FETCH_REINIT_PERIOD));
             done();
         });
 
-        this.agenda.every('10 seconds', 'greet the world2', {time: new Date()});
+        // await agenda ready
+        await new Promise(resolve => this.agenda.once('ready', resolve));
+        // start fetch task
+        this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
+    }
+
+    private async initWatch(initDate: Date) {
+
+        let currentFetches: FetchModel[] = await this.fetchModel.find({
+            'state': FetchState.active,
+            'updateDate': {"$lt": initDate}
+        }).sort({'updateDate': -1}).limit(100).exec();
+
+        if (currentFetches && currentFetches.length > 0) {
+
+            // init watch and
+            currentFetches.forEach(fetch => {
+
+                let fetchId: string = fetch._id;
+                let fetchUrl: string = fetch.fetchUrl;
+                let selector: string = fetch.selector;
+                let lastResult: string = fetch.lastResult[0];
+
+                // TODO move to data service
+                this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}, () => {
+                    this.scannerClient.fetchProduce(
+                        {
+                            fetchId: fetchId,
+                            fetchUrl: fetchUrl,
+                            selector: selector,
+                            lastResult: lastResult
+                        });
+                }).exec();
+
+            })
+
+            this.initWatch(initDate);
+        }
+    }
+
+    /** COMMON PRIVATE METHODS **/
+
+    private initPersonCoreDtoFromFetchModel({clientName, personKey}: FetchModel): PersonCoreDto {
+        return {clientName: clientName, personKey: personKey, personInfo: null};
     }
 
 }
