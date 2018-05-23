@@ -14,27 +14,29 @@ import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
 
 class MqGwScanService {
 
-    static scan = (components: Function[]): MqGwScanResult[] => {
+    static scan = (components: Function[]): {[uuid:string]: MqGwScanResult} => {
         return components
-            .map(component => component.prototype)
-            .map(prototype => MqGwScanService.scanObject(prototype))
-            .reduce((prev, cur) => [...prev, ...cur], []);
+            .map(component => MqGwScanService.scanObject(component.prototype))
+            .reduce((prev, cur) => [...prev, ...cur], [])
+            .reduce((result, {uuid,target}) => ({...result, [uuid]: target}), {});
     }
 
-    static scanObject = (prototype: object): MqGwScanResult[] => Object.keys(prototype)
-        .filter(key => isMqGwMethod(prototype[key]))
+    static scanObject = (prototype: object): {uuid:string, target: MqGwScanResult}[] => Object.getOwnPropertyNames(prototype)
+        .filter(key => key !== 'constructor' && isMqGwMethod(prototype[key]))
         .map(key => ({
-                key,
-                value: {
+                uuid: MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_UUID_METADATA),
+                target: {
+                    key,
                     prototype,
                     method: prototype[key],
-                    gw: MqGwScanService.buildGwPath(prototype[key])
+                    methodName: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_NAME_METADATA)}`,
+                    gw: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`
                 }
             })
         );
 
-    static buildGwPath = (target: Function): string => [`${Reflect.getMetadata(MQ_GW_METHOD_NAME_METADATA,target)}`,
-                                                        `${Reflect.getMetadata(MQ_GW_METHOD_GATEWAY_METADATA,target)}`].join('.')
+    static scanKey = (target: Function) => (key: string) => Reflect.getMetadata(key, target);
+    static hasKey = (target: Function) => (key: string) => Reflect.hasMetadata(key, target);
 
 }
 

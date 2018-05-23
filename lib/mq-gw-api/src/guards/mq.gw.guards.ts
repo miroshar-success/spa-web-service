@@ -9,25 +9,26 @@ import MQ_GW_METHOD_NAME_METADATA = MqGwConstants.MQ_GW_METHOD_NAME_METADATA;
 import MQ_GW_METHOD_CONSUMER_METADATA = MqGwConstants.MQ_GW_METHOD_CONSUMER_METADATA;
 import MQ_GW_METHOD_PRODUCER_METADATA = MqGwConstants.MQ_GW_METHOD_PRODUCER_METADATA;
 import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
+import MqGwScanService from "../services/mq.gw.scan.service";
 
 
 export namespace MqGwGuards {
 
     export function isMqGwMethod(target: any): target is MqGwMethod {
         return typeof target === 'function' &&
-            Reflect.hasMetadata(MQ_GW_METHOD_NAME_METADATA, target) &&
-            Reflect.hasMetadata(MQ_GW_METHOD_GATEWAY_METADATA, target) //&&
-            // Reflect.hasMetadata(MQ_GW_METHOD_UUID_METADATA, target);
+            MqGwScanService.scanKey(target)(MQ_GW_METHOD_NAME_METADATA) &&
+            MqGwScanService.scanKey(target)(MQ_GW_METHOD_GATEWAY_METADATA) &&
+            MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
     }
 
     export function isMqGwConsumer(target: any): target is MqGwConsumerType {
-        return Reflect.hasMetadata(MQ_GW_METHOD_CONSUMER_METADATA, target) &&
-               Reflect.getMetadata(MQ_GW_METHOD_CONSUMER_METADATA, target);
+        return MqGwScanService.hasKey(target)(MQ_GW_METHOD_CONSUMER_METADATA) &&
+               MqGwScanService.scanKey(target)(MQ_GW_METHOD_CONSUMER_METADATA);
     }
 
     export function isMqGwProducer(target: any): target is MqGwProducerType {
-        return Reflect.hasMetadata(MQ_GW_METHOD_PRODUCER_METADATA, target) &&
-               Reflect.getMetadata(MQ_GW_METHOD_PRODUCER_METADATA, target);
+        return MqGwScanService.hasKey(target)(MQ_GW_METHOD_PRODUCER_METADATA) &&
+               MqGwScanService.scanKey(target)(MQ_GW_METHOD_PRODUCER_METADATA);
     }
 
 }

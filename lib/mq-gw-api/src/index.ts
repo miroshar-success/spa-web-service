@@ -4,8 +4,8 @@ import {MqGwDecorators} from "./decorators/mq.gw.decorators";
 export default MqGwDecorators;
 
 
-//
-// import {Connection} from "amqplib";
+
+
 // import MqGwConsumer = MqGwDecorators.MqGwConsumer;
 // import MqGwProducer = MqGwDecorators.MqGwProducer;
 // import EnableMqGw = MqGwDecorators.EnableMqGw;
@@ -28,18 +28,22 @@ export default MqGwDecorators;
 //         return 'foo';
 //     }
 // }
+//
 // @EnableMqGw({
-//     root: 'root',
+//     root: 'beagle',
 //     clients:['telegram'],
-//     components:[Service, Number]
+//     components:[Service],
+//     connection: {
+//         hostname: "beagle-rabbit-mq",
+//         username: "rabbitmq",
+//         password: "rabbitmq"
+//     }
 // })
-// class Test {
-//     constructor(connection: Connection){}
-// }
+// class Test {}
 //
 // console.log('**********************************************************');
 // console.log('Test: ', Test);
-// const test = new Test(({} as Connection));
+// const test = new Test();
 // console.log('test: ', test);
 //
 // const service = new Service('serviceBar')

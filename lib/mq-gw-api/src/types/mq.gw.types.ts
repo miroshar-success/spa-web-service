@@ -1,37 +1,30 @@
-import {Connection} from "amqplib";
 
 export namespace MqGwTypes {
 
-    export declare type MqGwProducer = Producable<MqGwProducerType, Function>;
-    export declare type MqGwConsumer = Consumable<MqGwConsumerType, Function>;
 
-    export interface Runnable{
-        run():void
-    }
-    export interface Producable<T, R> {
-        produce(target: T): R
-    }
-    export interface Consumable<T, R> {
-        consume(target: T): R
-    }
 
-    export interface ConfigurationParam{
+    export interface ConnectionConfig{
+        hostname: string,
+        username: string,
+        password: string
+    }
+    export interface MqGwConfig {
         root: string
         clients: string[],
-        components: Function[]
+        components: Function[],
+        connection: ConnectionConfig
     }
-    export interface ProxyConfig extends ConfigurationParam {
-        connection: Connection
-    }
+
     export interface DecoratorParam {
         name: string
         gateway?: string
     }
     export interface MqGwScanResult {
+        prototype: object,
         key: string,
-        value: {prototype: object,
-                method: MqGwMethodType,
-                gw: string}
+        method: MqGwMethodType,
+        methodName: string,
+        gw: string
     }
 
     export interface MqGwMethodType extends Function{
