@@ -8,7 +8,8 @@ import PersonService from './person.service';
 @Module({
   modules: [DatabaseModule],
   controllers: [PersonController],
-  components: [PersonService, ...personProvider]
+  components: [PersonService, ...personProvider],
+  exports: [PersonController]
 })
 
 export default class PersonModule { }

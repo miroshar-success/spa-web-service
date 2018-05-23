@@ -1,36 +1,25 @@
 import * as React from 'react';
 import { Form, Input, Button, Icon } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { Link } from 'react-router-dom';
+import { SignInUser } from '@redux/auth/types';
 
 const FormItem = Form.Item;
 
-export interface LoginFormProps {
+export interface SignInFormProps {
   form: WrappedFormUtils;
+  signIn: (user: SignInUser) => any;
 }
 
-class LoginForm extends React.Component<LoginFormProps> {
+class SignInForm extends React.Component<SignInFormProps> {
 
   handleSubmit = (event: React.SyntheticEvent<EventTarget>) => {
     event.preventDefault();
 
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
-        this.props.form.resetFields();
+        this.props.signIn(values);
       }
-      // if (!err) {
-      //   fetch('http://localhost:3001/api/v1/login', {
-      //     headers: {
-      //       'Accept': 'application/json',
-      //       'Content-Type': 'application/json'
-      //     },
-      //     method: 'POST',
-      //     body: JSON.stringify(values)
-      //   }).then(response => response.json())
-      //     .then(json => {
-      //       alert(json.success)
-      //     })
-      // }
     });
 
   }
@@ -42,19 +31,19 @@ class LoginForm extends React.Component<LoginFormProps> {
 
     return (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-        <Form onSubmit={this.handleSubmit} style={{ maxWidth: 300 }}>
-          <h1>Log in Form</h1>
+        <Form onSubmit={this.handleSubmit} style={{ width: 300 }}>
+          <h1 style={{ textAlign: 'center' }}>Sign in form</h1>
           <FormItem>
             {
-              getFieldDecorator('login', {
+              getFieldDecorator('email', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your login'
+                    message: 'Please input your email'
                   }
                 ]
               })(
-                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your login' />
+                <Input prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your email' />
               )
             }
           </FormItem>
@@ -68,14 +57,17 @@ class LoginForm extends React.Component<LoginFormProps> {
                   }
                 ]
               })(
-                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type='password' placeholder='Input your password' />
+                <Input type='password' prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your email' />
               )
             }
           </FormItem>
           <FormItem>
             <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
-              Log in
+              Sign in
              </Button>
+          </FormItem>
+          <FormItem style={{ marginTop: '-10px' }}>
+            Or <Link to='/signup'> sign up!</Link>
           </FormItem>
         </Form>
       </div>
@@ -83,4 +75,4 @@ class LoginForm extends React.Component<LoginFormProps> {
   }
 }
 
-export default Form.create()(LoginForm);
+export default Form.create()(SignInForm);
