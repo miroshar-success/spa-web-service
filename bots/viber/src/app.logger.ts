@@ -1,5 +1,5 @@
 import * as chalk from 'chalk';
-import * as PrettyError from 'pretty-error'; // it's really handy to make your life easier
+import * as PrettyError from 'pretty-error';
 import {LoggerService} from '@nestjs/common';
 
 export class AppLogger implements LoggerService {
@@ -22,7 +22,6 @@ export class AppLogger implements LoggerService {
         this.formatedLog('warn', message);
     }
 
-    // this method just for printing a cool log in your terminal , using chalk
     private formatedLog(level: string, message: string, error?): void {
         let result = '';
         const color = chalk.default;

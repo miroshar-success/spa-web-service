@@ -1,61 +1,67 @@
 import {Injectable} from '@nestjs/common';
 import * as viber from 'viber-bot';
-import * as config from '../../../../config';
 import axios from 'axios';
 import {AppLogger} from '../../../app.logger';
-import {FetchDtoOut, FetchExploreDtoOut, Person, PersonCoreDtoOut, PersonInfo} from '../dto/fetch.dto.out';
-import urlRegexp from 'url-regex';
+import {FetchDtoOut, ExploreDtoOut, PersonDtoOut, PersonInfo} from '../dto/bot.dto.out';
+import * as urlRegex from 'url-regex';
 
 @Injectable()
 export class BotEventService {
     private readonly _logger: AppLogger = new AppLogger(BotEventService.name);
 
-    messageReceivedHandler(message: viber.Message, response: viber.Response) {
+    public async messageReceivedHandler(message: viber.Message, response: viber.Response) {
         let exploreRegex = /^\/explore/i;
         let fetchRegex = /^\/fetch/i;
         let getRegex = /^\/get/i;
+        let deleteRegex = /^\/delete/i;
 
         if (exploreRegex.test(message.text))
-            this.exploreHandler(message, response);
+            this.commandExploreHandler(message, response);
         else if (fetchRegex.test(message.text))
-            this.fetchHandler(message, response);
+            this.commandFetchHandler(message, response);
         else if (getRegex.test(message.text))
-            this.getHandler(message, response);
+            this.commandGetHandler(message, response);
+        else if (deleteRegex.test(message.text))
+            this.commandDeleteHandler(message, response);
     }
 
-    private fetchHandler(message: viber.Message, response: viber.Response) {
-        let textWithoutCommand = message.text.replace(config.FETCH_COMMAND, '').trim();
-        let url = textWithoutCommand.slice(0, textWithoutCommand.indexOf(',')).trim();
-        let sampleUrl = textWithoutCommand.replace(url, '').replace(',', '').trim();
+    private async commandExploreHandler(message: viber.Message, response: viber.Response) {
+        let urls: string[] = message.text.match(urlRegex());
 
-        let fetchDtoOut = new FetchDtoOut(url,
-            new Person(response.userProfile.id,
-                new PersonInfo(
-                    response.userProfile.id,
-                    response.userProfile.name,
-                    response.userProfile.country,
-                    response.userProfile.language)
-            ),
-            sampleUrl);
-        this.fetchPost(fetchDtoOut);
+        urls != null && urls.length == 1 ?
+            this.commandExplorePost(new ExploreDtoOut(urls[0],
+                new PersonDtoOut(response.userProfile.id,
+                    new PersonInfo(
+                        response.userProfile.id,
+                        response.userProfile.name,
+                        response.userProfile.country,
+                        response.userProfile.language)
+                )))
+            :
+            this._logger.warn('Ошибка! Используйте один валидный адрес');
     }
 
-    private exploreHandler(message: viber.Message, response: viber.Response) {
-        let url = message.text.replace(config.EXPLORE_COMMAND, '').trim();
-        let fetchExploreDtoOut = new FetchExploreDtoOut(url,
-            new Person(response.userProfile.id,
-                new PersonInfo(
-                    response.userProfile.id,
-                    response.userProfile.name,
-                    response.userProfile.country,
-                    response.userProfile.language)
-            ));
-        this._logger.log('EXPLORE OBJECT: ' + JSON.stringify(fetchExploreDtoOut));
-        this.fetchExplorePost(fetchExploreDtoOut);
+    private async commandFetchHandler(message: viber.Message, response: viber.Response) {
+        let urls: string[] = message.text.match(urlRegex());
+
+        this._logger.log(urls.toString());
+
+        urls != null && urls.length == 2 ?
+            this.commandFetchPost(new FetchDtoOut(urls[0],
+                new PersonDtoOut(response.userProfile.id,
+                    new PersonInfo(
+                        response.userProfile.id,
+                        response.userProfile.name,
+                        response.userProfile.country,
+                        response.userProfile.language)
+                ),
+                urls[1]))
+            :
+            this._logger.warn('Ошибка! Используйте валидный адрес страницы для анализа и адрес примера отслеживаемого товара');
     }
 
-    private getHandler(message: viber.Message, response: viber.Response) {
-        let personCoreDtoOut = new PersonCoreDtoOut(response.userProfile.id,
+    private async commandGetHandler(message: viber.Message, response: viber.Response) {
+        let personCoreDtoOut = new PersonDtoOut(response.userProfile.id,
             new PersonInfo(
                 response.userProfile.id,
                 response.userProfile.name,
@@ -63,11 +69,39 @@ export class BotEventService {
                 response.userProfile.language)
         );
 
-        this.fetchGetPost(personCoreDtoOut);
+        this.commandGetPost(personCoreDtoOut);
     }
 
-    //TODO url
-    private async fetchPost(fetchDtoOut: FetchDtoOut) {
+    private async commandDeleteHandler(message: viber.Message, response: viber.Response) {
+        let urls: string[] = message.text.match(urlRegex());
+
+        urls != null && urls.length == 1 ?
+            this.commandDeletePost(new ExploreDtoOut(urls[0],
+                new PersonDtoOut(response.userProfile.id,
+                    new PersonInfo(
+                        response.userProfile.id,
+                        response.userProfile.name,
+                        response.userProfile.country,
+                        response.userProfile.language)
+                )))
+            :
+            this._logger.warn('Ошибка! Используйте уже отслеживаемый адрес');
+    }
+
+    private async commandExplorePost(exploreDtoOut: ExploreDtoOut) {
+        this._logger.log('/explore POST body: ' + JSON.stringify(exploreDtoOut));
+        await axios.post('http://localhost:3000/fetch/explore', exploreDtoOut, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            this._logger.log('/explore request success');
+        }).catch(error => {
+            this._logger.error('/explore request error');
+        });
+    }
+
+    private async commandFetchPost(fetchDtoOut: FetchDtoOut) {
         await axios.post('http://localhost:3000/fetch', fetchDtoOut, {
             headers: {
                 'Content-Type': 'application/json'
@@ -79,21 +113,8 @@ export class BotEventService {
         });
     }
 
-    //TODO url
-    private async fetchExplorePost(fetchExploreDtoOut: FetchExploreDtoOut) {
-        await axios.post('http://localhost:3000/fetch/explore', fetchExploreDtoOut, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            this._logger.log('/explore request success');
-        }).catch(error => {
-            this._logger.error('/explore request error');
-        });
-    }
-
-    private async fetchGetPost(personCoreDtoOut: PersonCoreDtoOut) {
-        await axios.post('http://localhost:3000/fetch/get', PersonCoreDtoOut, {
+    private async commandGetPost(personCoreDtoOut: PersonDtoOut) {
+        await axios.post('http://localhost:3000/fetch/get', personCoreDtoOut, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -105,4 +126,22 @@ export class BotEventService {
             this._logger.error('/get request error');
         });
     }
+
+    private async commandDeletePost(exploreDtoOut: ExploreDtoOut) {
+        await axios.delete('http://localhost:3000/fetch/get', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: exploreDtoOut
+        }).then(response => {
+            this._logger.log('/delete request success');
+            this._logger.log(JSON.stringify(response.data));
+        }).catch(error => {
+            this._logger.log(JSON.stringify(error));
+            this._logger.error('/delete request error');
+        });
+    }
 }
+
+//TODO сообщение об ошибках
+//FIXME static url 'localhost'

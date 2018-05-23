@@ -27,47 +27,7 @@ export class BotEventHandler {
     private eventMsgReceived() {
         //Wqp88ccqY9fgk9lIH0y5LQ==
         this._bot.on(viber.Events.MESSAGE_RECEIVED, (message, response) => {
-
-            /*this.sendTextMessages(['one', 'two', 'three'], response.userProfile);
-            this._logger.log('msg');*/
-
-
-
             this.botEventService.messageReceivedHandler(message, response);
         });
-    }
-
-    private sendKeybord(bot, response): void {
-        const SAMPLE_KEYBOARD = {
-            'Type': 'keyboard',
-            'DefaultHeight': true,
-            'Buttons': [
-                {
-                    'ActionType': 'reply',
-                    'ActionBody': 'reply to me',
-                    'Text': 'Key text',
-                    'TextSize': 'regular'
-                }
-            ]
-        };
-
-        bot.sendMessage(response.userProfile, [
-            new viber.Message.Keyboard(SAMPLE_KEYBOARD)
-        ]);
-    }
-
-    private sendHelpMessage(response): void {
-        this._logger.log('HELP MSG');
-        this._bot.sendMessage(response.userProfile, [
-            new viber.Message.Text('HELP')
-        ]);
-    }
-
-
-    private sendTextMessages(messages: Array<string>, userProfile): void {
-        this._bot.sendMessage(userProfile, messages.map((key, value) => {
-                new viber.Message.Text(value);
-            })
-        );
     }
 }
