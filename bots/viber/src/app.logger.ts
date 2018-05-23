@@ -2,7 +2,7 @@ import * as chalk from 'chalk';
 import * as PrettyError from 'pretty-error'; // it's really handy to make your life easier
 import {LoggerService} from '@nestjs/common';
 
-export class AppLogger implements LoggerService{
+export class AppLogger implements LoggerService {
     private readonly prettyError = new PrettyError();
 
     constructor(private context: string, transport?) {
@@ -11,11 +11,13 @@ export class AppLogger implements LoggerService{
     }
 
     log(message: string): void {
-                this.formatedLog('info', message);
+        this.formatedLog('info', message);
     }
+
     error(message: string, trace?: any): void {
         this.formatedLog('error', message, trace);
     }
+
     warn(message: string): void {
         this.formatedLog('warn', message);
     }
@@ -36,7 +38,9 @@ export class AppLogger implements LoggerService{
             case 'error':
                 result = `[${color.red('ERR')}] ${color.dim.yellow.bold.underline(time)} [${color.green(
                     this.context,
-                )}] ${message}\n${error}`;
+                )}] ${message}`;
+                if (error != null || undefined)
+                    result.concat(`\n${error}`);
                 break;
             case 'warn':
                 result = `[${color.yellow('WARN')}] ${color.dim.yellow.bold.underline(time)} [${color.green(

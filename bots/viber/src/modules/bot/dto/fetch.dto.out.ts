@@ -43,4 +43,13 @@ export class PersonInfo {
     }
 }
 
+export class PersonCoreDtoOut extends  Person {
+    readonly clientName: string;
+
+    constructor (personKey: object, personInfo: PersonInfo) {
+        super(personKey, personInfo);
+        this.clientName = 'viber';
+    }
+}
+
 

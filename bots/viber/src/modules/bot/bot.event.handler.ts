@@ -12,7 +12,7 @@ export class BotEventHandler {
     constructor(private readonly botInitService: BotInitService,
                 private readonly botEventService: BotEventService) {
         this._bot = this.botInitService.bot;
-      //  this.eventSubscribe();
+        //  this.eventSubscribe();
         this.eventMsgReceived();
     }
 
@@ -28,13 +28,12 @@ export class BotEventHandler {
         //Wqp88ccqY9fgk9lIH0y5LQ==
         this._bot.on(viber.Events.MESSAGE_RECEIVED, (message, response) => {
 
-            //this.sendKeybord(bot, response);
-
-            this.sendTextMessages(['one', 'two', 'three'], response.userProfile);
-            this._logger.log('msg');
+            /*this.sendTextMessages(['one', 'two', 'three'], response.userProfile);
+            this._logger.log('msg');*/
 
 
-            //this.botEventService.messageReceivedHandler(message, response);
+
+            this.botEventService.messageReceivedHandler(message, response);
         });
     }
 
@@ -67,7 +66,7 @@ export class BotEventHandler {
 
     private sendTextMessages(messages: Array<string>, userProfile): void {
         this._bot.sendMessage(userProfile, messages.map((key, value) => {
-                new viber.Message.Text(value)
+                new viber.Message.Text(value);
             })
         );
     }

@@ -6,3 +6,4 @@ export const VIBER_BOT_NAME = 'Beagle';
 export const VIBER_BOT_AVATAR_URL = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvm9NnT04pHQNngfU6Rn49L9nzLDoYvYfEWTp_oQ3Vq0tFCiKc';
 export const FETCH_COMMAND = '/fetch';
 export const EXPLORE_COMMAND = '/explore';
+export const GET_COMMAND = '/get';
