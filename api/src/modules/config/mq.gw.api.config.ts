@@ -7,7 +7,7 @@ import MqGwProducer = MqGwDecorators.MqGwProducer;
 
 @EnableMqGw({
          root: 'beagle',
-         clients:['telegram'],
+         clients:['viber'],
          components:[FetchResultsGw],
          connection: {
              hostname: "beagle-rabbit-mq",
