@@ -44,8 +44,6 @@ export class BotEventService {
     private async commandFetchHandler(message: viber.Message, response: viber.Response) {
         let urls: string[] = message.text.match(urlRegex());
 
-        this._logger.log(urls.toString());
-
         urls != null && urls.length == 2 ?
             this.commandFetchPost(new FetchDtoOut(urls[0],
                 new PersonDtoOut(response.userProfile.id,
@@ -90,11 +88,12 @@ export class BotEventService {
 
     private async commandExplorePost(exploreDtoOut: ExploreDtoOut) {
         this._logger.log('/explore POST body: ' + JSON.stringify(exploreDtoOut));
-        await axios.post('http://localhost:3000/fetch/explore', exploreDtoOut, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
+        await axios.post('http://localhost:3000/fetch/explore',
+            exploreDtoOut, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
             this._logger.log('/explore request success');
         }).catch(error => {
             this._logger.error('/explore request error');
@@ -102,11 +101,12 @@ export class BotEventService {
     }
 
     private async commandFetchPost(fetchDtoOut: FetchDtoOut) {
-        await axios.post('http://localhost:3000/fetch', fetchDtoOut, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
+        await axios.post('http://localhost:3000/fetch',
+            fetchDtoOut, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
             this._logger.log('/fetch request success');
         }).catch(error => {
             this._logger.error('/fetch request error');
@@ -114,31 +114,28 @@ export class BotEventService {
     }
 
     private async commandGetPost(personCoreDtoOut: PersonDtoOut) {
-        await axios.post('http://localhost:3000/fetch/get', personCoreDtoOut, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
+        await axios.post('http://localhost:3000/fetch/get',
+            personCoreDtoOut, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
             this._logger.log('/get request success');
-            this._logger.log(JSON.stringify(response.data));
         }).catch(error => {
-            this._logger.log(JSON.stringify(error));
             this._logger.error('/get request error');
         });
     }
 
     private async commandDeletePost(exploreDtoOut: ExploreDtoOut) {
-        await axios.delete('http://localhost:3000/fetch/get', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: exploreDtoOut
-        }).then(response => {
+        await axios.post('http://localhost:3000/fetch/get',
+            exploreDtoOut, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
             this._logger.log('/delete request success');
-            this._logger.log(JSON.stringify(response.data));
         }).catch(error => {
-            this._logger.log(JSON.stringify(error));
-            this._logger.error('/delete request error');
+            this._logger.error('/delete request error - ' + error, error.stack);
         });
     }
 }

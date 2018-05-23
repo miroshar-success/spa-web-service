@@ -7,7 +7,7 @@ import {BotMqGw} from '../bot.mq.gw';
 @Injectable()
 @EnableMqGw({
          root: 'beagle',
-         clients:['telegram'],
+         clients:['viber'],
          components:[BotMqGw],
          connection: {
              hostname: "beagle-rabbit-mq",
