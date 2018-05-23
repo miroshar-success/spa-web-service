@@ -1,4 +1,4 @@
-import { connect } from 'amqplib';
+import {connect, Connection} from 'amqplib';
 import {MqGwTypes} from "../types/mq.gw.types";
 
 import MqGwScanService from './mq.gw.scan.service';
@@ -10,52 +10,63 @@ import {MqGwConstants} from "../constants/mq.gw.constants";
 import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
 import MqGwConfig = MqGwTypes.MqGwConfig;
 import ConnectionConfig = MqGwTypes.ConnectionConfig;
+import Bluebird = require("bluebird");
 const chalk = require('chalk');
 
 
 
-class MqGwProxyService {// implements MqGwProducer, MqGwConsumer, Runnable {
+class MqGwProxyService {
 
-    private readonly queueNames: string[];
-    private readonly rootClients: string[];
-    private readonly components: Function[];
-    private readonly connection: ConnectionConfig;
-    private readonly scanResultsMap: {[uuid: string]:MqGwScanResult};
-    public readonly scanResultsArr: MqGwScanResult[];
+    protected readonly rootClients: string[];
+    protected readonly components: Function[];
+    protected readonly connectionConfig: ConnectionConfig;
+    protected readonly queueNames: string[];
+    protected scanResultsMap: {[uuid: string]: MqGwScanResult};
+    protected scanResultsArr: MqGwScanResult[];
+    protected connection: Connection;
 
     constructor({root, clients, components, connection}: MqGwConfig){
         this.components = components;
-        this.connection = connection;
-        this.rootClients = clients.map(client => `${root}.${client}`)
-        this.scanResultsMap = MqGwScanService.scan(components);
+        this.rootClients = clients.map(client => `${root}.${client}`);
+        this.scanResultsMap = MqGwScanService.scan(this.components);
         this.scanResultsArr = Object.keys(this.scanResultsMap).map(uuid => this.scanResultsMap[uuid]);
+
+        this.connectionConfig = connection;
         this.queueNames = this.rootClients
             .map(rootClient => this.scanResultsArr.map(({methodName}) => `${rootClient}.${methodName}`))
             .reduce((prev, cur) => [...prev, ...cur], []);
+
+        this.connect().then(_ => this.proxify());
     }
 
-    connect(){
+    protected async connect(){
+        try {
+            this.connection =  await Promise.resolve(connect(this.connectionConfig));
+            console.log(chalk.green(`MQ_GW_CONNECTED: `) + chalk.yellow(`${this.connection}`));
+        } catch (err){
+            console.log(chalk.red(err));
+        }
 
-        console.log(chalk.green(`MQ_GW_QUEUES: `) + chalk.yellow(`${this.queueNames}`));
-        connect(this.connection)
-            .then(connection => connection.createChannel()
-                .then(channel => this.queueNames.forEach(queueName => channel.assertQueue(queueName)))
-                .catch(err => console.log(chalk.red(err))))
-            .catch(err => console.log(chalk.red(err)));
-
+        try {
+            let channel = await Promise.resolve(this.connection.createChannel());
+            console.log(chalk.green(`MQ_GW_QUEUES: `) + chalk.yellow(`${this.queueNames.join(', ')}`));
+            this.queueNames.forEach(queueName => channel.assertQueue(queueName));
+        } catch (err){
+            console.log(chalk.red(err));
+        }
     }
 
-    proxify(){
+    protected proxify(){
+
         console.log(chalk.green(`MQ_GW_SCAN(${this.components.map(c=>c.name)}): `), this.scanResultsArr);
 
-        this.scanResultsArr
-            .forEach(({key, method, prototype}) => {
-                if (isMqGwConsumer(method)) prototype[key] = this.consume(method);
-                else if (isMqGwProducer(method)) prototype[key] = this.produce(method);
-            });
+        this.scanResultsArr.forEach(({key, method, prototype}) => {
+            if (isMqGwConsumer(method)) prototype[key] = this.consumer(method);
+            else if (isMqGwProducer(method)) prototype[key] = this.producer(method);
+        });
     }
 
-    protected produce(target: Function) {
+    protected async producer(target: Function) {
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
         return function () {
             console.log(`Produce to `, targetUuid);
@@ -64,14 +75,22 @@ class MqGwProxyService {// implements MqGwProducer, MqGwConsumer, Runnable {
             return result;
         };
     }
-    protected consume(target: Function) {
+    protected async consumer(target: Function) {
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
-        return function () {
-            console.log(`Consume from `, targetUuid);
-            const result = target.apply(this, arguments);
-            console.log("DATA:", result);
-            return result;
-        };
+        const targetMethodName = this.scanResultsMap[targetUuid].methodName;
+        const channel = await Promise.resolve(this.connection.createChannel());
+        this.queueNames
+            .map(queueName => queueName.split('.'))
+            .filter(([root, client, methodName]) => methodName === targetMethodName)
+            .map(array => array.join('.'))
+            .forEach(queueName => channel.consume(queueName, target))
+
+        // return function () {
+        //     console.log(`Consume from `, targetUuid);
+        //     const result = target.apply(this, arguments);
+        //     console.log("DATA:", result);
+        //     return result;
+        // };
     }
 }
 
