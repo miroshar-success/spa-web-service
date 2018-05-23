@@ -62,9 +62,9 @@ export class ScannerService {
     };
 
     download = async (url: string): Promise<any> => {
-        const request = (await needle('get', url));
-        const html = request.body;
-       /* const jsdom = require('jsdom');
+        /*const request = (await needle('get', url));
+        const html = request.body;*/
+        const jsdom = require('jsdom');
         const domHtml = await (new Promise((resolve, reject) => {
             jsdom.env({
                 url,
@@ -84,8 +84,8 @@ export class ScannerService {
                     }
                 },
             });
-        }));*/
-        return {body: html};
+        }));
+        return {body: domHtml};
     };
 }
 

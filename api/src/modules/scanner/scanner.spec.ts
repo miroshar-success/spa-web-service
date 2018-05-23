@@ -1,7 +1,7 @@
 import {ScannerService} from './scanner.service';
 import {ScannerInstance, SELECTORS} from './scanner.instance';
-import {CssPath, CssValue} from './scanner.csspath';
 import {Sample, SampleList} from './scanner.sample';
+
 const fs = require('fs');
 
 describe('scanner test', () => {
@@ -17,10 +17,8 @@ describe('scanner test', () => {
     });
 
     describe('download', () => {
-
-        jest.mock('jsdom');
-
         beforeAll(() => {
+            jest.unmock('jsdom');
             scannerService = new ScannerService();
         });
 
@@ -42,22 +40,8 @@ describe('scanner test', () => {
 
     describe('findAll', () => {
 
-        const original = new (require('./scanner.service')).ScannerService();
-
-        jest.mock('./scanner.service');
-        const ScannerService = require('./scanner.service').ScannerService;
-
-        ScannerService.mockImplementation(() => {
-            return {
-                ...original,
-                download: () => {
-                    return {body: defaultHtml}
-                },
-            };
-        });
-
         beforeAll(() => {
-            scannerService = new ScannerService();
+            jest.mock('jsdom');
         });
 
         it('should return list Cheerio Element containings only links with href', async () => {
@@ -79,7 +63,6 @@ describe('scanner test', () => {
 
         it('should build SampleList from CssPath', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
-            console.log(sampleList.sample[0]);
             expect(sampleList.sample[0].selector).toBe(selectorPath.join(' > ') + '[href]');
             expect(sampleList.sample[0].sampleUrl[0].href).toBe(urlPath);
         });
@@ -126,35 +109,32 @@ describe('scanner test', () => {
             expect(groups.sample[0].sampleUrl[0].href).toBe('http://test.com/test')
         });
 
-        it('should find all samples', async () => {
+        it('should find all group and return one sample per group', async () => {
             const allSamples = await scannerService.fetchAll(urlPath);
-            console.log(allSamples);
             expect(allSamples.sample.length).toBeGreaterThan(0);
+
+            allSamples.sample.map(x =>
+                expect(typeof x.sampleUrl[0]).toBe('string')
+            );
+
+            allSamples.sample.map(x =>
+                expect(x.sampleUrl.length).toBe(1)
+            );
+
         });
     });
 
     describe('findOne', () => {
 
-        const original = new (require('./scanner.service')).ScannerService();
-
-        jest.mock('./scanner.service');
-        const ScannerService = require('./scanner.service').ScannerService;
-
-        ScannerService.mockImplementation(() => {
-            return {
-                ...original,
-                download: () => {
-
-                    return {body: defaultHtml}
-                },
-            };
+        beforeAll(() => {
+            jest.mock('jsdom');
         });
 
         it('should return all sample by url and selector', async () => {
             const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]');
             expect(result.isSampleUrlNotFound).toBeFalsy();
             expect(result.isSelectorEmpty).toBeFalsy();
-            expect(result.sampleUrl.length).toBe(17);
+            expect(result.sampleUrl.length).toBe(15);
         });
 
         it('should setup isSelectorEmpty if any nodes not found', async () => {
@@ -173,7 +153,36 @@ describe('scanner test', () => {
         it('should setup isSampleUrlNotFound if given url doesn\'t contains', async () => {
             const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]', 'sample');
             expect(result.isSampleUrlNotFound).toBe(true);
-            expect(result.sampleUrl.length).toBe(17);
+            expect(result.sampleUrl.length).toBe(15);
+        });
+    });
+
+    describe('site test', () => {
+
+        beforeAll(() => {
+            jest.unmock('jsdom');
+            scannerService = new ScannerService();
+        });
+
+        it('ebay', async () => {
+            const regex = /^https:\/\/www\.ebay\.com\/itm\/(.*)\/(.*)/;
+            const url = 'https://www.ebay.com/sch/Laptops-Netbooks-/175672/i.html';
+            const allExamples = await scannerService.fetchAll(url);
+
+            console.log(allExamples.sample[0].sampleUrl);
+
+            //примеры есть
+            expect(allExamples.sample.length).toBeGreaterThan(0);
+
+            //первый похож на хороший по структуре ссылки
+            expect(regex.test(allExamples.sample[0].sampleUrl[0])).toBeTruthy();
+
+            //остальные не похожи
+            allExamples.sample.filter((item, index) => index !== 0).map(x =>
+                expect(regex.test(x.sampleUrl[0])).toBeFalsy()
+            );
+
+            //если тянуть все примеры по первому, то они одинаковые по структуре
         });
     });
 });

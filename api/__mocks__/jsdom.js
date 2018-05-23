@@ -3,13 +3,17 @@ const fs = require('fs');
 const defaultHtml = fs.readFileSync('./__mocks__/__mockData__/scanner.html', 'utf8');
 
 function env(config) {
-  console.log(require('jsdom'));
-  config.done(null, {
-    document: require('jsdom').jsdom(defaultHtml, config).defaultView, close: () => {
-    }
-  });
+  const window = new Window({});
+  window.close = () => {};
+
+  config.done(null, window);
+}
+
+function serializeDocument(doc){
+  return defaultHtml;
 }
 
 jsdom.env = env;
+jsdom.serializeDocument = serializeDocument;
 
 module.exports = jsdom;
