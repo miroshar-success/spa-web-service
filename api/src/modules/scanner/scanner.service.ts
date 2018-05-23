@@ -5,32 +5,29 @@ import * as jsdom from 'jsdom'
 import {Component, Inject} from '@nestjs/common';
 import {SELECTORS, ScannerInstance, FILTERS} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
-import {SampleList, SampleResponse, UrlSample} from './scanner.sample';
+import {SampleList, SampleResponse, UrlSample, UrlSampleList} from './scanner.sample';
 import {EuristicMeta} from './scanner.euristic';
-
-const {JSDOM} = jsdom;
 
 @Component()
 export class ScannerService {
 
-    constructor(){
+    constructor() {
 
     }
 
-    fetchAll = async (url: string): Promise<UrlSample[]> => {
+    fetchAll = async (url: string): Promise<UrlSampleList> => {
         const sortEuristic: EuristicMeta = new EuristicMeta();
         const cssPaths: CssPath[] = await this.getPathsByUrl(url, SELECTORS.LINKS);
 
         sortEuristic.url = new URL(url);
 
-        const listPaths: UrlSample[] = SampleList.fromPaths(cssPaths, 0)
+        const listPaths: SampleList = SampleList.fromPaths(cssPaths, 0)
             .groupBy('selector')
             .distinct()
             .orderByDesc(sortEuristic)
-        //    .take(1)
-        //    .resolveRelativeUrl(url)
-            .onlyUniqueUrlList();
-        return listPaths;
+                .take(1);
+
+        return UrlSampleList.onlyUniqueUrlList(listPaths);
     };
 
     fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
@@ -56,7 +53,7 @@ export class ScannerService {
         const html = (await this.download(url)).body;
         const cheerioObject: CheerioStatic = this.parse(html);
         const scannerInstance: ScannerInstance = ScannerInstance.fromCheerio(cheerioObject, selector);
-        return scannerInstance.resolve(url).filter(FILTERS.INVALID_HREF,{}).getPaths();
+        return scannerInstance.resolve(url).filter(FILTERS.INVALID_HREF, {}).getPaths();
     };
 
 
@@ -67,26 +64,29 @@ export class ScannerService {
     download = async (url: string): Promise<any> => {
         const request = (await needle('get', url));
         const html = request.body;
-        // const domHtml = await (new Promise((resolve, reject) => {
-        //     jsdom.env({
-        //         url,
-        //         features: {
-        //             FetchExternalResources: ['script'],
-        //             ProcessExternalResources: ['script'],
-        //             SkipExternalResources: false
-        //         },
-        //         // proxy: 'https://api.enthought.com/',
-        //         done: function (err, window) {
-        //             if (err) {
-        //                 reject(err);
-        //             } else {
-        //                 const output = jsdom.serializeDocument(window.document);
-        //                 window.close();
-        //                 resolve(output);
-        //             }
-        //         },
-        //     });
-        // }));
+       /* const jsdom = require('jsdom');
+        const domHtml = await (new Promise((resolve, reject) => {
+            jsdom.env({
+                url,
+                features: {
+                    FetchExternalResources: ['script'],
+                    ProcessExternalResources: ['script'],
+                    SkipExternalResources: false
+                },
+                // proxy: 'https://api.enthought.com/',
+                done: function (err, window) {
+                    if (err) {
+                        // reject(err);
+                    } else {
+                        const output = jsdom.serializeDocument(window.document);
+                        window.close();
+                        resolve(output);
+                    }
+                },
+            });
+        }));*/
         return {body: html};
     };
 }
+
+export default ScannerService;

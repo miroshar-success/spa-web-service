@@ -1,6 +1,7 @@
 import {CssPath, CssValue} from './scanner.csspath';
 import * as path from 'url';
 import {EuristicMeta, EuristicOrderService} from './scanner.euristic';
+import {resolve} from 'url';
 
 export class SampleList {
     constructor(readonly sample: Sample[]) {
@@ -54,7 +55,7 @@ export class SampleList {
     resolveRelativeUrl = (baseUrl: string): SampleList => {
         const result = this.sample.map(x => {
             const absUrls = x.sampleUrl.map(y => {
-                return {href: new path.URL(y.href, baseUrl).href, ...y};
+                return {...y, href: resolve(baseUrl, y.href)};
             });
             return new Sample(x.selector, absUrls);
         });
@@ -79,14 +80,36 @@ export class SampleList {
         urlList
             .map(urlList => urlList.sampleUrl.join(','))
             .forEach((item, index) => {
-            if (keys.indexOf(item) === -1) {
-                keys.push(item);
-                indices.push(index);
-            }
-        });
-        return urlList.filter((x,index) => indices.indexOf(index) !== -1);
+                if (keys.indexOf(item) === -1) {
+                    keys.push(item);
+                    indices.push(index);
+                }
+            });
+        return urlList.filter((x, index) => indices.indexOf(index) !== -1);
     };
 
+}
+
+export class UrlSampleList {
+    constructor(readonly sample: UrlSample[]) {
+    };
+
+    static onlyUniqueUrlList(instance: SampleList): UrlSampleList {
+        const indices = [];
+        const keys = [];
+        const urlList = instance.sample
+            .map(x => UrlSample.fromSample(x));
+
+        urlList
+            .map(urlList => urlList.sampleUrl.join(','))
+            .forEach((item, index) => {
+                if (keys.indexOf(item) === -1) {
+                    keys.push(item);
+                    indices.push(index);
+                }
+            });
+        return new UrlSampleList(urlList.filter((x, index) => indices.indexOf(index) !== -1));
+    }
 }
 
 export class Sample {
