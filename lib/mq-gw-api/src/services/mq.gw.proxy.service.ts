@@ -20,7 +20,7 @@ class MqGwProxyService {
     protected readonly rootClients: string[];
     protected readonly components: Function[];
     protected readonly connectionConfig: ConnectionConfig;
-    protected readonly queueNames: string[];
+    protected readonly routes: string[];
     protected scanResultsMap: {[uuid: string]: MqGwScanResult};
     protected scanResultsArr: MqGwScanResult[];
     protected connection: Connection;
@@ -32,8 +32,9 @@ class MqGwProxyService {
         this.scanResultsArr = Object.keys(this.scanResultsMap).map(uuid => this.scanResultsMap[uuid]);
 
         this.connectionConfig = connection;
-        this.queueNames = this.rootClients
-            .map(rootClient => this.scanResultsArr.map(({methodName}) => `${rootClient}.${methodName}`))
+        this.routes = this.rootClients
+            .map(rootClient => Array.from(new Set(this.scanResultsArr.map(({mRoute})=>mRoute)))
+                                     .map(uniqueRoute =>`${rootClient}.${uniqueRoute}`))
             .reduce((prev, cur) => [...prev, ...cur], []);
 
         this.connect().then(_ => this.proxify());
@@ -49,8 +50,8 @@ class MqGwProxyService {
 
         try {
             let channel = await Promise.resolve(this.connection.createChannel());
-            console.log(chalk.green(`MQ_GW_QUEUES: `) + chalk.yellow(`${this.queueNames.join(', ')}`));
-            this.queueNames.forEach(queueName => channel.assertQueue(queueName));
+            console.log(chalk.green(`MQ_GW_ROUTES: `) + chalk.yellow(`${this.routes.join(', ')}`));
+            this.routes.forEach(queueName => channel.assertQueue(queueName));
         } catch (err){
             console.log(chalk.red(err));
         }
@@ -61,36 +62,51 @@ class MqGwProxyService {
         console.log(chalk.green(`MQ_GW_SCAN(${this.components.map(c=>c.name)}): `), this.scanResultsArr);
 
         this.scanResultsArr.forEach(({key, method, prototype}) => {
-            if (isMqGwConsumer(method)) prototype[key] = this.consumer(method);
-            else if (isMqGwProducer(method)) prototype[key] = this.producer(method);
+            if (isMqGwConsumer(method)) this.consumer(method).then(proxyFn => prototype[key] = proxyFn);
+            else if (isMqGwProducer(method)) this.producer(method).then(proxyFn => prototype[key] = proxyFn);
         });
     }
 
     protected async producer(target: Function) {
+        const proxyThis = this;
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
-        return function () {
-            console.log(`Produce to `, targetUuid);
-            const result = target.apply(this, arguments);
-            console.log("DATA:", result);
-            return result;
+        const targetMethodRoute = this.scanResultsMap[targetUuid].mRoute;
+        const channel = await Promise.resolve(this.connection.createChannel());
+        const proxyFn = function () {
+            const result: any = target.apply(this, arguments);
+            console.log(chalk.yellow(`MQ_GW_PRODUCER_RESULT: ${result}`));
+            if (result && result.then && typeof result.then === 'function') {
+                return result.then(data => console.log('PUBLISH_RESOLVED: ',data) || data && Promise.resolve(proxyThis.routes
+                    .filter(route => route.indexOf(`.${targetMethodRoute}`) > 0)
+                    .map(route => channel.sendToQueue(route, new Buffer(JSON.stringify(data), 'utf8')))));
+            }
+            console.log(chalk.yellow(`PUBLISH: ${result}`));
+            return result && proxyThis.routes
+                    .filter(route => route.indexOf(`.${targetMethodRoute}`) > 0)
+                    .map(route => channel.sendToQueue(route, new Buffer(JSON.stringify(result), 'utf8')));
         };
+        return proxyFn;
     }
     protected async consumer(target: Function) {
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
-        const targetMethodName = this.scanResultsMap[targetUuid].methodName;
+        const targetMethodRoute = this.scanResultsMap[targetUuid].mRoute;
         const channel = await Promise.resolve(this.connection.createChannel());
-        this.queueNames
-            .map(queueName => queueName.split('.'))
-            .filter(([root, client, methodName]) => methodName === targetMethodName)
-            .map(array => array.join('.'))
-            .forEach(queueName => channel.consume(queueName, target))
-
-        // return function () {
-        //     console.log(`Consume from `, targetUuid);
-        //     const result = target.apply(this, arguments);
-        //     console.log("DATA:", result);
-        //     return result;
-        // };
+        const proxyFn = function (message){
+            console.log(chalk.yellow(`MQ_GW_CONSUMER_MESSAGE: ${message.content}`));
+            try{
+                message && target.call(null, message);
+                message && channel.ack(message);
+                return Promise.resolve(message);
+            } catch (error){
+                message && channel.nack(message);
+                console.log(chalk.red(error));
+                return Promise.reject(error);
+            }
+        };
+        this.routes
+            .filter(route => route.indexOf(`.${targetMethodRoute}`) > 0 )
+            .forEach(route => channel.consume(route, proxyFn));
+        return target;
     }
 }
 

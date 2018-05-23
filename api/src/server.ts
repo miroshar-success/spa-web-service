@@ -3,8 +3,6 @@ import * as bodyParser from 'body-parser';
 import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger';
 import {ApplicationModule} from './app.module';
 import {ValidationPipe} from './validation.pipe';
-
-import {ScannerService} from './modules/scanner/scanner.service';
 import MqGwApiConfig from "./modules/config/mq.gw.api.config";
 
 

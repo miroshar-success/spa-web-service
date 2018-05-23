@@ -29,8 +29,8 @@ class MqGwScanService {
                     key,
                     prototype,
                     method: prototype[key],
-                    methodName: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_NAME_METADATA)}`,
-                    gw: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`
+                    mRoute: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_NAME_METADATA)}`,
+                    gwKey: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`
                 }
             })
         );
