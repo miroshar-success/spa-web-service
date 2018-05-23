@@ -1,9 +1,11 @@
 import * as path from 'url';
 import {CssPath} from './scanner.csspath';
+import {resolve} from 'url';
 
 export const SELECTORS = {
     LINKS: 'a[href]'
 };
+
 export const FILTERS = {
     IMG: inst => inst.filterChild(y => y.name === 'img'),
     EMPTY_HREF: inst => inst.filterAttr(y => y.href === ''),
@@ -16,24 +18,37 @@ export class ScannerInstance {
     constructor(readonly instance: CheerioElement[]) {
     }
 
-    static fromCheerio = (node: CheerioStatic, ...linkTypes: string[]) : ScannerInstance => {
-        return new ScannerInstance(node(...linkTypes).toArray());
-    }
-    filter = (predicate: (node: Cheerio) => ScannerInstance, params: any): ScannerInstance => {
+    static fromCheerio = (node: CheerioStatic, linkType: string) : ScannerInstance => {
+        return new ScannerInstance(node(linkType).toArray());
+    };
+
+    filter = (predicate: (node: ScannerInstance,params ?: any) => ScannerInstance, params: any): ScannerInstance => {
         return predicate(this, params);
-    }
-    filterChild = (predicate: (node: Cheerio) => boolean): ScannerInstance => {
+    };
+
+    filterChild = (predicate: (node: CheerioElement) => boolean): ScannerInstance => {
         const result = this.instance.filter((node, index) => {
             return node.children !== undefined ? !node.children.some(child => predicate(child)) : false;
         });
         return new ScannerInstance(result);
-    }
-    filterAttr = (predicate: (node: Cheerio) => boolean): ScannerInstance => {
-        const result = this.instance.filter((node, index) => node.attribs !== undefined ? !predicate(node.attribs) : false);
+    };
+
+    filterAttr = (predicate: (node: { [attr: string]: string; }) => boolean): ScannerInstance => {
+        const result = this.instance.filter(node => node.attribs !== undefined ? predicate(node.attribs) : false);
         return new ScannerInstance(result);
-    }
+    };
+
+    resolve = (url: string): ScannerInstance => {
+        const result = this.instance.map(node => {
+            if(node && node.attribs && node.attribs.href)
+                node.attribs.href = resolve(url,node.attribs.href);
+            return node;
+        });
+        return new ScannerInstance(result);
+    };
+
     getPaths = (): CssPath[] => {
        return this.instance.map(node => CssPath.fromNode(node));
-    }
+    };
 
 }
