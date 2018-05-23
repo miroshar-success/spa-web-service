@@ -10,7 +10,10 @@
       "li",
       "a"
     ],
-    "value": "https://www.tut.by/resource/"
+    "value": {
+      "href": "https://www.tut.by/resource/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -23,7 +26,10 @@
       "li",
       "a"
     ],
-    "value": "https://www.tut.by/#ua:top_menu_news.tut.by~1898"
+    "value": {
+      "href": "https://www.tut.by/#ua:top_menu_news.tut.by~1898",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -36,7 +42,10 @@
       "li",
       "a"
     ],
-    "value": "https://finance.tut.by/#ua:top_menu_news.tut.by~115"
+    "value": {
+      "href": "https://finance.tut.by/#ua:top_menu_news.tut.by~115",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -49,7 +58,10 @@
       "li",
       "a"
     ],
-    "value": "https://finance.tut.by/kurs/"
+    "value": {
+      "href": "https://finance.tut.by/kurs/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -62,7 +74,10 @@
       "li",
       "a"
     ],
-    "value": "https://afisha.tut.by/#ua:top_menu_news.tut.by~75"
+    "value": {
+      "href": "https://afisha.tut.by/#ua:top_menu_news.tut.by~75",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -75,7 +90,10 @@
       "li",
       "a"
     ],
-    "value": "https://jobs.tut.by/#ua:top_menu_news.tut.by~12"
+    "value": {
+      "href": "https://jobs.tut.by/#ua:top_menu_news.tut.by~12",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -88,7 +106,10 @@
       "li",
       "a"
     ],
-    "value": "https://pogoda.tut.by/#ua:top_menu_news.tut.by~641"
+    "value": {
+      "href": "https://pogoda.tut.by/#ua:top_menu_news.tut.by~641",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -101,7 +122,10 @@
       "li",
       "a"
     ],
-    "value": "https://kupi.tut.by/#ua:top_menu_news.tut.by~1926"
+    "value": {
+      "href": "https://kupi.tut.by/#ua:top_menu_news.tut.by~1926",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -114,7 +138,10 @@
       "li",
       "a"
     ],
-    "value": "https://tvset.tut.by/#ua:top_menu_news.tut.by~182"
+    "value": {
+      "href": "https://tvset.tut.by/#ua:top_menu_news.tut.by~182",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -127,58 +154,10 @@
       "li",
       "a"
     ],
-    "value": "https://tam.by/?rr=#ua:top_menu_news.tut.by~13"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://tam.by/"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://probusiness.io/"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://hoster.by/"
+    "value": {
+      "href": "https://tam.by/?rr=#ua:top_menu_news.tut.by~13",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -195,7 +174,10 @@
       "li",
       "a"
     ],
-    "value": "http://rebenok.by/"
+    "value": {
+      "href": "https://tam.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -212,7 +194,10 @@
       "li",
       "a"
     ],
-    "value": "https://av.by/"
+    "value": {
+      "href": "https://probusiness.io/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -229,7 +214,10 @@
       "li",
       "a"
     ],
-    "value": "http://help.blog.tut.by/#ua:top_menu_www.tut.by~22"
+    "value": {
+      "href": "https://hoster.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -246,7 +234,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/#ua:top_menu_news.tut.by~185"
+    "value": {
+      "href": "http://rebenok.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -263,7 +254,10 @@
       "li",
       "a"
     ],
-    "value": "https://42.tut.by/#ua:top_menu_news.tut.by~213"
+    "value": {
+      "href": "https://av.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -280,7 +274,10 @@
       "li",
       "a"
     ],
-    "value": "https://pogoda.tut.by/#ua:top_menu_news.tut.by~4077"
+    "value": {
+      "href": "http://help.blog.tut.by/#ua:top_menu_www.tut.by~22",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -297,7 +294,10 @@
       "li",
       "a"
     ],
-    "value": "https://finance.tut.by/#ua:top_menu_news.tut.by~3677"
+    "value": {
+      "href": "https://news.tut.by/#ua:top_menu_news.tut.by~185",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -314,7 +314,10 @@
       "li",
       "a"
     ],
-    "value": "https://afisha.tut.by/#ua:top_menu_news.tut.by~4073"
+    "value": {
+      "href": "https://42.tut.by/#ua:top_menu_news.tut.by~213",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -331,7 +334,10 @@
       "li",
       "a"
     ],
-    "value": "http://mail.tut.by/#ua:top_menu_news.tut.by~4074"
+    "value": {
+      "href": "https://pogoda.tut.by/#ua:top_menu_news.tut.by~4077",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -348,7 +354,10 @@
       "li",
       "a"
     ],
-    "value": "https://realty.tut.by/#ua:top_menu_news.tut.by~188"
+    "value": {
+      "href": "https://finance.tut.by/#ua:top_menu_news.tut.by~3677",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -365,7 +374,10 @@
       "li",
       "a"
     ],
-    "value": "http://search.tut.by/#ua:top_menu_news.tut.by~89"
+    "value": {
+      "href": "https://afisha.tut.by/#ua:top_menu_news.tut.by~4073",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -382,7 +394,10 @@
       "li",
       "a"
     ],
-    "value": "https://maps.tut.by/#ua:top_menu_news.tut.by~906"
+    "value": {
+      "href": "http://mail.tut.by/#ua:top_menu_news.tut.by~4074",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -399,7 +414,10 @@
       "li",
       "a"
     ],
-    "value": "https://sport.tut.by/#ua:top_menu_news.tut.by~1141"
+    "value": {
+      "href": "https://realty.tut.by/#ua:top_menu_news.tut.by~188",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -416,7 +434,10 @@
       "li",
       "a"
     ],
-    "value": "https://kupi.tut.by/#ua:top_menu_news.tut.by~3678"
+    "value": {
+      "href": "http://search.tut.by/#ua:top_menu_news.tut.by~89",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -433,7 +454,10 @@
       "li",
       "a"
     ],
-    "value": "http://talks.by/"
+    "value": {
+      "href": "https://maps.tut.by/#ua:top_menu_news.tut.by~906",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -450,7 +474,10 @@
       "li",
       "a"
     ],
-    "value": "https://auto.tut.by/#ua:top_menu_news.tut.by~1752"
+    "value": {
+      "href": "https://sport.tut.by/#ua:top_menu_news.tut.by~1141",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -467,7 +494,10 @@
       "li",
       "a"
     ],
-    "value": "https://jobs.tut.by/#ua:top_menu_news.tut.by~4075"
+    "value": {
+      "href": "https://kupi.tut.by/#ua:top_menu_news.tut.by~3678",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -484,7 +514,10 @@
       "li",
       "a"
     ],
-    "value": "http://afisha.tut.by/online-cinema/#ua:top_menu_news.tut.by~4078"
+    "value": {
+      "href": "http://talks.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -501,7 +534,10 @@
       "li",
       "a"
     ],
-    "value": "https://lady.tut.by/#ua:top_menu_news.tut.by~4579"
+    "value": {
+      "href": "https://auto.tut.by/#ua:top_menu_news.tut.by~1752",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -518,7 +554,10 @@
       "li",
       "a"
     ],
-    "value": "https://tvset.tut.by/#ua:top_menu_news.tut.by~3679"
+    "value": {
+      "href": "https://jobs.tut.by/#ua:top_menu_news.tut.by~4075",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -535,7 +574,10 @@
       "li",
       "a"
     ],
-    "value": "http://plati.tut.by/#ua:top_menu_news.tut.by~1018"
+    "value": {
+      "href": "http://afisha.tut.by/online-cinema/#ua:top_menu_news.tut.by~4078",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -552,7 +594,70 @@
       "li",
       "a"
     ],
-    "value": "https://www.tut.by/resource/"
+    "value": {
+      "href": "https://lady.tut.by/#ua:top_menu_news.tut.by~4579",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://tvset.tut.by/#ua:top_menu_news.tut.by~3679",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "http://plati.tut.by/#ua:top_menu_news.tut.by~1018",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://www.tut.by/resource/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -571,7 +676,10 @@
       "div",
       "a"
     ],
-    "value": "https://profile.tut.by/secret.html"
+    "value": {
+      "href": "https://profile.tut.by/secret.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -591,7 +699,10 @@
       "li",
       "a"
     ],
-    "value": "https://profile.tut.by/externalauth.html?login=facebook"
+    "value": {
+      "href": "https://profile.tut.by/externalauth.html?login=facebook",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -611,7 +722,10 @@
       "li",
       "a"
     ],
-    "value": "https://profile.tut.by/externalauth.html?login=vk"
+    "value": {
+      "href": "https://profile.tut.by/externalauth.html?login=vk",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -631,7 +745,10 @@
       "li",
       "a"
     ],
-    "value": "https://profile.tut.by/externalauth.html?login=google"
+    "value": {
+      "href": "https://profile.tut.by/externalauth.html?login=google",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -648,7 +765,10 @@
       "div",
       "a"
     ],
-    "value": "https://profile.tut.by/newtut.html"
+    "value": {
+      "href": "https://profile.tut.by/newtut.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -659,7 +779,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/"
+    "value": {
+      "href": "https://news.tut.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -670,7 +793,10 @@
       "div",
       "a"
     ],
-    "value": "https://www.tut.by/"
+    "value": {
+      "href": "https://www.tut.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -683,31 +809,10 @@
       "li",
       "a"
     ],
-    "value": "https://www.tut.by/unews/?utm_source=news.tut.by&utm_medium=top_button&utm_campaign=editorial_link"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://news.tut.by/daynews/"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://news.tut.by/geonews/minsk/"
+    "value": {
+      "href": "https://www.tut.by/unews/?utm_source=news.tut.by&utm_medium=top_button&utm_campaign=editorial_link",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -719,7 +824,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/top5news/"
+    "value": {
+      "href": "https://news.tut.by/daynews/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -731,7 +839,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/economics/"
+    "value": {
+      "href": "https://news.tut.by/geonews/minsk/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -743,7 +854,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/society/"
+    "value": {
+      "href": "https://news.tut.by/top5news/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -755,7 +869,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/"
+    "value": {
+      "href": "https://news.tut.by/economics/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -767,7 +884,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/culture/"
+    "value": {
+      "href": "https://news.tut.by/society/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -779,7 +899,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/finance/"
+    "value": {
+      "href": "https://news.tut.by/world/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -789,12 +912,12 @@
       "div",
       "ul",
       "li",
-      "div",
-      "ul",
-      "li",
       "a"
     ],
-    "value": "https://news.tut.by/accidents/"
+    "value": {
+      "href": "https://news.tut.by/culture/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -804,27 +927,12 @@
       "div",
       "ul",
       "li",
-      "div",
-      "ul",
-      "li",
       "a"
     ],
-    "value": "https://news.tut.by/realty/"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://news.tut.by/sport/"
+    "value": {
+      "href": "https://news.tut.by/finance/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -839,7 +947,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/auto/"
+    "value": {
+      "href": "https://news.tut.by/accidents/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -854,7 +965,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/lady/"
+    "value": {
+      "href": "https://news.tut.by/realty/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -869,7 +983,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/it/"
+    "value": {
+      "href": "https://news.tut.by/sport/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -884,7 +1001,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/vashdom/"
+    "value": {
+      "href": "https://news.tut.by/auto/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -899,7 +1019,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/afisha/"
+    "value": {
+      "href": "https://news.tut.by/lady/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -914,7 +1037,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/go/"
+    "value": {
+      "href": "https://news.tut.by/it/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -929,7 +1055,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/rebenokby/"
+    "value": {
+      "href": "https://news.tut.by/vashdom/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -944,7 +1073,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/probusiness/"
+    "value": {
+      "href": "https://news.tut.by/afisha/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -959,7 +1091,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/tamby/"
+    "value": {
+      "href": "https://news.tut.by/go/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -974,7 +1109,64 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/press/"
+    "value": {
+      "href": "https://news.tut.by/rebenokby/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/probusiness/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/tamby/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/press/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -986,7 +1178,332 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/projects/"
+    "value": {
+      "href": "https://news.tut.by/projects/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/30.04.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/01.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/02.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/03.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/04.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/05.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(1)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/06.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/07.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/08.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/09.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/10.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/11.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/12.05.2018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "div",
+      "form",
+      "div",
+      "div",
+      "table",
+      "tbody",
+      "tr:nth-child(2)",
+      "td",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/archive/13.05.2018.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1006,7 +1523,10 @@
       "td",
       "a"
     ],
-    "value": "https://news.tut.by/archive/30.04.2018.html"
+    "value": {
+      "href": "https://news.tut.by/archive/14.05.2018.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1026,7 +1546,10 @@
       "td",
       "a"
     ],
-    "value": "https://news.tut.by/archive/01.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/archive/15.05.2018.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1046,7 +1569,10 @@
       "td",
       "a"
     ],
-    "value": "https://news.tut.by/archive/02.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/archive/16.05.2018.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1066,7 +1592,10 @@
       "td",
       "a"
     ],
-    "value": "https://news.tut.by/archive/03.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/archive/17.05.2018.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1074,19 +1603,19 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
+      "span",
       "a"
     ],
-    "value": "https://news.tut.by/archive/04.05.2018.html"
+    "value": {
+      "href": "https://tutby.com/advert/order/?utm_source=news.tut.by&utm_medium=link-above_banner&utm_campaign=tut.by",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1094,19 +1623,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/05.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/?sort=reads",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1114,19 +1644,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/06.05.2018.html"
+    "value": {
+      "href": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1134,19 +1665,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/07.05.2018.html"
+    "value": {
+      "href": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1154,19 +1686,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/08.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1174,19 +1707,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/09.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1194,19 +1728,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/10.05.2018.html"
+    "value": {
+      "href": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1214,19 +1749,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/11.05.2018.html"
+    "value": {
+      "href": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1234,19 +1770,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/12.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1254,19 +1791,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/13.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1274,19 +1812,19 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
+      "span",
       "a"
     ],
-    "value": "https://news.tut.by/archive/14.05.2018.html"
+    "value": {
+      "href": "https://tutby.com/advert/order/?utm_source=news.tut.by&utm_medium=link-above_banner&utm_campaign=tut.by",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1294,19 +1832,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/15.05.2018.html"
+    "value": {
+      "href": "https://news.tut.by/?sort=reads",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1314,19 +1853,20 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/16.05.2018.html"
+    "value": {
+      "href": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1334,19 +1874,810 @@
       "body",
       "div",
       "div",
-      "ul",
-      "li",
       "div",
-      "form",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
       "div",
       "div",
-      "table",
-      "tbody",
-      "tr",
-      "td",
+      "div",
+      "div",
       "a"
     ],
-    "value": "https://news.tut.by/archive/17.05.2018.html"
+    "value": {
+      "href": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(1)",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/rss/world.rss",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593086.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593086.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593081.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593081.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593065.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593065.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593041.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593041.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593019.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593019.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593018.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593021.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593021.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593017.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div:nth-child(2)",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593017.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593016.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593016.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593015.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593015.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593011.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593011.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593007.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593007.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593004.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593004.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593003.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/593003.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/592967.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/592967.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/592957.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/592957.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/592956.html",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "div",
+      "a"
+    ],
+    "value": {
+      "href": "https://news.tut.by/world/592956.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1363,363 +2694,10 @@
       "span",
       "a"
     ],
-    "value": "https://tutby.com/advert/order/?utm_source=news.tut.by&utm_medium=link-above_banner&utm_campaign=tut.by"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/?sort=reads"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "span",
-      "a"
-    ],
-    "value": "https://tutby.com/advert/order/?utm_source=news.tut.by&utm_medium=link-above_banner&utm_campaign=tut.by"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/?sort=reads"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://auto.tut.by/news/accidents/593079.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/culture/593073.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://realty.tut.by/news/offtop-realty/593078.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593086.html?utm_source=news.tut.by_rubric&utm_medium=floating-news-right-block&utm_campaign=popular-news"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/rss/world.rss"
+    "value": {
+      "href": "https://news.tut.by/tag/32-politika.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1735,7 +2713,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/world/593086.html"
+    "value": {
+      "href": "https://news.tut.by/world/592948.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1751,7 +2732,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/world/593086.html"
+    "value": {
+      "href": "https://news.tut.by/world/592948.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1767,7 +2751,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/world/593081.html"
+    "value": {
+      "href": "https://news.tut.by/world/592940.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1783,7 +2770,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/world/593081.html"
+    "value": {
+      "href": "https://news.tut.by/world/592940.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1799,7 +2789,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/world/593065.html"
+    "value": {
+      "href": "https://news.tut.by/world/592917.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -1815,568 +2808,10 @@
       "div",
       "a"
     ],
-    "value": "https://news.tut.by/world/593065.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593041.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593041.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593019.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593019.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593018.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593018.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593021.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593021.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593017.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593017.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593016.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593016.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593015.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593015.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593011.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593011.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593007.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593007.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593004.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593004.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593003.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/593003.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592967.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592967.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592957.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592957.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592956.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592956.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "span",
-      "a"
-    ],
-    "value": "https://news.tut.by/tag/32-politika.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592948.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592948.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592940.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592940.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592917.html"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "a"
-    ],
-    "value": "https://news.tut.by/world/592917.html"
+    "value": {
+      "href": "https://news.tut.by/world/592917.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2394,7 +2829,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/2/"
+    "value": {
+      "href": "https://news.tut.by/world/2/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2412,7 +2850,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/2/"
+    "value": {
+      "href": "https://news.tut.by/world/2/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2430,7 +2871,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/3/"
+    "value": {
+      "href": "https://news.tut.by/world/3/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2448,7 +2892,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/4/"
+    "value": {
+      "href": "https://news.tut.by/world/4/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2466,7 +2913,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/5/"
+    "value": {
+      "href": "https://news.tut.by/world/5/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2484,7 +2934,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/world/6/"
+    "value": {
+      "href": "https://news.tut.by/world/6/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2500,7 +2953,10 @@
       "li",
       "a"
     ],
-    "value": "https://www.tut.by/route/appear/smart/?l=https%3A%2F%2Fnews.tut.by%2Fworld%2F"
+    "value": {
+      "href": "https://www.tut.by/route/appear/smart/?l=https%3A%2F%2Fnews.tut.by%2Fworld%2F",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2510,7 +2966,7 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(1)",
       "div",
       "ul",
       "li",
@@ -2518,7 +2974,10 @@
       "li",
       "a"
     ],
-    "value": "http://mobile.tut.by/app-news-android.html?utm_source=TUT.BY&utm_medium=ref&utm_campaign=footer_newspage"
+    "value": {
+      "href": "http://mobile.tut.by/app-news-android.html?utm_source=TUT.BY&utm_medium=ref&utm_campaign=footer_newspage",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2528,47 +2987,18 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(1)",
       "div",
       "ul",
       "li",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "http://mobile.tut.by/app-news-iphone.html?utm_source=TUT.BY&utm_medium=ref&utm_campaign=footer_newspage"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://www.tut.by/route/lang/bel/?l=https%3A%2F%2Fnews.tut.by%2Fworld%2F"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://www.tut.by/unews/?utm_source=news.tut.by&utm_medium=footer&utm_campaign=editorial_link"
+    "value": {
+      "href": "http://mobile.tut.by/app-news-iphone.html?utm_source=TUT.BY&utm_medium=ref&utm_campaign=footer_newspage",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2584,7 +3014,10 @@
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/limitation.html"
+    "value": {
+      "href": "https://www.tut.by/route/lang/bel/?l=https%3A%2F%2Fnews.tut.by%2Fworld%2F",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2600,7 +3033,10 @@
       "li",
       "a"
     ],
-    "value": "https://twitter.com/tutby/"
+    "value": {
+      "href": "https://www.tut.by/unews/?utm_source=news.tut.by&utm_medium=footer&utm_campaign=editorial_link",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2616,7 +3052,10 @@
       "li",
       "a"
     ],
-    "value": "https://www.facebook.com/tut.by/"
+    "value": {
+      "href": "https://news.tut.by/limitation.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2626,13 +3065,16 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(3)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://vk.com/tutby"
+    "value": {
+      "href": "https://twitter.com/tutby/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2642,13 +3084,16 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(3)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://ok.ru/tutby"
+    "value": {
+      "href": "https://www.facebook.com/tut.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2658,13 +3103,16 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(3)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://chats.viber.com/tut.by"
+    "value": {
+      "href": "https://vk.com/tutby",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2674,13 +3122,16 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(3)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://www.youtube.com/user/TUTBYtv"
+    "value": {
+      "href": "https://ok.ru/tutby",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2690,13 +3141,16 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(4)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://www.instagram.com/tutbylive/"
+    "value": {
+      "href": "https://chats.viber.com/tut.by",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2706,13 +3160,16 @@
       "div",
       "div",
       "div",
-      "div",
+      "div:nth-child(4)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://news.tut.by/rss.html"
+    "value": {
+      "href": "https://www.youtube.com/user/TUTBYtv",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2721,11 +3178,17 @@
       "div",
       "div",
       "div",
+      "div",
+      "div:nth-child(4)",
+      "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "https://tutby.com/"
+    "value": {
+      "href": "https://www.instagram.com/tutbylive/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2734,50 +3197,17 @@
       "div",
       "div",
       "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://www.tut.by/contacts/"
-  },
-  {
-    "path": [
-      "html",
-      "body",
       "div",
-      "div",
+      "div:nth-child(4)",
       "div",
       "ul",
       "li",
       "a"
     ],
-    "value": "tel:+375172395777"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "https://tutby.com/advert/price/"
-  },
-  {
-    "path": [
-      "html",
-      "body",
-      "div",
-      "div",
-      "div",
-      "ul",
-      "li",
-      "a"
-    ],
-    "value": "tel:+375172395701"
+    "value": {
+      "href": "https://news.tut.by/rss.html",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2790,7 +3220,10 @@
       "li",
       "a"
     ],
-    "value": "https://tutby.com/advert/price/"
+    "value": {
+      "href": "https://tutby.com/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2803,7 +3236,90 @@
       "li",
       "a"
     ],
-    "value": "https://hoster.by/"
+    "value": {
+      "href": "https://www.tut.by/contacts/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "tel:+375172395777",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://tutby.com/advert/price/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "tel:+375172395701",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://tutby.com/advert/price/",
+      "isImageInside": false
+    }
+  },
+  {
+    "path": [
+      "html",
+      "body",
+      "div",
+      "div",
+      "div",
+      "ul",
+      "li",
+      "a"
+    ],
+    "value": {
+      "href": "https://hoster.by/",
+      "isImageInside": false
+    }
   },
   {
     "path": [
@@ -2811,6 +3327,10 @@
       "body",
       "a"
     ],
-    "value": "https://preved.tut.by/?clickid=13877&frameid=828&keywordid=&rnd=4288&u=38136fa965081a9ca948f7fc3191f4e5&rubrics=3"
+    "value": {
+      "href": "https://preved.tut.by/?clickid=13877&frameid=828&keywordid=&rnd=4288&u=38136fa965081a9ca948f7fc3191f4e5&rubrics=3",
+      "isImageInside": false
+    }
   }
 ]
+
