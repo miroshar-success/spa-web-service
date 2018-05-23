@@ -4,12 +4,19 @@ import {FetchMessage} from "./dto/fetch.message";
 import PersonCoreDto from "../person/person.dto";
 import {MqGwDecorators} from "../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators";
 import MqGwProducer = MqGwDecorators.MqGwProducer;
+import {MqGwDecorators} from "../../../../lib/mq-gw-api/dist/decorators/mq.gw.decorators";
+import MqGwConsumer = MqGwDecorators.MqGwConsumer;
 
 
 @Component()
 export class FetchResultsGw {
 
-    constructor() {}
+    constructor() {
+        setTimeout(() =>{
+            console.log("PUBLISH MESSAGE")
+        }, 10000)
+
+    }
 
 
     @MqGwProducer({name:'fetchExplore', gateway:'clientKey'})
@@ -26,6 +33,11 @@ export class FetchResultsGw {
     async publishMessage(message: FetchMessage, person: PersonCoreDto) {
         let fetchMessage: FetchMessageDto = {message: message, person: person};
         console.log("message"+ JSON.stringify(fetchMessage))
+    }
+
+    @MqGwConsumer({name:'fetchMessage', gateway:'clientKey'})
+    async consumeMessage(message: object) {
+        console.log("MESSAGE:"+ JSON.stringify(message));
     }
 
 }

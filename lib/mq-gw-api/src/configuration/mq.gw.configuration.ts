@@ -34,14 +34,9 @@ import MqGwProxyService from "../services/mq.gw.proxy.service";
 
 export abstract class MqGwConfiguration {
 
-    protected proxyService: MqGwProxyService;
-
      constructor() {
-        this.proxyService = new MqGwProxyService((this as any).config);
-        this.proxyService.proxify();
-        this.proxyService.connect();
+        new MqGwProxyService((this as any).config);
     }
-
 
     /**
      * Implemented in decorator @EnableMqGw.
