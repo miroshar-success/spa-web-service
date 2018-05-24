@@ -9,6 +9,7 @@ import MQ_GW_METHOD_NAME_METADATA = MqGwConstants.MQ_GW_METHOD_NAME_METADATA;
 import MQ_GW_METHOD_CONSUMER_METADATA = MqGwConstants.MQ_GW_METHOD_CONSUMER_METADATA;
 import MQ_GW_METHOD_PRODUCER_METADATA = MqGwConstants.MQ_GW_METHOD_PRODUCER_METADATA;
 import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
+import MQ_GW_METHOD_CLIENT_METADATA = MqGwConstants.MQ_GW_METHOD_CLIENT_METADATA;
 
 
 
@@ -30,7 +31,8 @@ class MqGwScanService {
                     prototype,
                     method: prototype[key],
                     mRoute: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_NAME_METADATA)}`,
-                    gwKey: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`
+                    gwKey: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`,
+                    client: MqGwScanService.hasKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA) ? `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)}` : null
                 }
             })
         );

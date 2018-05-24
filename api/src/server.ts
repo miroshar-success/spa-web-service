@@ -3,12 +3,12 @@ import * as bodyParser from 'body-parser';
 import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger';
 import {ApplicationModule} from './app.module';
 import {ValidationPipe} from './validation.pipe';
-import MqGwApiConfig from "./modules/config/mq.gw.api.config";
+import MqGwApi from "./modules/config/mq.gw.api.config";
 
 
 async function bootstrap() {
 
-    new MqGwApiConfig();
+    new MqGwApi().enable();
 
     const app = await NestFactory.create(ApplicationModule);
 

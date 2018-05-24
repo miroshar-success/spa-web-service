@@ -8,7 +8,7 @@ export default MqGwDecorators;
 
 // import MqGwConsumer = MqGwDecorators.MqGwConsumer;
 // import MqGwProducer = MqGwDecorators.MqGwProducer;
-// import EnableMqGw = MqGwDecorators.EnableMqGw;
+// import MqGwApiConfig = MqGwDecorators.MqGwApiConfig;
 // export class Service {
 //     constructor(public bar: string){
 //         console.log('INIT: ', bar);
@@ -29,7 +29,7 @@ export default MqGwDecorators;
 //     }
 // }
 //
-// @EnableMqGw({
+// @MqGwApiConfig({
 //     root: 'beagle',
 //     clients:['telegram'],
 //     components:[Service],

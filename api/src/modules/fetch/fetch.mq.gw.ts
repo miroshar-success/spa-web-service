@@ -7,39 +7,38 @@ import MqGwProducer = MqGwDecorators.MqGwProducer;
 import MqGwConsumer = MqGwDecorators.MqGwConsumer;
 
 
-
+@Component()
 export class FetchResultsGw {
 
-    static THIS: FetchResultsGw;
+    private static THIS: FetchResultsGw;
 
     constructor() {
         FetchResultsGw.THIS = this;
-        setTimeout(()=> this.publishMessage({status:MessageStatus.OK,messageKey: "XXX-"}), 5000);
+        setTimeout(()=> this.publishMessage({status:MessageStatus.OK, messageKey: "viber"}), 5000);
     }
 
 
-    @MqGwProducer({name:'fetchExplore', gateway:'clientKey'})
+    @MqGwProducer({name:'fetchExplore', gateway:'messageKey'})
     async publishFetchExplore(fetchExploreResultDto: FetchExploreResultDto) {
         console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto))
     }
 
-    @MqGwProducer({name:'fetchResult', gateway:'clientKey'})
+    @MqGwProducer({name:'fetchResult', gateway:'messageKey'})
     async publishFetchResult(fetchResultDto: FetchResultDto) {
         console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
     }
 
-    @MqGwProducer({name:'fetchMessage', gateway:'clientKey'})
+    @MqGwProducer({name:'fetchMessage', gateway:'messageKey'})
     async publishMessage(message: FetchMessage, person?: PersonCoreDto) {
         let fetchMessage: FetchMessageDto = {message: message, person: person};
-        console.log("message"+ JSON.stringify(fetchMessage))
+        console.log("publishMessage"+ JSON.stringify(fetchMessage))
         return message;
     }
 
-    @MqGwConsumer({name:'fetchMessage', gateway:'clientKey'})
+    @MqGwConsumer({name:'fetchMessage', gateway:'messageKey'})
     async consumeMessage(message: any) {
-        console.log("THIS: ", FetchResultsGw.THIS)
-        console.log("MESSAGE:"+ JSON.stringify(message));
-        console.log("data:"+ message.content);
+        console.log("THIS: ", this);
+        console.log("MESSAGE:"+ message.status);
     }
 
 }

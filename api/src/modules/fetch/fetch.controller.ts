@@ -3,7 +3,7 @@ import {Body, Controller, Get, Post} from '@nestjs/common';
 import {FetchService} from "./fetch.service";
 import {FetchDto, FetchExploreDto} from "./dto/fetch.dto";
 import PersonCoreDto from "../person/person.dto";
-import {Delete} from "@nestjs/common/utils/decorators/request-mapping.decorator";
+
 
 @Controller('fetch')
 export class FetchController {

@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {MqGwDecorators} from '../../../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators';
-import EnableMqGw = MqGwDecorators.EnableMqGw;
+import EnableMqGw = MqGwDecorators.MqGwApiConfig;
 import {BotMqGw} from '../bot.mq.gw';
 
 
