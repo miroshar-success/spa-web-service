@@ -18,24 +18,26 @@ export class FetchResultsGw {
     }
 
 
-    @MqGwProducer({name:'fetchExplore', gateway:'clientKey'})
-    async publishFetchExplore(fetchExploreResultDto: FetchExploreResultDto) {
-        console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto))
+    @MqGwProducer({name:'fetchExplore', gateway:'person.clientName'})
+    async publishFetchExploreResult(fetchExploreResultDto: FetchExploreResultDto) {
+        console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto));
+        return fetchExploreResultDto;
     }
 
-    @MqGwProducer({name:'fetchResult', gateway:'clientKey'})
+    @MqGwProducer({name:'fetchResult', gateway:'person.clientName'})
     async publishFetchResult(fetchResultDto: FetchResultDto) {
         console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
+        return fetchResultDto
     }
 
-    @MqGwProducer({name:'fetchMessage', gateway:'clientKey'})
+    @MqGwProducer({name:'fetchMessage', gateway:'person.clientName'})
     async publishMessage(message: FetchMessage, person?: PersonCoreDto) {
         let fetchMessage: FetchMessageDto = {message: message, person: person};
         console.log("message"+ JSON.stringify(fetchMessage))
         return message;
     }
 
-    @MqGwConsumer({name:'fetchMessage', gateway:'clientKey'})
+    @MqGwConsumer({name:'fetchMessage', gateway:'person.clientName'})
     async consumeMessage(message: any) {
         console.log("THIS: ", FetchResultsGw.THIS)
         console.log("MESSAGE:"+ JSON.stringify(message));

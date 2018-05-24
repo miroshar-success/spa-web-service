@@ -83,7 +83,7 @@ export class FetchService {
 
             let sampleUrls = selectors.map(selector => selector.sampleUrl);
             // send to person
-            this.fetchResultsGw.publishFetchExplore(
+            this.fetchResultsGw.publishFetchExploreResult(
                 {
                     person: personCoreDto,
                     fetchUrl: fetchModel.fetchUrl,
