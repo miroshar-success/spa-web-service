@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, BadRequestException, UseGuards } from '@nestjs/common';
 import { AuthManagerService } from './auth-manager.service';
-import { SignInPersonDto } from '../clients/person.dto';
+import { SignInUserDto } from '../clients/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('beagle-web')
@@ -11,7 +11,7 @@ export class AuthManagerController {
   ) { }
 
   @Post('auth/signin')
-  async signIn(@Body() user: SignInPersonDto): Promise<any> {
+  async signIn(@Body() user: SignInUserDto): Promise<any> {
     return await this.authManagerService.authenticate(user);
   }
 

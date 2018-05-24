@@ -1,11 +1,11 @@
 import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
-import { PersonService } from '../clients/person.service';
+import { UserService } from '../clients/user.service';
 import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly personService: PersonService) { }
+  constructor(private readonly userService: UserService) { }
 
   async createToken(email: JwtPayload) {
     const user: JwtPayload = email;
@@ -13,6 +13,7 @@ export class AuthService {
   }
 
   async validateUser(payload: JwtPayload): Promise<any> {
-    return await this.personService.findOneByEmail(payload.email);
+    console.log('authService - validateUser')
+    return await this.userService.findOneByEmail(payload.email);
   }
 }

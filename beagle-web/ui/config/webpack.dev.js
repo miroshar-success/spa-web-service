@@ -14,14 +14,18 @@ module.exports = merge(common, {
 
   devServer: {
     proxy: {
-      '/beagle-web/**': {
+      '*': {
         target: 'http://localhost:3001',
         secure: false,
       },
-      '/data/**': {
-        target: 'http://localhost:3000',
-        secure: false,
-      },
+      // '/beagle-web/**': {
+      //   target: 'http://localhost:3001',
+      //   secure: false,
+      // },
+      // '/data/**': {
+      //   target: 'http://localhost:3000',
+      //   secure: false,
+      // },
     },
 
     contentBase: path.resolve(__dirname, '../dist'),

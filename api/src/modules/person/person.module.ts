@@ -9,7 +9,7 @@ import PersonService from './person.service';
   modules: [DatabaseModule],
   controllers: [PersonController],
   components: [PersonService, ...personProvider],
-  exports: [PersonController]
+  // exports: [PersonController]
 })
 
 export default class PersonModule { }

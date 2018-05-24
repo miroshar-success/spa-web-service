@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 
-export interface PersonModel extends mongoose.Document {
+export interface UserModel extends mongoose.Document {
   readonly name: string;
   readonly email: string;
   readonly password: string;
 }
 
-export const PersonSchema = new mongoose.Schema(
+export const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,

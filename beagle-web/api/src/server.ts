@@ -3,6 +3,9 @@ import * as bodyParser from 'body-parser';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ApplicationModule } from './app.module';
 import { resolve } from 'path';
+import { Transport } from '@nestjs/common/enums/transport.enum';
+
+const proxy = require('http-proxy-middleware');
 
 const path = require('path');
 
@@ -10,6 +13,11 @@ async function bootstrap() {
 
   //const app = await NestFactory.create(ApplicationModule, new FastifyAdapter());
   const app = await NestFactory.create(ApplicationModule);
+
+  app.use('/data', proxy({
+    target: 'http://localhost:3000',
+    changeOrigin: true,
+  }))
 
   // VALIDATION CONFIG
   app.use(bodyParser.json());

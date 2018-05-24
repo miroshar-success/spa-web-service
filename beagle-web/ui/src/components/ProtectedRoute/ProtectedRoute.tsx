@@ -14,7 +14,6 @@ export class TokenManager {
 
 const ProtectedRoute = (props: any) => {
   const { component: Component, ...rest } = props;
-  console.log(TokenManager.getToken())
   return (
     <Route {...rest} render={(props) =>
       TokenManager.getToken()
