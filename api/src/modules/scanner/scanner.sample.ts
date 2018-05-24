@@ -1,6 +1,7 @@
-import {CssPath} from './scanner.csspath';
+import {CssPath, CssValue} from './scanner.csspath';
 import * as path from 'url';
 import {EuristicMeta, EuristicOrderService} from './scanner.euristic';
+import {resolve} from 'url';
 
 export class SampleList {
     constructor(readonly sample: Sample[]) {
@@ -10,7 +11,7 @@ export class SampleList {
         const sample = paths.map(x => {
             const group: Sample = new Sample(
                 [...x.path].splice(0, x.path.length - deep).join(' > ') + '[href]',
-                [x.value]
+                [{...x.value}]
             );
             return group;
         });
@@ -31,7 +32,7 @@ export class SampleList {
     };
 
     orderByDesc = (meta: EuristicMeta): SampleList => {
-        const result = [...this.sample].sort((x, y) => EuristicOrderService.compare(y.sampleUrl,x.sampleUrl,meta));
+        const result = [...this.sample].sort((x, y) => EuristicOrderService.compare(y.sampleUrl, x.sampleUrl, meta));
         return new SampleList(result);
     };
 
@@ -45,24 +46,89 @@ export class SampleList {
     };
 
     distinct = (): SampleList => {
-        const result = this.sample.map(sample=>{
-            return new Sample(sample.selector,sample.sampleUrl.filter((value, index, self) => self.indexOf(value) === index));
+        const result = this.sample.map(sample => {
+            return new Sample(sample.selector, sample.sampleUrl.filter((value, index, self) => self.indexOf(value) === index));
         });
         return new SampleList(result);
     };
 
     resolveRelativeUrl = (baseUrl: string): SampleList => {
         const result = this.sample.map(x => {
-            const absUrls = x.sampleUrl.map(y =>  new path.URL(y, baseUrl).href);
+            const absUrls = x.sampleUrl.map(y => {
+                return {...y, href: resolve(baseUrl, y.href)};
+            });
             return new Sample(x.selector, absUrls);
         });
         return new SampleList(result);
     };
+
+    firstUnique = (count: number = 10): SampleList => {
+        const result = this.sample
+            .map(x => x.sampleUrl.map(hrefs => hrefs.href).join(','))
+            .reduce((res, y) =>
+                    res.indexOf(y) === -1 ? res.concat(y) : res
+                , []).map(rez => rez.split(','));
+        return new SampleList(result);
+    };
+
+    onlyUniqueUrlList = (): UrlSample[] => {
+        const indices = [];
+        const keys = [];
+        const urlList = this.sample
+            .map(x => UrlSample.fromSample(x));
+
+        urlList
+            .map(urlList => urlList.sampleUrl.join(','))
+            .forEach((item, index) => {
+                if (keys.indexOf(item) === -1) {
+                    keys.push(item);
+                    indices.push(index);
+                }
+            });
+        return urlList.filter((x, index) => indices.indexOf(index) !== -1);
+    };
+
+}
+
+export class UrlSampleList {
+    constructor(readonly sample: UrlSample[]) {
+    };
+
+    static onlyUniqueUrlList(instance: SampleList): UrlSampleList {
+        const indices = [];
+        const keys = [];
+        const urlList = instance.sample
+            .map(x => UrlSample.fromSample(x));
+
+        urlList
+            .map(urlList => urlList.sampleUrl.join(','))
+            .forEach((item, index) => {
+                if (keys.indexOf(item) === -1) {
+                    keys.push(item);
+                    indices.push(index);
+                }
+            });
+        return new UrlSampleList(urlList.filter((x, index) => indices.indexOf(index) !== -1));
+    }
 }
 
 export class Sample {
     selector: string;
+    sampleUrl: CssValue[];
+
+    constructor(selector: string, value: CssValue[] = []) {
+        this.selector = selector;
+        this.sampleUrl = value;
+    }
+}
+
+export class UrlSample {
+    selector: string;
     sampleUrl: string[];
+
+    static fromSample = (sample: Sample) => {
+        return new UrlSample(sample.selector, sample.sampleUrl.map(x => x.href));
+    };
 
     constructor(selector: string, value: string[] = []) {
         this.selector = selector;

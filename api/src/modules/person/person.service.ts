@@ -1,30 +1,22 @@
-import { Model } from 'mongoose';
-import { Component, Inject } from '@nestjs/common';
+import {Model} from 'mongoose';
+import {Component, Inject} from '@nestjs/common';
 import Person from './person.interface';
 import CreatePersonDto from './person.dto';
+import PersonDataService from "./person.service.data";
 
 @Component()
 export default class PersonService {
-  constructor(@Inject('PersonModelToken') private readonly personModel: Model<Person>) { }
-
-  async create(createPersonDto: CreatePersonDto): Promise<Person> {
-    const createdPerson = new this.personModel(createPersonDto);
-    return await createdPerson.save();
-  }
-
-  async find(offset: number, limit: number, value: string): Promise<Person[]> {
-    if (value.length > 0) {
-      return await this.personModel.paginate({ $text: { $search: value } }, { offset, limit })
+    constructor(private readonly personDataService: PersonDataService) {
     }
-    return await this.personModel.paginate({}, { offset, limit });
-  }
 
-  async search(searchString): Promise<Person[]> {
-    if (searchString.length === 0) {
-      return await this.personModel.paginate({}, { limit: 10 })
-    } else {
-      return await this.personModel.paginate({ $text: { $search: searchString } }, { limit: 10 })
+    async merge(createPersonDto: CreatePersonDto) {
+        const {personKey, clientName} = createPersonDto
+        let person = await this.personDataService.getByClientNameAndPersonKey(personKey, clientName);
+        if (!person) {
+            this.personDataService.create(createPersonDto);
+        } else {
+
+        }
+
     }
-  }
-
 }

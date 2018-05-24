@@ -1,0 +1,17 @@
+{
+  "name": "mq",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "up": "(tsc -w &) && nodemon ./dist/index.js"
+  },
+  "dependencies": {
+    "@types/amqplib": "^0.5.7",
+    "@types/reflect-metadata": "^0.1.0",
+    "amqplib": "^0.5.2",
+    "chalk": "^2.4.1",
+    "reflect-metadata": "^0.1.12",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {}
+}
