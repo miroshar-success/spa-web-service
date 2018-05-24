@@ -4,16 +4,21 @@ import axios from 'axios';
 import {AppLogger} from '../../../app.logger';
 import {FetchDtoOut, ExploreDtoOut, PersonDtoOut, PersonInfo} from '../dto/bot.dto.out';
 import * as urlRegex from 'url-regex';
+import {BotMessageService} from './bot.message.service';
 
 @Injectable()
 export class BotEventService {
     private readonly _logger: AppLogger = new AppLogger(BotEventService.name);
+
+    constructor(private readonly botMessageService: BotMessageService) {
+    }
 
     public async messageReceivedHandler(message: viber.Message, response: viber.Response) {
         let exploreRegex = /^\/explore/i;
         let fetchRegex = /^\/fetch/i;
         let getRegex = /^\/get/i;
         let deleteRegex = /^\/delete/i;
+        let helpRegex = /^\/help/i;
 
         if (exploreRegex.test(message.text))
             this.commandExploreHandler(message, response);
@@ -23,6 +28,11 @@ export class BotEventService {
             this.commandGetHandler(message, response);
         else if (deleteRegex.test(message.text))
             this.commandDeleteHandler(message, response);
+        else if (helpRegex.test(message.text))
+            this.commandHelpHandler(response);
+        // else this.notCommandHandler(response);
+
+
     }
 
     private async commandExploreHandler(message: viber.Message, response: viber.Response) {
@@ -38,7 +48,7 @@ export class BotEventService {
                         response.userProfile.language)
                 )))
             :
-            this._logger.warn('Ошибка! Используйте один валидный адрес');
+            this.botMessageService.sendCommandExploreError(response.userProfile.id);
     }
 
     private async commandFetchHandler(message: viber.Message, response: viber.Response) {
@@ -55,7 +65,7 @@ export class BotEventService {
                 ),
                 urls[1]))
             :
-            this._logger.warn('Ошибка! Используйте валидный адрес страницы для анализа и адрес примера отслеживаемого товара');
+            this.botMessageService.sendCommandFetchError(response.userProfile.id);
     }
 
     private async commandGetHandler(message: viber.Message, response: viber.Response) {
@@ -83,7 +93,15 @@ export class BotEventService {
                         response.userProfile.language)
                 )))
             :
-            this._logger.warn('Ошибка! Используйте уже отслеживаемый адрес');
+            this.botMessageService.sendCommandDeleteError(response.userProfile.id);
+    }
+
+    private async commandHelpHandler(response: viber.Response) {
+        this.botMessageService.sendHelpMessage(response.userProfile.id);
+    }
+
+    private async notCommandHandler(response: viber.Response) {
+        this.botMessageService.sendNotCommandMessage(response.userProfile.id);
     }
 
     private async commandExplorePost(exploreDtoOut: ExploreDtoOut) {
@@ -93,11 +111,12 @@ export class BotEventService {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(response => {
-            this._logger.log('/explore request success');
-        }).catch(error => {
-            this._logger.error('/explore request error');
-        });
+            })
+            .then(response => {
+                this._logger.log('/explore request success');
+            }).catch(error => {
+                this._logger.error('/explore request error');
+            });
     }
 
     private async commandFetchPost(fetchDtoOut: FetchDtoOut) {
@@ -106,24 +125,29 @@ export class BotEventService {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(response => {
-            this._logger.log('/fetch request success');
-        }).catch(error => {
-            this._logger.error('/fetch request error');
-        });
+            })
+            .then(response => {
+                this._logger.log('/fetch request success');
+            }).catch(error => {
+                this._logger.error('/fetch request error');
+            });
     }
 
     private async commandGetPost(personCoreDtoOut: PersonDtoOut) {
+        this._logger.log('GET REQUEST BODY: ' + JSON.stringify(personCoreDtoOut));
         await axios.post('http://localhost:3000/fetch/get',
             personCoreDtoOut, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(response => {
-            this._logger.log('/get request success');
-        }).catch(error => {
-            this._logger.error('/get request error');
-        });
+            })
+            .then(response => {
+                this._logger.log('/get request success');
+                // this._logger.log(JSON.stringify(response));
+                this.botMessageService.sendCommandGetMessage(response.data);
+            }).catch(error => {
+                this._logger.error('/get request error - ' + error, error.stack);
+            });
     }
 
     private async commandDeletePost(exploreDtoOut: ExploreDtoOut) {
@@ -132,13 +156,13 @@ export class BotEventService {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(response => {
-            this._logger.log('/delete request success');
-        }).catch(error => {
-            this._logger.error('/delete request error - ' + error, error.stack);
-        });
+            })
+            .then(response => {
+                this._logger.log('/delete request success');
+            }).catch(error => {
+                this._logger.error('/delete request error - ' + error, error.stack);
+            });
     }
 }
-
-//TODO сообщение об ошибках
+//TODO handle request errors
 //FIXME static url 'localhost'
