@@ -91,7 +91,7 @@ export class SampleList {
 }
 
 export class UrlSampleList {
-    constructor(readonly sample: UrlSample[]) {
+    constructor(public readonly sample: UrlSample[]) {
     };
 
     static onlyUniqueUrlList(instance: SampleList): UrlSampleList {
