@@ -21,7 +21,7 @@ export class FetchController {
         await this.fetchService.fetch(fetchDto);
     }
 
-    @Delete('/delete')
+    @Post('/delete')
     async deleteFetch(@Body() fetchExploreDto: FetchExploreDto) {
         await this.fetchService.fetchDelete(fetchExploreDto);
     }

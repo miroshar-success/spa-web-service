@@ -20,11 +20,11 @@ export namespace MqGwTypes {
         gateway?: string
     }
     export interface MqGwScanResult {
-        prototype: object,
         key: string,
+        prototype: object,
         method: MqGwMethodType,
-        methodName: string,
-        gw: string
+        mRoute: string,
+        gwKey: string
     }
 
     export interface MqGwMethodType extends Function{

@@ -3,13 +3,11 @@ import EnableMqGw = MqGwDecorators.EnableMqGw;
 import {FetchResultsGw} from "../fetch/fetch.mq.gw";
 import MqGwConsumer = MqGwDecorators.MqGwConsumer;
 import MqGwProducer = MqGwDecorators.MqGwProducer;
-import {Component, Inject} from "@nestjs/common";
 
 
-@Component()
 @EnableMqGw({
          root: 'beagle',
-         clients:['telegram'],
+         clients:['viber'],
          components:[FetchResultsGw],
          connection: {
              hostname: "beagle-rabbit-mq",

@@ -34,7 +34,11 @@ export namespace MqGwDecorators {
 
     export function MqGwConsumer({name, gateway = 'clientKey'}: DecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`@MQ_GW_CONSUMER(method ${methodName})`));
+            if (target && target.then && typeof target.then === 'function') {
+                console.log(chalk.green(`@MQ_GW_CONSUMER(method ${methodName})`));
+            } else {
+                console.log(warn(`@MQ_GW_CONSUMER(method ${methodName}) must return Promise`));
+            }
             Reflect.defineMetadata(MQ_GW_METHOD_CONSUMER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_GATEWAY_METADATA, gateway, descriptor.value);
