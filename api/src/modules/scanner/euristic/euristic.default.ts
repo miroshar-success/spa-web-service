@@ -3,11 +3,8 @@ import {Euristic} from './eurictic';
 import {CssValue} from '../scanner.csspath';
 
 export class DefaultEuristic extends Euristic {
-    computeOne(samples: CssValue, meta: EuristicMeta): number {
-        return 1;
-    }
 
-    compute(samples: CssValue[], meta: EuristicMeta): number {
-        return samples.length;
+    computeOne(samples: CssValue, meta: EuristicMeta): number {
+        return samples.isImageInside ? 1 : 0.2;
     }
 }

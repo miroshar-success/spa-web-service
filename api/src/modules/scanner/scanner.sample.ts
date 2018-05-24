@@ -47,7 +47,7 @@ export class SampleList {
 
     distinct = (): SampleList => {
         const result = this.sample.map(sample => {
-            return new Sample(sample.selector, sample.sampleUrl.filter((value, index, self) => self.indexOf(value) === index));
+            return new Sample(sample.selector, sample.sampleUrl.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index));
         });
         return new SampleList(result);
     };
@@ -101,7 +101,7 @@ export class UrlSampleList {
             .map(x => UrlSample.fromSample(x));
 
         urlList
-            .map(urlList => urlList.sampleUrl.join(','))
+            .map(urlList => [...urlList.sampleUrl].splice(0,10).join(','))
             .forEach((item, index) => {
                 if (keys.indexOf(item) === -1) {
                     keys.push(item);

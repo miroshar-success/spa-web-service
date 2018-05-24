@@ -10,7 +10,7 @@ export class EuristicMeta {
 export class EuristicOrderService {
 
     static services = {
-      //  'allegro.pl': new AllegroEuristic(),
+        //'allegro.pl': new AllegroEuristic(),
         'default': new DefaultEuristic()
     };
 

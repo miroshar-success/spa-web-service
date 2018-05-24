@@ -25,7 +25,7 @@ export class ScannerService {
             .groupBy('selector')
             .distinct()
             .orderByDesc(sortEuristic)
-                .take(1);
+            .take(1);
 
         return UrlSampleList.onlyUniqueUrlList(listPaths);
     };
@@ -65,9 +65,11 @@ export class ScannerService {
         /*const request = (await needle('get', url));
         const html = request.body;*/
         const jsdom = require('jsdom');
+        const jar = jsdom.createCookieJar();
         const domHtml = await (new Promise((resolve, reject) => {
             jsdom.env({
                 url,
+                cookieJar: jar,
                 features: {
                     FetchExternalResources: ['script'],
                     ProcessExternalResources: ['script'],
@@ -79,7 +81,7 @@ export class ScannerService {
                         // reject(err);
                     } else {
                         const output = jsdom.serializeDocument(window.document);
-                        window.close();
+                        //  window.close();
                         resolve(output);
                     }
                 },

@@ -4,6 +4,48 @@ import {Sample, SampleList} from './scanner.sample';
 
 const fs = require('fs');
 
+const testTemplate = (url, regex) => {
+    let allExamples;
+    let scannerService;
+
+    beforeAll(async () => {
+        jest.unmock('jsdom');
+        scannerService = new ScannerService();
+        const html = (await scannerService.download(url)).body;
+        jest.mock('jsdom');
+        require('jsdom').__setMockHTML(html);
+        allExamples = await scannerService.fetchAll(url);
+    });
+
+    it('sample list isn\'t empty',() => {
+        expect(allExamples.sample.length).toBeGreaterThan(0);
+    });
+
+    it('first sample look like good url',() => {
+        allExamples.sample.forEach((x, index) => {
+                if (regex.test(x.sampleUrl[0]))
+                    console.log('look like good:', index);
+            }
+        );
+        expect(regex.test(allExamples.sample[0].sampleUrl[0])).toBeTruthy();
+    });
+
+    it('another not',() => {
+        allExamples.sample.filter((item, index) => index !== 0).map(x =>
+            expect(regex.test(x.sampleUrl[0])).toBeFalsy()
+        );
+    });
+
+    it('each samples from first group have similar url structure', async () => {
+        const firstExample = await scannerService.fetchOne(url, allExamples.sample[0].selector);
+        expect(firstExample.isSampleUrlNotFound).toBeFalsy();
+        firstExample.sampleUrl.map(x => {
+            expect(regex.test(x)).toBeTruthy()
+        })
+    });
+};
+
+
 describe('scanner test', () => {
 
     let scannerService: ScannerService;
@@ -159,30 +201,25 @@ describe('scanner test', () => {
 
     describe('site test', () => {
 
-        beforeAll(() => {
-            jest.unmock('jsdom');
-            scannerService = new ScannerService();
-        });
+        describe('allegro.pl', () => testTemplate(
+            'https://allegro.pl/kategoria/samochody-osobowe-4029?order=n',
+            /^(https?)(:)(\/)(\/)(allegro\.pl)(\/)([a-z\d\\-]+)(\.)(html)/
+        ));
 
-        it('ebay', async () => {
-            const regex = /^https:\/\/www\.ebay\.com\/itm\/(.*)\/(.*)/;
-            const url = 'https://www.ebay.com/sch/Laptops-Netbooks-/175672/i.html';
-            const allExamples = await scannerService.fetchAll(url);
+        describe('av.by', () => testTemplate(
+            'https://cars.av.by/infiniti?sort=date&order=desc',
+            /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
+        ));
 
-            console.log(allExamples.sample[0].sampleUrl);
+        describe('booking', () => testTemplate(
+            'https://www.booking.com/searchresults.ru.html?aid=939121;label=refer-UmFuZG9tSVYkc2RlIyh9YUoIgu3kDk8FPNj-7YKozOpVFpaOxX7QyG_zEZMZqTdyr8ag4HCKsPvHhE7g7nrnzBhVCBHfCr6Y;sid=d6c795a3c20e3a2eae2c8ca672ba417a;city=-1941830;from_idr=1&;ilp=1;d_dcp=1',
+            /^https:\/\/www\.booking\.com\/hotel\/by\/(.*)/
+        ));
 
-            //примеры есть
-            expect(allExamples.sample.length).toBeGreaterThan(0);
+        describe('ebay', () => testTemplate(
+            'https://www.ebay.com/sch/Laptops-Netbooks-/175672/i.html',
+            /^https:\/\/www\.ebay\.com\/itm\/(.*)\/(.*)/
+        ));
 
-            //первый похож на хороший по структуре ссылки
-            expect(regex.test(allExamples.sample[0].sampleUrl[0])).toBeTruthy();
-
-            //остальные не похожи
-            allExamples.sample.filter((item, index) => index !== 0).map(x =>
-                expect(regex.test(x.sampleUrl[0])).toBeFalsy()
-            );
-
-            //если тянуть все примеры по первому, то они одинаковые по структуре
-        });
     });
 });

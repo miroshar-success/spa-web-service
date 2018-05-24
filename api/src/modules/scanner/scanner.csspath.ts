@@ -12,8 +12,14 @@ export class CssPath {
 
     static fromNode = (node: CheerioElement): CssPath => {
         const parents: string[] = [];
+
         const value = node.attribs.href;
-        //объект, чтобы рвботать по ссылке а не по значению
+        let isImageInside = false;
+
+        if(node.children.findIndex(x=>x.name === "img") !== -1){
+            isImageInside = true;
+        }
+        //объект, чтобы работать по ссылке а не по значению
         let flags = {isRouted: false};
         while (node !== null) {
             let domMeta = {};
@@ -23,7 +29,7 @@ export class CssPath {
         }
         const result: CssPath = new CssPath();
         result.path = parents.reverse();
-        result.value = {href: value, isImageInside: false};
+        result.value = {href: value, isImageInside};
         return result;
     };
 
