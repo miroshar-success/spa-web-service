@@ -1,5 +1,6 @@
 import {FetchExploreSamplesDto} from "./fetch.dto";
 import {Meta, Sample, SampleOut} from '../../scanner/scanner.sample';
+import {SampleModel} from "../fetch.model";
 
 /** SCANNER DTO **/
 
@@ -25,7 +26,7 @@ export class FetchExploreScannerResultDto extends FetchExploreScannerDto {
 
 export class FetchScannerDto extends BaseFetchScannerModelDto{
     readonly selector: string;
-    readonly lastResult: string;
+    readonly lastResult: SampleModel;
 }
 
 export class FetchScannerResultDto extends BaseFetchScannerModelDto{

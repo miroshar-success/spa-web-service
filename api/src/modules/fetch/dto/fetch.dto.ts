@@ -19,13 +19,13 @@ export class FetchExploreDto  extends CoreFetchDto{
 
 //fetch explore result MQ
 export class FetchExploreResultDto extends FetchExploreDto {
-    readonly sampleUrls: SampleOut[];
+    readonly samples: SampleOut[];
     readonly meta: Meta;
 }
 
 export class FetchExploreSamplesDto {
     readonly selector: string;
-    readonly sampleUrls: SampleOut;
+    readonly sample: SampleOut;
 }
 
 export class FetchDto extends FetchExploreDto {

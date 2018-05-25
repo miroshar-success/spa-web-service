@@ -34,7 +34,7 @@ export class ScannerClient implements OnModuleInit {
         let samples: FetchExploreSamplesDto[] = fetches
             .selectors
             .map(value => {
-                return {sampleUrls: value.sample, selector: value.selector};
+                return {sample: value.sample, selector: value.selector};
             });
 
         this.fetchExploreConsumer({

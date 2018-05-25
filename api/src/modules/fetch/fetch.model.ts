@@ -5,7 +5,7 @@ import {ClientName} from '../clients/clients.enums';
 import {Meta} from '../scanner/scanner.sample';
 
 export interface FetchExploreSelectorModel {
-    readonly sampleUrl: SampleModel[]
+    readonly sample: SampleModel
     readonly selector: string
     readonly meta: Meta;
 }
@@ -24,7 +24,7 @@ export const FetchExploreSampleSchema = new mongoose.Schema(
 
 export const FetchExploreSelectorsSchema = new mongoose.Schema(
     {
-        sampleUrl: [FetchExploreSampleSchema],
+        sample: FetchExploreSampleSchema,
         selector: String,
         meta: Object
     }
@@ -42,7 +42,7 @@ export interface FetchModel extends Document {
     selector: string
 
     updateDate: Date
-    lastResult: [string]
+    lastResult: SampleModel[]
 }
 
 export const FetchSchema = new mongoose.Schema(
@@ -56,7 +56,7 @@ export const FetchSchema = new mongoose.Schema(
 
         selector: String,
         updateDate: {type: Date, require: true},
-        lastResult: [String]
+        lastResult: [FetchExploreSampleSchema]
     }
 );
 

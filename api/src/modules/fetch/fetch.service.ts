@@ -1,7 +1,7 @@
 import {Model} from 'mongoose';
 import {Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
 
-import {FetchExploreSelectorModel, FetchModel} from './fetch.model';
+import {FetchExploreSelectorModel, FetchModel, SampleModel} from './fetch.model';
 import {FetchState} from './fetch.enums';
 import * as Agenda from 'agenda';
 
@@ -81,13 +81,13 @@ export class FetchService {
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
 
 
-            let sampleUrls: SampleOut[] = selectors.map(selector => selector.sampleUrls);
+            let sample: SampleOut[] = selectors.map(selector => selector.sample);
             // send to person
             this.fetchResultsGw.publishFetchExploreResult(
                 {
                     person: personCoreDto,
                     fetchUrl: fetchModel.fetchUrl,
-                    sampleUrls: sampleUrls,
+                    samples: sample,
                     meta: meta
                 })
         }
@@ -104,6 +104,8 @@ export class FetchService {
         // get current job if exists
         let fetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
+        console.log("**********************************fetch**************************");
+
         if (!fetchModel) {
             throw new HttpException(FetchMessage.FETCH_EXISTS_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
@@ -114,8 +116,8 @@ export class FetchService {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
-        console.log("TEST",selectors);
-        let selectorModel = selectors.find(selector => selector.sampleUrl.findIndex(url => url.url === sampleUrl) !== -1);
+
+        let selectorModel = selectors.find(selector => selector.sample.url === sampleUrl);
 
         if (!selectorModel == null && selectorModel.selector) {``
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
@@ -163,7 +165,7 @@ export class FetchService {
 
     private async initFetchWatcher() {
 
-        // define agenda task wit h timer
+        // define agenda task with timer
         this.agenda.define(FetchService.FETCH_WATCH_JOB_NAME, async (job, done) => {
             await this.initWatch(new Date(Date.now() - FetchService.FETCH_REINIT_PERIOD));
             done();
@@ -190,7 +192,7 @@ export class FetchService {
                 let fetchId: string = fetch._id;
                 let fetchUrl: string = fetch.fetchUrl;
                 let selector: string = fetch.selector;
-                let lastResult: string = fetch.lastResult[0];
+                let lastResult: SampleModel = fetch.lastResult[0];
 
                 // TODO move to data service
                 this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}, () => {
