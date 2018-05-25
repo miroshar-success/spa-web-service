@@ -4,6 +4,7 @@ import {FetchState} from './fetch.enums';
 import {ClientName} from '../clients/clients.enums';
 import {Meta} from '../scanner/scanner.sample';
 
+
 export interface FetchExploreSelectorModel {
     readonly sample: SampleModel
     readonly selector: string
