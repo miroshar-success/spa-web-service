@@ -8,6 +8,7 @@ import {Meta, Sample, SampleOut, SelectorOut} from '../../scanner/scanner.sample
 /** FETCH DTO **/
 
 export class CoreFetchDto {
+
     @ApiModelProperty()
     readonly person: PersonDto;
 }
