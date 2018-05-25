@@ -37,7 +37,7 @@ export class FetchResultsGw {
         return message;
     }
 
-    @MqGwConsumer({name:'fetchMessage', gateway:'clientName'})
+    @MqGwConsumer({name:'fetchMessage', gateway:'clientName', client:'xxx'})
     async consumeMessage(message: any) {
         console.log("THIS: ", this);
         console.log("MESSAGE:"+ message.status);

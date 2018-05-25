@@ -5,7 +5,7 @@ import * as config from '../config';
 import {MqGwViberConfig} from './modules/bot/config/mq.gw.viber.config';
 
 async function bootstrap() {
-    new MqGwViberConfig();
+    new MqGwViberConfig().enable();
 
     const app = await NestFactory.create(AppModule, {
         logger: new AppLogger('Main')
