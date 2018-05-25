@@ -15,92 +15,75 @@ export class BotMessageService {
 
     //TODO /explore message
     public async sendCommandExploreMessage(fetchExploreResultDto: FetchExploreResultDto) {
-        console.log('sendExploreMessage');
-    }
+        let urlTitle = 'Test URL title';
+        let urlImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStIRwDJnchMxep0AQQOkY6kB6aAf3ulRmRIl1CWU2PR5YDAyR6';
 
-    public async sendCommandFetchMessage(fetchResultDto: FetchResultDto) {
-        this._bot.sendMessage(new viber.UserProfile(fetchResultDto.person.personKey),
-            fetchResultDto.resultUrls.map(url => {
-                return this.createFetchUrlMessage(url);
-                /*new viber.Message.Text(`Новое объявление: \n${url}`);*/
+        this._bot.sendMessage(new viber.UserProfile(fetchExploreResultDto.person.personKey),
+            fetchExploreResultDto.sampleUrls.map((url, index) => {
+                return this.createFetchExploreMessage(index + 1, url, urlTitle, urlImage, fetchExploreResultDto.fetchUrl);
             })
         );
     }
 
-    private createFetchUrlMessage(url: string): viber.Message.Url {
-        let urlMessageTemplate = {
-            'type': 'url',
-            'media': `Новое объявление: \n${url}`
-        };
-        return new viber.Message.RichMedia(urlMessageTemplate);
+    public async sendCommandFetchMessage(fetchResultDto: FetchResultDto) {
+        let urlTitle = 'Test URL title';
+        let urlImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStIRwDJnchMxep0AQQOkY6kB6aAf3ulRmRIl1CWU2PR5YDAyR6';
+        let groupTitle = 'Test group URL title';
+
+        this._bot.sendMessage(new viber.UserProfile(fetchResultDto.person.personKey),
+            fetchResultDto.resultUrls.map(url => {
+                return this.createFetchMessage(url, urlTitle, urlImage, groupTitle);
+            })
+        );
     }
 
     //TODO create DTO for /get
     public async sendCommandGetMessage(activeFetches: { clientName: ClientName, person: PersonCoreDto, fetchUrl: string }[]) {
+        let groupTitle = 'Test group URL title';
+
         this._bot.sendMessage(new viber.UserProfile(activeFetches[0].person.personKey),
             activeFetches.map((activeFetch, index) => {
-                return this.createCommandGetMessage(index + 1, activeFetch.fetchUrl);
+                return this.createCommandGetMessage(index + 1, activeFetch.fetchUrl, groupTitle);
             })
         );
     }
 
-    private createCommandGetMessage(number: number, url: string): viber.Message.RichMedia {
-        let getMessageTemplate = {
+    public async sendTextMessage(userId: string, text: string) {
+        this._bot.sendMessage(new viber.UserProfile(userId),
+            new viber.Message.Text(text));
+    }
+
+    public async sendRichMessage(userId: string, title: string, text: string) {
+        let messageTemplate = {
             'Type': 'rich_media',
             'ButtonsGroupColumns': 6,
-            'ButtonsGroupRows': 6,
+            'ButtonsGroupRows': 3,
             'BgColor': '#FFFFFF',
             'Buttons': [
                 {
                     'Columns': 6,
                     'Rows': 1,
                     'ActionType': 'none',
-                    'Text': `<font color="#FFFFFF">Отслеживание №${number}</font>`,
+                    'Text': `<font color="#FFFFFF">${title}</font>`,
                     'TextSize': 'large',
                     'TextVAlign': 'middle',
-                    'TextHAlign': 'center',
-                    'BgColor': '#512DA8',
+                    'TextHAlign': 'left',
+                    'BgColor': '#665CAC',
                 },
                 {
                     'Columns': 6,
-                    'Rows': 4,
+                    'Rows': 1,
                     'ActionType': 'none',
-                    'Text': `${url}`,
+                    'Text': `${text}`,
                     'TextSize': 'large',
                     'TextVAlign': 'middle',
                     'TextHAlign': 'center',
-                    'BgColor': '#FFFFFF'
-                },
-                {
-                    'Columns': 3,
-                    'Rows': 1,
-                    'ActionType': 'open-url',
-                    'ActionBody': `${url}`,
-                    'Text': '<font color="#FFFFFF">OPEN</font>',
-                    'TextSize': 'large',
-                    'TextVAlign': 'middle',
-                    'TextHAlign': 'middle',
-                    'BgColor': '#7C4DFF',
-                },
-                {
-                    'Columns': 3,
-                    'Rows': 1,
-                    'ActionType': 'reply',
-                    'ActionBody': `/delete ${url}`,
-                    'Text': '<font color="#FFFFFF">STOP</font>',
-                    'TextSize': 'large',
-                    'TextVAlign': 'middle',
-                    'TextHAlign': 'middle',
-                    'BgColor': '#512DA8'
                 }
             ]
         };
-        return new viber.Message.RichMedia(getMessageTemplate);
-    }
 
-    public async sendTextMessage(userId: string, text: string) {
         this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text(text));
+            new viber.Message.RichMedia(messageTemplate));
     }
 
     public async sendCommandExploreError(userId: string) {
@@ -131,6 +114,179 @@ export class BotMessageService {
     public async sendNotCommandMessage(userId: string) {
         this._bot.sendMessage(new viber.UserProfile(userId),
             new viber.Message.Text('Неизвестная команда. Введите /help для получения информации'));
+    }
+
+    private createFetchExploreMessage(num: number, url: string, urlTitle: string, urlImage: string, groupUrl: string): viber.Message.RichMedia {
+        let fetchExploreMessageTemplate = {
+            'Type': 'rich_media',
+            'ButtonsGroupColumns': 6,
+            'ButtonsGroupRows': 7,
+            'BgColor': '#FFFFFF',
+            'Buttons': [
+                {
+                    'Columns': 6,
+                    'Rows': 1,
+                    'ActionType': 'none',
+                    'Text': `<font color="#FFFFFF">№${num}: ${urlTitle}</font>`,
+                    'TextSize': 'regular',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'left',
+                    'BgColor': '#665CAC',
+                },
+                {
+                    'Columns': 6,
+                    'Rows': 4,
+                    'ActionType': 'none',
+                    'Image': `${urlImage}`,
+                    'BgColor': '#FFFFFF',
+                },
+                {
+                    'Columns': 6,
+                    'Rows': 1,
+                    'ActionType': 'none',
+                    'Text': `<font color="#212121">${url}</font>`,
+                    'TextSize': 'small',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'left',
+                    'BgColor': '#FFFFFF',
+                },
+                {
+                    'Columns': 3,
+                    'Rows': 1,
+                    'ActionType': 'open-url',
+                    'ActionBody': `${url}`,
+                    'Text': '<font color="#FFFFFF">OPEN</font>',
+                    'TextSize': 'large',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'middle',
+                    'Silent': 'true',
+                    'BgColor': '#665CAC',
+
+                },
+                {
+                    'Columns': 3,
+                    'Rows': 1,
+                    'ActionType': 'reply',
+                    'ActionBody': `/fetch ${groupUrl} ${url}`,
+                    'Text': '<font color="#FFFFFF">FETCH</font>',
+                    'TextSize': 'large',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'middle',
+                    'Silent': 'true',
+                    'BgColor': '#665CAC',
+                }
+            ]
+        };
+
+        return new viber.Message.RichMedia(fetchExploreMessageTemplate);
+    }
+
+    private createFetchMessage(url: string, urlTitle: string, urlImage: string, groupTitle: string): viber.Message.RichMedia {
+        let fetchMessageTemplate = {
+            'Type': 'rich_media',
+            'ButtonsGroupColumns': 6,
+            'ButtonsGroupRows': 7,
+            'BgColor': '#FFFFFF',
+            'Buttons': [
+                {
+                    'Columns': 6,
+                    'Rows': 1,
+                    'ActionType': 'none',
+                    'Text': `<font color="#FFFFFF">${groupTitle}</font>`,
+                    'TextSize': 'regular',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'left',
+                    'BgColor': '#665CAC',
+                },
+                {
+                    'Columns': 6,
+                    'Rows': 4,
+                    'ActionType': 'none',
+                    'BgColor': '#FFFFFF',
+                    'Image': `${urlImage}`,
+                },
+                {
+                    'Columns': 6,
+                    'Rows': 1,
+                    'ActionType': 'none',
+                    'Text': `<font color="#212121">${urlTitle}</font>`,
+                    'TextSize': 'small',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'left',
+                    'BgColor': '#FFFFFF',
+                },
+                {
+                    'Columns': 6,
+                    'Rows': 1,
+                    'ActionType': 'open-url',
+                    'ActionBody': `${url}`,
+                    'Text': '<font color="#FFFFFF">OPEN</font>',
+                    'TextSize': 'large',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'middle',
+                    'BgColor': '#665CAC',
+                    'Silent': 'true'
+                }
+            ]
+        };
+
+        return new viber.Message.RichMedia(fetchMessageTemplate);
+    }
+
+    private createCommandGetMessage(num: number, url: string, groupTitle: string): viber.Message.RichMedia {
+        let getMessageTemplate = {
+            'Type': 'rich_media',
+            'ButtonsGroupColumns': 6,
+            'ButtonsGroupRows': 5,
+            'BgColor': '#FFFFFF',
+            'Buttons': [
+                {
+                    'Columns': 6,
+                    'Rows': 1,
+                    'ActionType': 'none',
+                    'Text': `<font color="#FFFFFF">#${num}: ${groupTitle}</font>`,
+                    'TextSize': 'small',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'left',
+                    'BgColor': '#665CAC',
+                },
+                {
+                    'Columns': 6,
+                    'Rows': 3,
+                    'ActionType': 'none',
+                    'Text': `${url}`,
+                    'TextSize': 'large',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'left',
+                    'BgColor': '#FFFFFF'
+                },
+                {
+                    'Columns': 3,
+                    'Rows': 1,
+                    'ActionType': 'open-url',
+                    'ActionBody': `${url}`,
+                    'Text': '<font color="#FFFFFF">OPEN</font>',
+                    'TextSize': 'large',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'center',
+                    'BgColor': '#665CAC',
+                    'Silent': 'true'
+                },
+                {
+                    'Columns': 3,
+                    'Rows': 1,
+                    'ActionType': 'reply',
+                    'ActionBody': `/delete ${url}`,
+                    'Text': '<font color="#FFFFFF">CANCEL</font>',
+                    'TextSize': 'large',
+                    'TextVAlign': 'middle',
+                    'TextHAlign': 'center',
+                    'BgColor': '#EF6062',
+                    'Silent': 'true'
+                }
+            ]
+        };
+        return new viber.Message.RichMedia(getMessageTemplate);
     }
 }
 

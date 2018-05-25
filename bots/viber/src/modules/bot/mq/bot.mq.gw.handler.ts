@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {FetchExploreResultDto, FetchResultDto} from '../../../../../../api/src/modules/fetch/dto/fetch.dto';
 import {BotMessageService} from '../services/bot.message.service';
 
 @Injectable()
@@ -9,13 +8,11 @@ export class BotMqGwHandler {
     }
 
     async MqFetchExploreHandler(message) {
-        let fetchExploreResultDto: FetchExploreResultDto = JSON.parse(message.content.toString('utf8'));
-        this.botMessageService.sendCommandExploreMessage(fetchExploreResultDto);
+        this.botMessageService.sendCommandExploreMessage(message);
     }
 
     async MqFetchResultHandler(message) {
-        let fetchResultDto: FetchResultDto = JSON.parse(message.content.toString('utf8'));
-        this.botMessageService.sendCommandFetchMessage(fetchResultDto);
+        this.botMessageService.sendCommandFetchMessage(message);
     }
 
     //TODO mq message receiving

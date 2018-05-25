@@ -33,8 +33,6 @@ export class BotEventService {
         else if (helpRegex.test(message.text))
             this.commandHelpHandler(response);
         // else this.notCommandHandler(response);
-
-
     }
 
     private async commandExploreHandler(message: viber.Message, response: viber.Response) {
@@ -141,7 +139,6 @@ export class BotEventService {
                 }
             })
             .then(response => {
-                this._logger.log('/get request success');
                 this.botMessageService.sendCommandGetMessage(response.data);
             }).catch(error => {
                 this._logger.error('/get request error - ' + error, error.stack);
