@@ -1,11 +1,11 @@
 import { MqGwDecorators } from '../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators';
-import EnableMqGw = MqGwDecorators.EnableMqGw;
+import MqGwConfig = MqGwDecorators.MqGwConfig;
 import { FetchResultsGw } from "../fetch/fetch.mq.gw";
-import { Injectable } from '@nestjs/common';
+import { MqGwConfiguration } from "../../../../lib/mq-gw-api/src/configuration/mq.gw.configuration";
 
-@EnableMqGw({
+@MqGwConfig({
   root: 'beagle',
-  clients: ['viber'],
+  clients: ['beagleWeb'],
   components: [FetchResultsGw],
   connection: {
     hostname: "beagle-rabbit-mq",
@@ -13,4 +13,4 @@ import { Injectable } from '@nestjs/common';
     password: "rabbitmq"
   }
 })
-export class MqGwConfig { }
+export class MqGwApi extends MqGwConfiguration { }

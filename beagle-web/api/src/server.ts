@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ApplicationModule } from './app.module';
 import { resolve } from 'path';
 import { Transport } from '@nestjs/common/enums/transport.enum';
-import { MqGwConfig } from './config/mq.gw.api.config';
+import { MqGwApi } from './config/mq.gw.api.config';
 
 const proxy = require('http-proxy-middleware');
 
@@ -12,7 +12,7 @@ const path = require('path');
 
 async function bootstrap() {
 
-  new MqGwConfig();
+  new MqGwApi().enable();
 
   //const app = await NestFactory.create(ApplicationModule, new FastifyAdapter());
   const app = await NestFactory.create(ApplicationModule);

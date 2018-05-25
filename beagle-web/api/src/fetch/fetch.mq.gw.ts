@@ -1,48 +1,51 @@
 import { Injectable } from "@nestjs/common";
 import { MqGwDecorators } from "../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators";
-import MqGwProducer = MqGwDecorators.MqGwProducer;
 import MqGwConsumer = MqGwDecorators.MqGwConsumer;
+const WebSocket = require('ws');
 
+const wss = new WebSocket.Server({ port: 9000 })
 
 @Injectable()
 export class FetchResultsGw {
 
   static THIS: FetchResultsGw;
 
+  private clients: any[] = []
+
   constructor() {
-    FetchResultsGw.THIS = this;
-    setTimeout(() => this.publishMessage({ status: 'ok', messageKey: "XXX-" }), 5000);
+    FetchResultsGw.THIS = this
+    console.log('clients1', wss.clients);
+    wss.on('connection', ws => {
+      // ws.clientName = 'admin';
+      // wss.clients.forEach(element => {
+      //   console.log(element);
+      // });
+      ws.on('message', message => {
+        this.clients.push({
+          clientName: message,
+          client: ws,
+        })
+        this.clients[0].client.send(JSON.stringify('message'))
+        console.log(message);
+      })
+    })
+    // setTimeout(() => this.publishMessage({ status: 'ok', clientName: "viber" }), 5000);
   }
 
 
-  @MqGwProducer({ name: 'fetchMessage', gateway: 'clientKey' })
-  async publishMessage(message: any) {
-    let fetchMessage: any = { message: message };
-    console.log("message" + JSON.stringify(fetchMessage))
-    return message;
-  }
-
-
-  // @MqGwProducer({name:'fetchExplore', gateway:'clientKey'})
-  // async publishFetchExplore(fetchExploreResultDto: FetchExploreResultDto) {
-  //     console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto))
-  // }
-
-  // @MqGwProducer({name:'fetchResult', gateway:'clientKey'})
-  // async publishFetchResult(fetchResultDto: FetchResultDto) {
-  //     console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
-  // }
-
-  // @MqGwProducer({name:'fetchMessage', gateway:'clientKey'})
-  // async publishMessage(message: FetchMessage, person?: PersonCoreDto) {
-  //     let fetchMessage: FetchMessageDto = {message: message, person: person};
-  //     console.log("message"+ JSON.stringify(fetchMessage))
-  //     return message;
-  // }
-
-  @MqGwConsumer({ name: 'fetchMessage', gateway: 'clientKey' })
+  @MqGwConsumer({ name: 'fetchResult', gateway: 'person.clientName' })
   async consumeMessage(message: any) {
-    console.log('up');
+    // console.log(this.clients[0]);
+    // const client = this.clients[0].client;
+    // client.send(JSON.stringify('message2'));
+    this.clients[0].client.send(JSON.stringify(message))
+    // wss.clients.forEach(client => {
+    //   client.send(JSON.stringify(message));
+    // })
+    // console.log(client);
+    // client.send(message);
+    // console.log(message);
+    // console.log('up');
     // console.log("THIS: ", FetchResultsGw.THIS)
     // console.log("MESSAGE:" + JSON.stringify(message));
     // console.log("data:" + message.content);

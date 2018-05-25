@@ -8,7 +8,7 @@ import {
   getError,
 } from '@redux/common/table/reducer';
 import { TableReducerNameSubscribers } from '@redux/common/table/types';
-import FilterableFetchTable from '../components/FetchTable/FilterableFetchTable';
+import FilterableFetchTable from '@components/FetchTable/FilterableFetchTable';
 
 const prefix = TableReducerNameSubscribers.FETCHS;
 

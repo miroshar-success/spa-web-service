@@ -34,3 +34,74 @@ const getSuccessPayload = (fetchs: Array<Fetch>) => {
     updateDate: fetch.updateDate,
   }))
 }
+
+// import { take, call, put, fork } from 'redux-saga/effects';
+// import { eventChannel } from 'redux-saga';
+// import { TableActions } from '@redux/common/table/types';
+// import axios from 'axios';
+
+// export const fetchData = (url: string, personKey: string) => {
+//   return axios.post(url, {
+//     clientName: 'beagleWeb',
+//     personKey,
+//     personInfo: null,
+//   })
+//     .then(response => response.data)
+//     .catch(error => error)
+// }
+
+// // worker sagas
+// function* loadFetchs(personKey: string): IterableIterator<any> {
+//   try {
+
+//     const data = yield call(fetchData, '/fetch/get', personKey);
+
+//     yield put({
+//       type: TableActions.LOAD_DATA_SUCCESS,
+//       payload: {
+//         fetchs: data.map((dataItem: any) => {
+//           return {
+//             fetchUrl: dataItem.fetchUrl,
+//           }
+//         })
+//       },
+//     })
+//   } catch (error) {
+//     // TODO: handle errors
+//   }
+// }
+
+// function initWebsocket() {
+//   return eventChannel(emit => {
+//     const ws = new WebSocket('ws://localhost:9000');
+
+//     ws.onopen = () => {
+//       console.log('opening ...');
+//       ws.send('admin');
+//     }
+
+//     ws.onmessage = (event) => {
+//       console.log(event.data);
+//     }
+
+//     return () => {
+//       ws.close();
+//     }
+//   })
+// }
+
+// // watcher sagas
+// export function* loadFetchsSaga(): IterableIterator<any> {
+//   while (true) {
+//     const { payload: { personKey } } = yield take(TableActions.LOAD_DATA);
+//     yield fork(loadFetchs, personKey);
+//   }
+// }
+
+// export function* wsSaga(): IterableIterator<any> {
+//   const channel = yield call(initWebsocket);
+//   while (true) {
+//     const action = yield take(channel);
+//     yield put(action);
+//   }
+// }

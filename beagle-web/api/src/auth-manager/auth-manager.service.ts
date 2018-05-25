@@ -18,7 +18,7 @@ export class AuthManagerService {
     } else {
       if (await this.userService.compareHash(password, foundedUser.password)) {
         const accessToken = await this.authService.createToken({ email });
-        return { accessToken }
+        return { accessToken, name: foundedUser.name }
       }
     }
     throw new BadRequestException('authentication error');

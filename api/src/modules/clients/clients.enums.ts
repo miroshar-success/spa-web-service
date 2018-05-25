@@ -1,4 +1,5 @@
 export enum ClientName {
     viber = 'viber',
-    telegram = 'telegram'
+    telegram = 'telegram',
+    beagleWeb = 'beagleWeb',
 }

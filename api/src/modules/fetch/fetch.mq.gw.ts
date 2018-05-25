@@ -1,8 +1,8 @@
-import {Component} from "@nestjs/common";
-import {FetchExploreResultDto, FetchResultDto, FetchMessageDto} from "./dto/fetch.dto";
-import {FetchMessage, MessageStatus} from "./dto/fetch.message";
+import { Component } from "@nestjs/common";
+import { FetchExploreResultDto, FetchResultDto, FetchMessageDto } from "./dto/fetch.dto";
+import { FetchMessage, MessageStatus } from "./dto/fetch.message";
 import PersonCoreDto from "../person/person.dto";
-import {MqGwDecorators} from "../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators";
+import { MqGwDecorators } from "../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators";
 import MqGwProducer = MqGwDecorators.MqGwProducer;
 import MqGwConsumer = MqGwDecorators.MqGwConsumer;
 
@@ -14,33 +14,39 @@ export class FetchResultsGw {
 
     constructor() {
         FetchResultsGw.THIS = this;
-        setTimeout(()=> this.publishMessage({status:MessageStatus.OK, messageKey: "viber"}), 5000);
+        // const obj = {
+        //     person: {
+        //         status: MessageStatus.OK,
+        //         clientName: 'beagleWeb',
+        //     }
+        // }
+        // setTimeout(() => this.publishMessage(obj), 5000);
     }
 
 
-    @MqGwProducer({name:'fetchExplore', gateway:'person.clientName'})
+    @MqGwProducer({ name: 'fetchExplore', gateway: 'person.clientName' })
     async publishFetchExploreResult(fetchExploreResultDto: FetchExploreResultDto) {
         console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto));
         return fetchExploreResultDto;
     }
 
-    @MqGwProducer({name:'fetchResult', gateway:'clientName'})
+    @MqGwProducer({ name: 'fetchResult', gateway: 'person.clientName' })
     async publishFetchResult(fetchResultDto: FetchResultDto) {
-        console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
+        console.log("publishFetchResult" + JSON.stringify(fetchResultDto))
         return fetchResultDto
     }
 
-    @MqGwProducer({name:'fetchMessage', gateway:'clientName'})
-    async publishMessage(message: FetchMessage, person?: PersonCoreDto) {
-        let fetchMessage: FetchMessageDto = {message: message, person: person};
-        console.log("publishMessage"+ JSON.stringify(fetchMessage))
+    @MqGwProducer({ name: 'fetchMessage', gateway: 'person.clientName' })
+    async publishMessage(message: any, person?: any) {
+        let fetchMessage: FetchMessageDto = { message: message, person: person };
+        console.log("publishMessage" + JSON.stringify(fetchMessage))
         return message;
     }
 
-    @MqGwConsumer({name:'fetchMessage', gateway:'clientName', client:'xxx'})
+    @MqGwConsumer({ name: 'fetchMessage', gateway: 'person.clientName' })
     async consumeMessage(message: any) {
         console.log("THIS: ", this);
-        console.log("MESSAGE:"+ message.status);
+        console.log("MESSAGE:" + message.status);
     }
 
 }

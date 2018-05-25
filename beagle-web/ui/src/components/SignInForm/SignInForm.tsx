@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Form, Input, Button, Icon } from 'antd';
+import { Form, Input, Button, Icon, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Link } from 'react-router-dom';
 import { SignInUser } from '@redux/auth/types';
+import ErrorMessage from '@components/common/ErrorMessage/ErrorMessage';
 
 const FormItem = Form.Item;
 
 export interface SignInFormProps {
   form: WrappedFormUtils;
+  loading: boolean;
+  error: string;
   signIn: (user: SignInUser) => any;
 }
 
@@ -26,13 +29,21 @@ class SignInForm extends React.Component<SignInFormProps> {
 
   render() {
     const {
-      getFieldDecorator,
-    } = this.props.form;
+      form: { getFieldDecorator },
+      error,
+      loading,
+    } = this.props;
 
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: 50 }}>
+        {error.length > 0 && <ErrorMessage message={error} />}
         <Form onSubmit={this.handleSubmit} style={{ width: 300 }}>
           <h1 style={{ textAlign: 'center' }}>Sign in form</h1>
+          {
+            loading
+              ? <Spin size='large' style={{ display: 'flex', justifyContent: 'center' }} />
+              : null
+          }
           <FormItem>
             {
               getFieldDecorator('email', {
