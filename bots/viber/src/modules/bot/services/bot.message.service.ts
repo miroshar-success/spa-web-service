@@ -72,7 +72,7 @@ export class BotMessageService {
                 },
                 {
                     'Columns': 6,
-                    'Rows': 1,
+                    'Rows': 2,
                     'ActionType': 'none',
                     'Text': `${text}`,
                     'TextSize': 'large',

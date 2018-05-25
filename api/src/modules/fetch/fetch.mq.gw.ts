@@ -24,13 +24,13 @@ export class FetchResultsGw {
         return fetchExploreResultDto;
     }
 
-    @MqGwProducer({name:'fetchResult', gateway:'clientName'})
+    @MqGwProducer({name:'fetchResult', gateway:'person.clientName'})
     async publishFetchResult(fetchResultDto: FetchResultDto) {
         console.log("publishFetchResult"+ JSON.stringify(fetchResultDto))
         return fetchResultDto
     }
 
-    @MqGwProducer({name:'fetchMessage', gateway:'clientName'})
+    @MqGwProducer({name:'fetchMessage', gateway:'person.clientName'})
     async publishMessage(message: FetchMessage, person?: PersonCoreDto) {
         let fetchMessage: FetchMessageDto = {message: message, person: person};
         console.log("publishMessage"+ JSON.stringify(fetchMessage))

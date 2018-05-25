@@ -139,7 +139,9 @@ export class BotEventService {
                 }
             })
             .then(response => {
-                this.botMessageService.sendCommandGetMessage(response.data);
+                response.data.length != 0 ?
+                    this.botMessageService.sendCommandGetMessage(response.data) :
+                    this.botMessageService.sendRichMessage(personCoreDtoOut.personKey, 'Информация', 'У вас нет активных отслеживаний');
             }).catch(error => {
                 this._logger.error('/get request error - ' + error, error.stack);
             });
