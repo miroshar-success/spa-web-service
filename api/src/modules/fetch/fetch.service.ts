@@ -1,31 +1,32 @@
 import {Model} from 'mongoose';
 import {Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
 
-import {FetchExploreSelectorModel, FetchModel} from "./fetch.model";
-import {FetchState} from "./fetch.enums";
-import * as Agenda from "agenda";
+import {FetchExploreSelectorModel, FetchModel} from './fetch.model';
+import {FetchState} from './fetch.enums';
+import * as Agenda from 'agenda';
 
 
-import {async} from "rxjs/scheduler/async";
-import {ScannerClient} from "./scanner.client";
+import {async} from 'rxjs/scheduler/async';
+import {ScannerClient} from './scanner.client';
 import {
     CoreFetchDto,
     FetchDto, FetchExploreDto, FetchExploreSamplesDto
-} from "./dto/fetch.dto";
-import {ClientName} from "../clients/clients.enums";
-import PersonCoreDto from "../person/person.dto";
-import {FetchResultsGw} from "./fetch.mq.gw";
-import {ApiModelProperty} from "@nestjs/swagger";
-import {FetchExploreScannerResultDto, FetchScannerResultDto} from "./dto/scanner.dto";
-import {FetchMessage} from "./dto/fetch.message";
-import FetchDataService from "./fetch.service.data";
-import PersonService from "../person/person.service";
+} from './dto/fetch.dto';
+import {ClientName} from '../clients/clients.enums';
+import PersonCoreDto from '../person/person.dto';
+import {FetchResultsGw} from './fetch.mq.gw';
+import {ApiModelProperty} from '@nestjs/swagger';
+import {FetchExploreScannerResultDto, FetchScannerResultDto} from './dto/scanner.dto';
+import {FetchMessage} from './dto/fetch.message';
+import FetchDataService from './fetch.service.data';
+import PersonService from '../person/person.service';
+import {Meta, SampleOut} from '../scanner/scanner.sample';
 
 
 @Component()
 export class FetchService {
 
-    private static FETCH_WATCH_JOB_NAME: string = "fetchWatcherJob";
+    private static FETCH_WATCH_JOB_NAME: string = 'fetchWatcherJob';
     private static FETCH_WATCH_JOB_REPEAT_TIME: string = '1 seconds';
 
     private static FETCH_REINIT_PERIOD: number = 500;
@@ -63,31 +64,31 @@ export class FetchService {
             createDate: Date.now(),
             state: FetchState.new,
         }).save();
-
         let fetchId: string = currentFetchModel._id.toString();
         this.scannerClient.fetchExploreProduce({fetchId: fetchId, fetchUrl: fetchUrl})
     }
 
-    public async fetchExploreResultConsumer({fetchId, selectors}: FetchExploreScannerResultDto) {
+    public async fetchExploreResultConsumer({fetchId, selectors, meta}: FetchExploreScannerResultDto) {
         let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
         if (fetchModel) {
             await this.fetchModel.updateOne(fetchModel, {
                 $set: {
                     selectors: selectors,
-                    state: FetchState.init
+                    state: FetchState.init,
+                    meta: meta
                 }
             }).exec();
-
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
 
 
-            let sampleUrls = selectors.map(selector => selector.sampleUrl);
+            let sampleUrls: SampleOut[] = selectors.map(selector => selector.sampleUrls);
             // send to person
             this.fetchResultsGw.publishFetchExploreResult(
                 {
                     person: personCoreDto,
                     fetchUrl: fetchModel.fetchUrl,
-                    sampleUrls: sampleUrls
+                    sampleUrls: sampleUrls,
+                    meta: meta
                 })
         }
     }
@@ -113,12 +114,12 @@ export class FetchService {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
 
-        let selectorModel = selectors.find(selector => selector.sampleUrl == sampleUrl);
+        console.log("TEST",selectors);
+        let selectorModel = selectors.find(selector => selector.sampleUrl.findIndex(url => url.url === sampleUrl) !== -1);
 
-        if (!selectorModel == null && selectorModel.selector) {
+        if (!selectorModel == null && selectorModel.selector) {``
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
-
         await this.fetchDataService.updateFetchModelWithInitData(fetchModel, selectorModel.selector);
     }
 
@@ -135,7 +136,7 @@ export class FetchService {
             }).exec();
 
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
-            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls});
+            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls, meta: new Meta()});
         }
     }
 
@@ -178,7 +179,7 @@ export class FetchService {
 
         let currentFetches: FetchModel[] = await this.fetchModel.find({
             'state': FetchState.active,
-            'updateDate': {"$lt": initDate}
+            'updateDate': {'$lt': initDate}
         }).sort({'updateDate': -1}).limit(100).exec();
 
         if (currentFetches && currentFetches.length > 0) {

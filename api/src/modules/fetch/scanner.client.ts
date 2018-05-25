@@ -10,6 +10,7 @@ import {
     FetchExploreScannerDto, FetchExploreScannerResultDto, FetchScannerDto,
     FetchScannerResultDto
 } from "./dto/scanner.dto";
+import {FetchOut} from '../scanner/scanner.sample';
 
 /** FETCH DTO **/
 
@@ -29,17 +30,18 @@ export class ScannerClient implements OnModuleInit {
 
     // FIXME - ADD REAL CALL
     public async fetchExploreProduce(fetchExploreScannerDto: FetchExploreScannerDto) {
-
-        let samples: FetchExploreSamplesDto[] = (await this.scannerService.fetchAll(fetchExploreScannerDto.fetchUrl))
-            .sample
+        let fetches: FetchOut = (await this.scannerService.fetchAll(fetchExploreScannerDto.fetchUrl));
+        let samples: FetchExploreSamplesDto[] = fetches
+            .selectors
             .map(value => {
-                return {sampleUrl: value.sampleUrl[0], selector: value.selector};
-            })
+                return {sampleUrls: value.sample, selector: value.selector};
+            });
 
         this.fetchExploreConsumer({
             fetchId: fetchExploreScannerDto.fetchId,
             fetchUrl: fetchExploreScannerDto.fetchUrl,
-            selectors: samples
+            selectors: samples,
+            meta: fetches.meta
         });
     }
 

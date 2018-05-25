@@ -1,8 +1,10 @@
-import * as _ from "lodash"
+import * as _ from 'lodash'
+import {Meta} from './scanner.sample';
 
 export class CssValue {
     href: string;
     isImageInside: boolean;
+    meta: Meta;
 }
 
 export class CssPath {
@@ -16,7 +18,7 @@ export class CssPath {
         const value = node.attribs.href;
         let isImageInside = false;
 
-        if(node.children.findIndex(x=>x.name === "img") !== -1){
+        if(node.children.findIndex(x=>x.name === 'img') !== -1){
             isImageInside = true;
         }
         //объект, чтобы работать по ссылке а не по значению
@@ -29,7 +31,7 @@ export class CssPath {
         }
         const result: CssPath = new CssPath();
         result.path = parents.reverse();
-        result.value = {href: value, isImageInside};
+        result.value = {href: value, isImageInside, meta: {image: "sdg", title: "Dfgdfg"}};
         return result;
     };
 

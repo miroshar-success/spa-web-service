@@ -119,7 +119,7 @@ describe('scanner test', () => {
         it('should distinct elements', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
             const groups = sampleList.groupBy('selector');
-            const unique = groups.sample[0].sampleUrl.filter((value, index, self) => self.indexOf(value) === index);
+            const unique = groups.sample[0].sampleUrl.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index);
             expect(groups.distinct().sample[0].sampleUrl.length).toBe(unique.length);
         });
 
@@ -201,18 +201,18 @@ describe('scanner test', () => {
 
     describe('site test', () => {
 
-        describe('allegro.pl', () => testTemplate(
+        describe('allegro', () => testTemplate(
             'https://allegro.pl/kategoria/samochody-osobowe-4029?order=n',
             /^(https?)(:)(\/)(\/)(allegro\.pl)(\/)([a-z\d\\-]+)(\.)(html)/
         ));
 
-        describe('av.by', () => testTemplate(
+        describe('av', () => testTemplate(
             'https://cars.av.by/infiniti?sort=date&order=desc',
             /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
         ));
 
         describe('booking', () => testTemplate(
-            'https://www.booking.com/searchresults.ru.html?aid=939121;label=refer-UmFuZG9tSVYkc2RlIyh9YUoIgu3kDk8FPNj-7YKozOpVFpaOxX7QyG_zEZMZqTdyr8ag4HCKsPvHhE7g7nrnzBhVCBHfCr6Y;sid=d6c795a3c20e3a2eae2c8ca672ba417a;city=-1941830;from_idr=1&;ilp=1;d_dcp=1',
+            'https://www.booking.com/searchresults.ru.html?city=-1941830',
             /^https:\/\/www\.booking\.com\/hotel\/by\/(.*)/
         ));
 

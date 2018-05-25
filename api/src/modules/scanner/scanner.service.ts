@@ -1,11 +1,9 @@
 import * as cheerio from 'cheerio';
-import * as needle from 'needle';
 import {resolve, URL} from 'url';
-import * as jsdom from 'jsdom'
-import {Component, Inject} from '@nestjs/common';
+import {Component} from '@nestjs/common';
 import {SELECTORS, ScannerInstance, FILTERS} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
-import {SampleList, SampleResponse, UrlSample, UrlSampleList} from './scanner.sample';
+import {FetchOut, Meta, SampleList, SampleOut, SampleResponse, SelectorOut} from './scanner.sample';
 import {EuristicMeta} from './scanner.euristic';
 
 @Component()
@@ -15,9 +13,14 @@ export class ScannerService {
 
     }
 
-    fetchAll = async (url: string): Promise<UrlSampleList> => {
+    fetchAll = async (url: string): Promise<FetchOut> => {
         const sortEuristic: EuristicMeta = new EuristicMeta();
-        const cssPaths: CssPath[] = await this.getPathsByUrl(url, SELECTORS.LINKS);
+        let cssPaths: CssPath[];
+        try {
+            cssPaths = await this.getPathsByUrl(url, SELECTORS.LINKS);
+        } catch (e) {
+            return e;
+        }
 
         sortEuristic.url = new URL(url);
 
@@ -25,15 +28,26 @@ export class ScannerService {
             .groupBy('selector')
             .distinct()
             .orderByDesc(sortEuristic)
-            .take(1);
+            .unique()
+            .takeSample(1)
+            .take(0, 10);
 
-        return UrlSampleList.onlyUniqueUrlList(listPaths);
+         return {selectors:listPaths.toOut(), meta: {image: "ggg", title: "dfghdfhdhf"}};
     };
 
     fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
         const response: SampleResponse = new SampleResponse();
-        const cssPaths: CssPath[] = await this.getPathsByUrl(url, selector);
-        const urls: string[] = cssPaths.map(x => x.value.href);
+        let cssPaths: CssPath[];
+        try {
+            cssPaths = await this.getPathsByUrl(url, selector);
+        } catch (e) {
+            return e;
+        }
+        const listPaths: SelectorOut[] = SampleList.fromPaths(cssPaths, 0)
+            .unique()
+            .take(0, 20)
+            .toOut();
+        const urls: string[] = listPaths.map(x => x.sample.url);
         if (urls.length === 0)
             response.isSelectorEmpty = true;
         let uniqueUrls = urls.filter((value, index, self) => self.indexOf(value) === index);
@@ -45,13 +59,19 @@ export class ScannerService {
                 response.isSampleUrlNotFound = true;
             }
         }
-        response.sampleUrl = uniqueUrls.map(x => resolve(url, x));
+        response.sampleUrl = listPaths.map(x=>x.sample);
         return response;
     };
 
     getPathsByUrl = async (url: string, selector: string): Promise<CssPath[]> => {
-        const html = (await this.download(url)).body;
-        const cheerioObject: CheerioStatic = this.parse(html);
+        let res;
+        try {
+            res = (await this.download(url)).body;
+        }
+        catch (e) {
+            throw e;
+        }
+        const cheerioObject: CheerioStatic = this.parse(res);
         const scannerInstance: ScannerInstance = ScannerInstance.fromCheerio(cheerioObject, selector);
         return scannerInstance.resolve(url).filter(FILTERS.INVALID_HREF, {}).getPaths();
     };
@@ -78,7 +98,7 @@ export class ScannerService {
                 // proxy: 'https://api.enthought.com/',
                 done: function (err, window) {
                     if (err) {
-                        // reject(err);
+                        reject(err);
                     } else {
                         const output = jsdom.serializeDocument(window.document);
                         //  window.close();

@@ -27,34 +27,38 @@ export class SampleList {
                 return sum.set(groupByVal, groupedItems);
             },
             new Map()
-        )).map(v => new Sample(v[0], v[1].map(link => link.sampleUrl[0])));
+        )).map(v => new Sample(v[0], v[1].map(link => link.data[0])));
         return new SampleList(sample);
     };
 
     orderByDesc = (meta: EuristicMeta): SampleList => {
-        const result = [...this.sample].sort((x, y) => EuristicOrderService.compare(y.sampleUrl, x.sampleUrl, meta));
+        const result = [...this.sample].sort((x, y) => EuristicOrderService.compare(y.data, x.data, meta));
         return new SampleList(result);
     };
 
-    take = (count: number = 1): SampleList => {
+    takeSample = (count: number = 1): SampleList => {
         const result = this.sample.map(x => {
-            if (!Array.isArray(x.sampleUrl))
+            if (!Array.isArray(x.data))
                 return new Sample(x.selector, undefined);
-            return new Sample(x.selector, x.sampleUrl.splice(0, count));
+            return new Sample(x.selector, x.data.splice(0, count));
         });
         return new SampleList(result);
     };
 
+    take = (from: number = 0, count: number = 10) : SampleList => {
+        return new SampleList([...this.sample].slice(from,count));
+    };
+
     distinct = (): SampleList => {
         const result = this.sample.map(sample => {
-            return new Sample(sample.selector, sample.sampleUrl.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index));
+            return new Sample(sample.selector, sample.data.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index));
         });
         return new SampleList(result);
     };
 
     resolveRelativeUrl = (baseUrl: string): SampleList => {
         const result = this.sample.map(x => {
-            const absUrls = x.sampleUrl.map(y => {
+            const absUrls = x.data.map(y => {
                 return {...y, href: resolve(baseUrl, y.href)};
             });
             return new Sample(x.selector, absUrls);
@@ -62,83 +66,65 @@ export class SampleList {
         return new SampleList(result);
     };
 
-    firstUnique = (count: number = 10): SampleList => {
-        const result = this.sample
-            .map(x => x.sampleUrl.map(hrefs => hrefs.href).join(','))
-            .reduce((res, y) =>
-                    res.indexOf(y) === -1 ? res.concat(y) : res
-                , []).map(rez => rez.split(','));
-        return new SampleList(result);
-    };
-
-    onlyUniqueUrlList = (): UrlSample[] => {
+    unique = (): SampleList => {
         const indices = [];
         const keys = [];
-        const urlList = this.sample
-            .map(x => UrlSample.fromSample(x));
 
-        urlList
-            .map(urlList => urlList.sampleUrl.join(','))
+        this.sample
+            .map(urlList => urlList.data.map(elem=>elem.href).join(','))
             .forEach((item, index) => {
                 if (keys.indexOf(item) === -1) {
                     keys.push(item);
                     indices.push(index);
                 }
             });
-        return urlList.filter((x, index) => indices.indexOf(index) !== -1);
+        return new SampleList(this.sample.filter((x, index) => indices.indexOf(index) !== -1));
     };
 
-}
-
-export class UrlSampleList {
-    constructor(public readonly sample: UrlSample[]) {
-    };
-
-    static onlyUniqueUrlList(instance: SampleList): UrlSampleList {
-        const indices = [];
-        const keys = [];
-        const urlList = instance.sample
-            .map(x => UrlSample.fromSample(x));
-
-        urlList
-            .map(urlList => [...urlList.sampleUrl].splice(0,10).join(','))
-            .forEach((item, index) => {
-                if (keys.indexOf(item) === -1) {
-                    keys.push(item);
-                    indices.push(index);
+    toOut = (): SelectorOut[] => {
+        return this.sample.map(x => {
+            return {
+                selector: x.selector,
+                sample: {
+                    url: x.data[0].href,
+                    meta: x.data[0].meta
                 }
-            });
-        return new UrlSampleList(urlList.filter((x, index) => indices.indexOf(index) !== -1));
+            }
+        })
     }
 }
 
 export class Sample {
-    selector: string;
-    sampleUrl: CssValue[];
 
-    constructor(selector: string, value: CssValue[] = []) {
-        this.selector = selector;
-        this.sampleUrl = value;
+    constructor(public readonly selector: string, public readonly data: CssValue[]){
+
     }
 }
 
-export class UrlSample {
+
+export class FetchOut{
+    meta: Meta;
+    selectors: SelectorOut[]
+}
+
+export class SelectorOut {
     selector: string;
-    sampleUrl: string[];
+    sample: SampleOut;
+}
 
-    static fromSample = (sample: Sample) => {
-        return new UrlSample(sample.selector, sample.sampleUrl.map(x => x.href));
-    };
+export class SampleOut {
+    url: string;
+    meta: Meta;
+}
 
-    constructor(selector: string, value: string[] = []) {
-        this.selector = selector;
-        this.sampleUrl = value;
-    }
+export class Meta {
+    image: string;
+    title: string;
 }
 
 export class SampleResponse {
     // ссылки на найденные примеры
-    sampleUrl: string[] = [];
+    sampleUrl: SampleOut[] = [];
     // ссылки по селектору не найдены
     isSelectorEmpty: boolean = false;
     // заданный пример не найден

@@ -14,7 +14,7 @@ export class FetchResultsGw {
 
     constructor() {
         FetchResultsGw.THIS = this;
-        setTimeout(()=> this.publishMessage({status:MessageStatus.OK, messageKey: "viber"}), 5000);
+        // setTimeout(()=> this.publishMessage({status:MessageStatus.OK, messageKey: "viber"}), 5000);
     }
 
 
@@ -30,14 +30,14 @@ export class FetchResultsGw {
         return fetchResultDto
     }
 
-    @MqGwProducer({name:'fetchMessage', gateway:'clientName'})
+    @MqGwProducer({name:'fetchMessage', gateway:'person.clientName'})
     async publishMessage(message: FetchMessage, person?: PersonCoreDto) {
         let fetchMessage: FetchMessageDto = {message: message, person: person};
         console.log("publishMessage"+ JSON.stringify(fetchMessage))
         return message;
     }
 
-    @MqGwConsumer({name:'fetchMessage', gateway:'clientName', client:'xxx'})
+    @MqGwConsumer({name:'fetchMessage', gateway:'clientName'})
     async consumeMessage(message: any) {
         console.log("THIS: ", this);
         console.log("MESSAGE:"+ message.status);
