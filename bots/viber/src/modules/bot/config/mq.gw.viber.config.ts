@@ -1,11 +1,11 @@
 import {Injectable} from '@nestjs/common';
 import {MqGwDecorators} from '../../../../../../lib/mq-gw-api/src/decorators/mq.gw.decorators';
-import EnableMqGw = MqGwDecorators.EnableMqGw;
-import {BotMqGw} from '../bot.mq.gw';
+import MqGwConfig = MqGwDecorators.MqGwConfig;
+import {BotMqGw} from '../mq/bot.mq.gw';
 
 
 @Injectable()
-@EnableMqGw({
+@MqGwConfig({
          root: 'beagle',
          clients:['viber'],
          components:[BotMqGw],

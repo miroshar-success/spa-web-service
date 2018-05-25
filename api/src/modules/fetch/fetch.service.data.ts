@@ -8,8 +8,7 @@ import {ClientName} from "../clients/clients.enums";
 @Component()
 export default class FetchDataService {
 
-    constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>) {
-    }
+    constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>) {}
 
     async create(fetchDtoData: FetchDtoData): Promise<FetchModel> {
         const {
