@@ -2,7 +2,7 @@ import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 import {AppLogger} from './app.logger';
 import * as config from '../config';
-import {MqGwViberConfig} from './modules/bot/config/mq.gw.viber.config';
+import {MqGwViberConfig} from './modules/bot/mq/bot.mq.gw.config';
 
 async function bootstrap() {
     new MqGwViberConfig();

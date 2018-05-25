@@ -2,7 +2,9 @@ import {Injectable} from '@nestjs/common';
 import * as viber from 'viber-bot';
 import axios from 'axios';
 import {AppLogger} from '../../../app.logger';
-import {FetchDtoOut, ExploreDtoOut, PersonDtoOut, PersonInfo} from '../dto/bot.dto.out';
+import {
+    FetchDtoOut, FetchExploreDtoOut, PersonCoreDtoOut, PersonInfo
+} from '../dto/bot.dto.out';
 import * as urlRegex from 'url-regex';
 import {BotMessageService} from './bot.message.service';
 
@@ -39,14 +41,14 @@ export class BotEventService {
         let urls: string[] = message.text.match(urlRegex());
 
         urls != null && urls.length == 1 ?
-            this.commandExplorePost(new ExploreDtoOut(urls[0],
-                new PersonDtoOut(response.userProfile.id,
-                    new PersonInfo(
-                        response.userProfile.id,
-                        response.userProfile.name,
-                        response.userProfile.country,
-                        response.userProfile.language)
-                )))
+            this.commandExplorePost(new FetchExploreDtoOut(new PersonCoreDtoOut(
+                response.userProfile.id,
+                new PersonInfo(
+                    response.userProfile.id,
+                    response.userProfile.name,
+                    response.userProfile.country,
+                    response.userProfile.language)
+            ), urls[0]))
             :
             this.botMessageService.sendCommandExploreError(response.userProfile.id);
     }
@@ -55,21 +57,20 @@ export class BotEventService {
         let urls: string[] = message.text.match(urlRegex());
 
         urls != null && urls.length == 2 ?
-            this.commandFetchPost(new FetchDtoOut(urls[0],
-                new PersonDtoOut(response.userProfile.id,
+            this.commandFetchPost(new FetchDtoOut(
+                new PersonCoreDtoOut(response.userProfile.id,
                     new PersonInfo(
                         response.userProfile.id,
                         response.userProfile.name,
                         response.userProfile.country,
                         response.userProfile.language)
-                ),
-                urls[1]))
+                ), urls[0], urls[1]))
             :
             this.botMessageService.sendCommandFetchError(response.userProfile.id);
     }
 
     private async commandGetHandler(message: viber.Message, response: viber.Response) {
-        let personCoreDtoOut = new PersonDtoOut(response.userProfile.id,
+        let personCoreDtoOut = new PersonCoreDtoOut(response.userProfile.id,
             new PersonInfo(
                 response.userProfile.id,
                 response.userProfile.name,
@@ -84,14 +85,14 @@ export class BotEventService {
         let urls: string[] = message.text.match(urlRegex());
 
         urls != null && urls.length == 1 ?
-            this.commandDeletePost(new ExploreDtoOut(urls[0],
-                new PersonDtoOut(response.userProfile.id,
-                    new PersonInfo(
-                        response.userProfile.id,
-                        response.userProfile.name,
-                        response.userProfile.country,
-                        response.userProfile.language)
-                )))
+            this.commandDeletePost(new FetchExploreDtoOut(new PersonCoreDtoOut(
+                response.userProfile.id,
+                new PersonInfo(
+                    response.userProfile.id,
+                    response.userProfile.name,
+                    response.userProfile.country,
+                    response.userProfile.language)
+            ), urls[0]))
             :
             this.botMessageService.sendCommandDeleteError(response.userProfile.id);
     }
@@ -104,10 +105,9 @@ export class BotEventService {
         this.botMessageService.sendNotCommandMessage(response.userProfile.id);
     }
 
-    private async commandExplorePost(exploreDtoOut: ExploreDtoOut) {
-        this._logger.log('/explore POST body: ' + JSON.stringify(exploreDtoOut));
+    private async commandExplorePost(fetchExploreDtoOut: FetchExploreDtoOut) {
         await axios.post('http://localhost:3000/fetch/explore',
-            exploreDtoOut, {
+            fetchExploreDtoOut, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -133,8 +133,7 @@ export class BotEventService {
             });
     }
 
-    private async commandGetPost(personCoreDtoOut: PersonDtoOut) {
-        this._logger.log('GET REQUEST BODY: ' + JSON.stringify(personCoreDtoOut));
+    private async commandGetPost(personCoreDtoOut: PersonCoreDtoOut) {
         await axios.post('http://localhost:3000/fetch/get',
             personCoreDtoOut, {
                 headers: {
@@ -143,16 +142,15 @@ export class BotEventService {
             })
             .then(response => {
                 this._logger.log('/get request success');
-                // this._logger.log(JSON.stringify(response));
                 this.botMessageService.sendCommandGetMessage(response.data);
             }).catch(error => {
                 this._logger.error('/get request error - ' + error, error.stack);
             });
     }
 
-    private async commandDeletePost(exploreDtoOut: ExploreDtoOut) {
-        await axios.post('http://localhost:3000/fetch/get',
-            exploreDtoOut, {
+    private async commandDeletePost(fetchExploreDtoOut: FetchExploreDtoOut) {
+        await axios.post('http://localhost:3000/fetch/delete',
+            fetchExploreDtoOut, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -164,5 +162,6 @@ export class BotEventService {
             });
     }
 }
+
 //TODO handle request errors
 //FIXME static url 'localhost'

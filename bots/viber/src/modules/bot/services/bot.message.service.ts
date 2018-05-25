@@ -21,9 +21,18 @@ export class BotMessageService {
     public async sendCommandFetchMessage(fetchResultDto: FetchResultDto) {
         this._bot.sendMessage(new viber.UserProfile(fetchResultDto.person.personKey),
             fetchResultDto.resultUrls.map(url => {
-                return new viber.Message.Text(`Новое объявление: \n${url}`);
+                return this.createFetchUrlMessage(url);
+                /*new viber.Message.Text(`Новое объявление: \n${url}`);*/
             })
         );
+    }
+
+    private createFetchUrlMessage(url: string): viber.Message.Url {
+        let urlMessageTemplate = {
+            'type': 'url',
+            'media': `Новое объявление: \n${url}`
+        };
+        return new viber.Message.RichMedia(urlMessageTemplate);
     }
 
     //TODO create DTO for /get
