@@ -28,6 +28,8 @@ export class BotEventHandler {
         //Wqp88ccqY9fgk9lIH0y5LQ==
 
         this._bot.on(viber.Events.MESSAGE_RECEIVED, (message, response) => {
+            /*this._bot.sendMessage(new viber.UserProfile('Wqp88ccqY9fgk9lIH0y5LQ=='),
+                new viber.Message.RichMedia(''));*/
             this.botEventService.messageReceivedHandler(message, response);
         });
     }
