@@ -1,8 +1,8 @@
-import {NestFactory} from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import * as bodyParser from 'body-parser';
-import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger';
-import {ApplicationModule} from './app.module';
-import {ValidationPipe} from './validation.pipe';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ApplicationModule } from './app.module';
+import { ValidationPipe } from './validation.pipe';
 import MqGwApiConfig from "./modules/config/mq.gw.api.config";
 
 
