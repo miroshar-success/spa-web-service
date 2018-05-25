@@ -244,7 +244,7 @@ export class BotMessageService {
                     'Columns': 6,
                     'Rows': 1,
                     'ActionType': 'none',
-                    'Text': `<font color="#FFFFFF">#${num}: ${groupTitle}</font>`,
+                    'Text': `<font color="#FFFFFF">№${num}: ${groupTitle}</font>`,
                     'TextSize': 'small',
                     'TextVAlign': 'middle',
                     'TextHAlign': 'left',
