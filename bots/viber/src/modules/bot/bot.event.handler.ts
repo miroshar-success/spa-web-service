@@ -26,6 +26,7 @@ export class BotEventHandler {
 
     private eventMsgReceived() {
         //Wqp88ccqY9fgk9lIH0y5LQ==
+
         this._bot.on(viber.Events.MESSAGE_RECEIVED, (message, response) => {
             this.botEventService.messageReceivedHandler(message, response);
         });

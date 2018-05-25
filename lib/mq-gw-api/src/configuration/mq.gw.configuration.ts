@@ -1,47 +1,47 @@
-import "reflect-metadata";
-import { connect } from 'amqplib';
 import {MqGwTypes} from "../types/mq.gw.types";
-import MqGwConfig = MqGwTypes.MqGwConfig;
-import {MqGwGuards} from "../guards/mq.gw.guards";
-import isMqMethod = MqGwGuards.isMqGwMethod;
-import MqMethodType = MqGwTypes.MqGwMethodType;
-import MqConsumerType = MqGwTypes.MqGwConsumerType;
-import MqProducerType = MqGwTypes.MqGwProducerType;
-import isMqGwConsumer = MqGwGuards.isMqGwConsumer;
-import isMqGwProducer = MqGwGuards.isMqGwProducer;
-import MqGwMethodType = MqGwTypes.MqGwMethodType;
-import ConnectionConfig = MqGwTypes.ConnectionConfig;
+import MqGwConfig = MqGwTypes.MqGwConfigType;
 import MqGwProxyService from "../services/mq.gw.proxy.service";
+const chalk = require('chalk');
 
 
 /**
  *
  * Example:
  *
- * @EnableMqGw({
- *      root: 'root',
+ * @MqGwConfig({
+ *      root: 'beagle',
  *      clients:['telegram'],
- *      components:[Service, Number]
+ *      components:[Service, Number],
+ *      connection:{
+ *         hostname: "beagle-rabbit-mq",
+ *         username: "rabbitmq",
+ *         password: "rabbitmq"
+ *      }
  * })
- * class Test {
+ * class MyConfig extends MqGwConfiguration {}
  *
- *   constructor(connection: Connection){}
- *
- * }
+ * new MyConfig().enable();
  *
  *
  */
 
-export abstract class MqGwConfiguration {
+export class MqGwConfiguration {
 
-     constructor() {
-        new MqGwProxyService((this as any).config);
+    private readonly proxyService: MqGwProxyService;
+    private readonly config: MqGwConfig;
+
+    constructor() {
+        this.proxyService = new MqGwProxyService(this.config);
     }
 
-    /**
-     * Implemented in decorator @EnableMqGw.
-     */
-    protected abstract get config(): MqGwConfig
+
+    enable(){
+         this.proxyService.connect()
+             .catch(error => console.log(chalk.red(`[mq-gw-api] - [connection-error] `, error)))
+             .then(_ => this.proxyService.proxify())
+             .catch(error => console.log(chalk.red(`[mq-gw-api] - [proxy-error] `, error)));
+    }
+
 }
 
 
