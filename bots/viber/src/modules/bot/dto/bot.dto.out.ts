@@ -1,28 +1,32 @@
-export class ExploreDtoOut {
-    readonly fetchUrl: string;
-    readonly person: PersonDtoOut;
 
-    constructor(fetchUrl: string, person: PersonDtoOut) {
-        this.fetchUrl = fetchUrl;
+/** /fetch/explore & /delete **/
+export class FetchExploreDtoOut {
+    readonly person: PersonCoreDtoOut;
+    readonly fetchUrl: string;
+
+    constructor(person: PersonCoreDtoOut, fetchUrl: string) {
         this.person = person;
+        this.fetchUrl = fetchUrl;
     }
 }
 
-export class FetchDtoOut extends ExploreDtoOut {
+/** /fetch **/
+export class FetchDtoOut extends FetchExploreDtoOut {
     readonly sampleUrl: string;
 
-    constructor(fetchUrl: string, person: PersonDtoOut, sampleUrl: string) {
-        super(fetchUrl, person);
+    constructor(person: PersonCoreDtoOut, fetchUrl: string, sampleUrl: string) {
+        super(person, fetchUrl);
         this.sampleUrl = sampleUrl;
     }
 }
 
-export class PersonDtoOut {
-    readonly clientName: string;
-    readonly personKey: object;
+/** /get **/
+export class PersonCoreDtoOut {
+    readonly clientName;
+    readonly personKey;
     readonly personInfo: PersonInfo;
 
-    constructor(personKey: object, personInfo: PersonInfo) {
+    constructor(personKey, personInfo: PersonInfo) {
         this.clientName = 'viber';
         this.personKey = personKey;
         this.personInfo = personInfo;
@@ -42,6 +46,8 @@ export class PersonInfo {
         this.language = language;
     }
 }
+
+
 
 
 
