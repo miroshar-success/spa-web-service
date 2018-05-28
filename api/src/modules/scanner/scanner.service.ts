@@ -5,6 +5,7 @@ import {SELECTORS, ScannerInstance, FILTERS} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
 import {FetchOut, Meta, SampleList, SampleOut, SampleResponse, SelectorOut} from './scanner.sample';
 import {EuristicMeta} from './scanner.euristic';
+import {SampleModel} from "../fetch/fetch.model";
 
 @Component()
 export class ScannerService {
@@ -35,7 +36,7 @@ export class ScannerService {
          return {selectors:listPaths.toOut(), meta: {image: "ggg", title: "dfghdfhdhf"}};
     };
 
-    fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
+    fetchOne = async (url: string, selector: string, before?: SampleModel): Promise<SampleResponse> => {
         const response: SampleResponse = new SampleResponse();
         let cssPaths: CssPath[];
         try {
@@ -52,7 +53,7 @@ export class ScannerService {
             response.isSelectorEmpty = true;
         let uniqueUrls = urls.filter((value, index, self) => self.indexOf(value) === index);
         if (before !== undefined) {
-            const beforeIndex = uniqueUrls.indexOf(before);
+            const beforeIndex = uniqueUrls.indexOf(before.url);
             if (beforeIndex !== -1) {
                 uniqueUrls = uniqueUrls.splice(0, beforeIndex);
             } else {
