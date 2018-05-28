@@ -13,14 +13,13 @@ export class BotMessageService {
         this._bot = this.botInitService.bot;
     }
 
-    //TODO /explore message
     public async sendCommandExploreMessage(fetchExploreResultDto: FetchExploreResultDto) {
         let urlTitle = 'Test URL title';
         let urlImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStIRwDJnchMxep0AQQOkY6kB6aAf3ulRmRIl1CWU2PR5YDAyR6';
 
         this._bot.sendMessage(new viber.UserProfile(fetchExploreResultDto.person.personKey),
-            fetchExploreResultDto.sampleUrls.map((url, index) => {
-                return this.createFetchExploreMessage(index + 1, url, urlTitle, urlImage, fetchExploreResultDto.fetchUrl);
+            fetchExploreResultDto.samples.map((sample, index) => {
+                return this.createFetchExploreMessage(index + 1, sample.url, urlTitle, urlImage, fetchExploreResultDto.fetchUrl);
             })
         );
     }
@@ -31,13 +30,12 @@ export class BotMessageService {
         let groupTitle = 'Test group URL title';
 
         this._bot.sendMessage(new viber.UserProfile(fetchResultDto.person.personKey),
-            fetchResultDto.resultUrls.map(url => {
-                return this.createFetchMessage(url, urlTitle, urlImage, groupTitle);
+            fetchResultDto.resultUrls.map(result => {
+                return this.createFetchMessage(result.url, urlTitle, urlImage, groupTitle);
             })
         );
     }
 
-    //TODO create DTO for /get
     public async sendCommandGetMessage(activeFetches: { clientName: ClientName, person: PersonCoreDto, fetchUrl: string }[]) {
         let groupTitle = 'Test group URL title';
 
@@ -48,12 +46,11 @@ export class BotMessageService {
         );
     }
 
-    public async sendTextMessage(userId: string, text: string) {
-        this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text(text));
-    }
-
-    public async sendRichMessage(userId: string, title: string, text: string) {
+    public async sendSimpleRichMessage(userId: string, title: string, text: string, error?: boolean) {
+        let titleBgColor = '#665CAC';
+        if (error) {
+            titleBgColor = '#EF6062';
+        }
         let messageTemplate = {
             'Type': 'rich_media',
             'ButtonsGroupColumns': 6,
@@ -68,7 +65,7 @@ export class BotMessageService {
                     'TextSize': 'large',
                     'TextVAlign': 'middle',
                     'TextHAlign': 'left',
-                    'BgColor': '#665CAC',
+                    'BgColor': `${titleBgColor}`,
                 },
                 {
                     'Columns': 6,
@@ -86,35 +83,17 @@ export class BotMessageService {
             new viber.Message.RichMedia(messageTemplate));
     }
 
-    public async sendCommandExploreError(userId: string) {
-        this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text('Ошибка! Используйте один валидный адрес'));
-    }
-
-    public async sendCommandFetchError(userId: string) {
-        this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text('Ошибка! Используйте валидный адрес страницы для анализа и адрес примера отслеживаемого товара'));
-    }
-
-    public async sendCommandDeleteError(userId: string) {
-        this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text('Ошибка! Используйте валидный адрес'));
-    }
-
     public async sendHelpMessage(userId: string) {
+        let text = '/explore [explore url] - исследовать ссылку' +
+            '\n\n/fetch [explore url] [fetch url] - отслеживать ссылки данного типа' +
+            '\n\n/get - получить список активных отсеживаний' +
+            '\n\n/delete [explore url] - остановить отслеживание' +
+            '\n\n/help - помощь';
+
         this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text(
-                '/explore [explore url] - исследовать ссылку' +
-                '\n/fetch [explore url] [fetch url] - отслеживать ссылки данного типа' +
-                '\n/get - получить список активных отсеживаний' +
-                '\n/delete [explore url] - остановить отслеживание' +
-                '\n/help - помощь'));
+            new viber.Message.Text(text));
     }
 
-    public async sendNotCommandMessage(userId: string) {
-        this._bot.sendMessage(new viber.UserProfile(userId),
-            new viber.Message.Text('Неизвестная команда. Введите /help для получения информации'));
-    }
 
     private createFetchExploreMessage(num: number, url: string, urlTitle: string, urlImage: string, groupUrl: string): viber.Message.RichMedia {
         let fetchExploreMessageTemplate = {

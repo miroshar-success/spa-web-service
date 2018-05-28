@@ -31,8 +31,10 @@ export class BotEventService {
         else if (deleteRegex.test(message.text))
             this.commandDeleteHandler(message, response);
         else if (helpRegex.test(message.text))
-            this.commandHelpHandler(response);
-        // else this.notCommandHandler(response);
+            this.botMessageService.sendHelpMessage(response.userProfile.id);
+        else
+            this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
+                'Ошибка!', 'Неизвестная команда. Введите \n/help для получения информации', true);
     }
 
     private async commandExploreHandler(message: viber.Message, response: viber.Response) {
@@ -48,7 +50,8 @@ export class BotEventService {
                     response.userProfile.language)
             ), urls[0]))
             :
-            this.botMessageService.sendCommandExploreError(response.userProfile.id);
+            this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
+                'Ошибка!', 'Используйте один валидный адрес', true);
     }
 
     private async commandFetchHandler(message: viber.Message, response: viber.Response) {
@@ -64,7 +67,8 @@ export class BotEventService {
                         response.userProfile.language)
                 ), urls[0], urls[1]))
             :
-            this.botMessageService.sendCommandFetchError(response.userProfile.id);
+            this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
+                'Ошибка!', 'Используйте валидный адрес страницы для анализа и адрес примера отслеживаемого товара', true);
     }
 
     private async commandGetHandler(message: viber.Message, response: viber.Response) {
@@ -92,15 +96,8 @@ export class BotEventService {
                     response.userProfile.language)
             ), urls[0]))
             :
-            this.botMessageService.sendCommandDeleteError(response.userProfile.id);
-    }
-
-    private async commandHelpHandler(response: viber.Response) {
-        this.botMessageService.sendHelpMessage(response.userProfile.id);
-    }
-
-    private async notCommandHandler(response: viber.Response) {
-        this.botMessageService.sendNotCommandMessage(response.userProfile.id);
+            this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
+                'Ошибка!', 'Используйте валидный адрес', true);
     }
 
     private async commandExplorePost(fetchExploreDtoOut: FetchExploreDtoOut) {
@@ -113,6 +110,8 @@ export class BotEventService {
             .then(response => {
                 this._logger.log('/explore request success');
             }).catch(error => {
+                this.botMessageService.sendSimpleRichMessage(fetchExploreDtoOut.person.personKey,
+                    'Ошибка!', 'Не удалось получить примеры. Попробуйте еще раз', true);
                 this._logger.error('/explore request error');
             });
     }
@@ -126,7 +125,11 @@ export class BotEventService {
             })
             .then(response => {
                 this._logger.log('/fetch request success');
+                this.botMessageService.sendSimpleRichMessage(fetchDtoOut.person.personKey,
+                    'Информация', 'Отслеживание активировано');
             }).catch(error => {
+                this.botMessageService.sendSimpleRichMessage(fetchDtoOut.person.personKey,
+                    'Ошибка!', 'Не удалось начать отслеживание. Попробуйте еще раз', true);
                 this._logger.error('/fetch request error');
             });
     }
@@ -141,8 +144,10 @@ export class BotEventService {
             .then(response => {
                 response.data.length != 0 ?
                     this.botMessageService.sendCommandGetMessage(response.data) :
-                    this.botMessageService.sendRichMessage(personCoreDtoOut.personKey, 'Информация', 'У вас нет активных отслеживаний');
+                    this.botMessageService.sendSimpleRichMessage(personCoreDtoOut.personKey, 'Информация', 'У вас нет активных отслеживаний');
             }).catch(error => {
+                this.botMessageService.sendSimpleRichMessage(personCoreDtoOut.personKey,
+                    'Ошибка!', 'Не удалось получить список активных отслеживаний. Попробуйте еще раз', true);
                 this._logger.error('/get request error - ' + error, error.stack);
             });
     }
@@ -156,11 +161,14 @@ export class BotEventService {
             })
             .then(response => {
                 this._logger.log('/delete request success');
+                this.botMessageService.sendSimpleRichMessage(fetchExploreDtoOut.person.personKey,
+                    'Информация', 'Отслеживание остановлено');
             }).catch(error => {
+                this.botMessageService.sendSimpleRichMessage(fetchExploreDtoOut.person.personKey,
+                    'Ошибка!', 'Не удалось остановить отслеживание. Попробуйте еще раз', true);
                 this._logger.error('/delete request error - ' + error, error.stack);
             });
     }
 }
 
-//TODO handle request errors
 //FIXME static url 'localhost'
