@@ -32,7 +32,7 @@ export class ScannerService {
             .takeSample(1)
             .take(0, 10);
 
-         return {selectors:listPaths.toOut(), meta: {image: "ggg", title: "dfghdfhdhf"}};
+        return {selectors: listPaths.toOut(), meta: {image: 'ggg', title: 'dfghdfhdhf'}};
     };
 
     fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
@@ -43,23 +43,22 @@ export class ScannerService {
         } catch (e) {
             return e;
         }
-        const listPaths: SelectorOut[] = SampleList.fromPaths(cssPaths, 0)
-            .unique()
-            .take(0, 20)
-            .toOut();
-        const urls: string[] = listPaths.map(x => x.sample.url);
-        if (urls.length === 0)
+        let listPaths: SampleList = SampleList.fromPaths(cssPaths, 0);
+        if (listPaths.sample.length === 0)
             response.isSelectorEmpty = true;
-        let uniqueUrls = urls.filter((value, index, self) => self.indexOf(value) === index);
-        if (before !== undefined) {
-            const beforeIndex = uniqueUrls.indexOf(before);
-            if (beforeIndex !== -1) {
-                uniqueUrls = uniqueUrls.splice(0, beforeIndex);
-            } else {
-                response.isSampleUrlNotFound = true;
+        else {
+            listPaths = listPaths.unique().take(0, 20);
+            if (before !== undefined) {
+                const beforeIndex = listPaths.sample.findIndex(x => x.data[0].href === before);
+                if (beforeIndex !== -1) {
+                    listPaths = listPaths.take(0, beforeIndex);
+                } else {
+                    response.isSampleUrlNotFound = true;
+                }
             }
         }
-        response.sampleUrl = listPaths.map(x=>x.sample);
+
+        response.sampleUrl = listPaths.toOut().map(x => x.sample);
         return response;
     };
 
