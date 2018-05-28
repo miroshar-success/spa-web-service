@@ -20,7 +20,7 @@ import {FetchExploreScannerResultDto, FetchScannerResultDto} from './dto/scanner
 import {FetchMessage} from './dto/fetch.message';
 import FetchDataService from './fetch.service.data';
 import PersonService from '../person/person.service';
-import {Meta, SampleOut} from '../scanner/scanner.sample';
+import {Meta, SampleOut} from "../../../../scanner/src/scanner.sample";
 
 
 @Component()
@@ -190,7 +190,7 @@ export class FetchService {
                 let fetchId: string = fetch._id;
                 let fetchUrl: string = fetch.fetchUrl;
                 let selector: string = fetch.selector;
-                let lastResult: SampleModel = fetch.lastResult[0];
+                let lastResult: string = fetch.lastResult[0].url;
 
                 // TODO move to data service
                 this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}, () => {
@@ -203,7 +203,7 @@ export class FetchService {
                         });
                 }).exec();
 
-            })
+            });
 
             this.initWatch(initDate);
         }

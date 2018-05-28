@@ -26,7 +26,8 @@ export class FetchExploreScannerResultDto extends FetchExploreScannerDto {
 
 export class FetchScannerDto extends BaseFetchScannerModelDto{
     readonly selector: string;
-    readonly lastResult: SampleModel;
+    readonly lastResult: string;
+    readonly fetchUrl: string;
 }
 
 export class FetchScannerResultDto extends BaseFetchScannerModelDto{
