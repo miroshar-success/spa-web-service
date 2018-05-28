@@ -100,7 +100,7 @@ export class ScannerService {
                         reject(err);
                     } else {
                         const output = jsdom.serializeDocument(window.document);
-                        //  window.close();
+                        setTimeout(() => window.close(), 100);
                         resolve(output);
                     }
                 },

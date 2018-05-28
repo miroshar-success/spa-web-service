@@ -15,38 +15,18 @@
   },
   "dependencies": {
     "@nestjs/common": "^4.5.9",
-    "@nestjs/core": "^4.5.10",
-    "@nestjs/microservices": "^4.5.8",
-    "@nestjs/swagger": "1.2.2",
-    "@nestjs/testing": "^4.5.5",
-    "@nestjs/websockets": "^4.5.8",
-    "@types/agenda": "^1.0.3",
-    "@types/amqplib": "^0.5.7",
-    "agenda": "^1.0.3",
-    "amqplib": "^0.5.2",
-    "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "jsdom": "9.12.0",
-    "mongoose": "^5.1.1",
-    "mongoose-paginate": "^5.0.3",
-    "needle": "^2.2.1",
-    "redis": "^2.7.1",
     "reflect-metadata": "^0.1.12",
-    "rxjs": "^5.5.6",
+    "request": "^2.87.0",
+    "lodash": "^4.17.10",
     "typescript": "^2.8.3"
   },
   "devDependencies": {
-    "@types/jest": "^21.1.8",
-    "@types/node": "^9.3.0",
-    "@types/supertest": "^2.0.4",
     "jest": "^21.2.1",
     "nodemon": "^1.14.1",
     "prettier": "^1.11.1",
-    "supertest": "^3.0.0",
-    "ts-jest": "^21.2.4",
-    "ts-node": "^4.1.0",
-    "tsconfig-paths": "^3.1.1",
-    "tslint": "5.3.2"
+    "ts-node": "^4.1.0"
   },
   "jest": {
     "moduleFileExtensions": [

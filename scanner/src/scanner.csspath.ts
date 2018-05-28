@@ -15,27 +15,37 @@ export class CssPath {
     static fromNode = (node: CheerioElement): CssPath => {
         const parents: string[] = [];
 
-        const value = node.attribs.href;
-        let isImageInside = false;
-
-        if(node.children.findIndex(x=>x.name === 'img') !== -1){
-            isImageInside = true;
-        }
+        const value = CssPath.buildValue(node);
         //объект, чтобы работать по ссылке а не по значению
         let flags = {isRouted: false};
+
         while (node !== null) {
-            let domMeta = {};
-            const path: string = CssPath.buildPath(node, flags, domMeta);
+            const path: string = CssPath.buildPath(node, flags);
             parents.push(path);
             node = node.parent;
         }
+
         const result: CssPath = new CssPath();
         result.path = parents.reverse();
-        result.value = {href: value, isImageInside, meta: {image: "sdg", title: "Dfgdfg"}};
+        result.value = value;
         return result;
     };
 
-    static buildPath = (node: CheerioElement, flags: any, domMeta: any): string => {
+    static buildValue = (node: CheerioElement): CssValue => {
+        const value = node.attribs.href;
+        let isImageInside = false;
+        let meta = {image: null, title: null};
+
+        let imagePart = node.children.find(x => x.name === 'img');
+        if(imagePart !== undefined) {
+            isImageInside = true;
+            meta = {image: imagePart.attribs.src, title: imagePart.attribs.alt}
+        }
+
+        return {href: value, isImageInside, meta}
+    };
+
+    static buildPath = (node: CheerioElement, flags: any): string => {
         const parent = node.parent;
         if (parent === null || parent.children.length <= 1)
             return node.name;
