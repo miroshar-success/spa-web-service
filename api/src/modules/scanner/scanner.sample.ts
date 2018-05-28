@@ -95,7 +95,6 @@ export class SampleList {
 }
 
 export class Sample {
-
     constructor(public readonly selector: string, public readonly data: CssValue[]){
 
     }

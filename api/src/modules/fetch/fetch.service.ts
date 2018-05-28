@@ -104,7 +104,7 @@ export class FetchService {
         // get current job if exists
         let fetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
-        console.log("**********************************fetch**************************");
+        console.log('**********************************fetch**************************');
 
         if (!fetchModel) {
             throw new HttpException(FetchMessage.FETCH_EXISTS_ERROR.messageKey, HttpStatus.BAD_REQUEST);
@@ -115,11 +115,9 @@ export class FetchService {
         if (!selectors || selectors.length < 1) {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
-
-
         let selectorModel = selectors.find(selector => selector.sample.url === sampleUrl);
 
-        if (!selectorModel == null && selectorModel.selector) {``
+        if (!selectorModel == null && selectorModel.selector) {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
         await this.fetchDataService.updateFetchModelWithInitData(fetchModel, selectorModel.selector);

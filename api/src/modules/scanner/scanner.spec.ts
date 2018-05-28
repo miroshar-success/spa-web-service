@@ -1,6 +1,6 @@
 import {ScannerService} from './scanner.service';
 import {ScannerInstance, SELECTORS} from './scanner.instance';
-import {Sample, SampleList} from './scanner.sample';
+import {Meta, Sample, SampleList} from './scanner.sample';
 
 const fs = require('fs');
 
@@ -18,29 +18,29 @@ const testTemplate = (url, regex) => {
     });
 
     it('sample list isn\'t empty',() => {
-        expect(allExamples.sample.length).toBeGreaterThan(0);
+        expect(allExamples.selectors.length).toBeGreaterThan(0);
     });
 
     it('first sample look like good url',() => {
-        allExamples.sample.forEach((x, index) => {
-                if (regex.test(x.sampleUrl[0]))
+        allExamples.selectors.forEach((x, index) => {
+                if (regex.test(x.sample.url))
                     console.log('look like good:', index);
             }
         );
-        expect(regex.test(allExamples.sample[0].sampleUrl[0])).toBeTruthy();
+        expect(regex.test(allExamples.selectors[0].sample.url)).toBeTruthy();
     });
 
     it('another not',() => {
-        allExamples.sample.filter((item, index) => index !== 0).map(x =>
-            expect(regex.test(x.sampleUrl[0])).toBeFalsy()
+        allExamples.selectors.filter((item, index) => index !== 0).map(x =>
+            expect(regex.test(x.sample.url)).toBeFalsy()
         );
     });
 
     it('each samples from first group have similar url structure', async () => {
-        const firstExample = await scannerService.fetchOne(url, allExamples.sample[0].selector);
+        const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
         expect(firstExample.isSampleUrlNotFound).toBeFalsy();
         firstExample.sampleUrl.map(x => {
-            expect(regex.test(x)).toBeTruthy()
+            expect(regex.test(x.url)).toBeTruthy()
         })
     });
 };
@@ -106,28 +106,28 @@ describe('scanner test', () => {
         it('should build SampleList from CssPath', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
             expect(sampleList.sample[0].selector).toBe(selectorPath.join(' > ') + '[href]');
-            expect(sampleList.sample[0].sampleUrl[0].href).toBe(urlPath);
+            expect(sampleList.sample[0].data[0].href).toBe(urlPath);
         });
 
         it('should grouping by selector', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
             const firstGroup = sampleList.groupBy('selector').sample[0];
             expect(firstGroup.selector).toBe(selectorPath.join(' > ') + '[href]');
-            expect(firstGroup.sampleUrl.length).toBe(18);
+            expect(firstGroup.data.length).toBe(18);
         });
 
         it('should distinct elements', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
             const groups = sampleList.groupBy('selector');
-            const unique = groups.sample[0].sampleUrl.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index);
-            expect(groups.distinct().sample[0].sampleUrl.length).toBe(unique.length);
+            const unique = groups.sample[0].data.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index);
+            expect(groups.distinct().sample[0].data.length).toBe(unique.length);
         });
 
         it('should order by sample length descending elements', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
             const groups = sampleList.groupBy('selector').orderByDesc();
             for (let i = 0; i < groups.sample.length - 1; i++) {
-                expect(groups.sample[i].sampleUrl.length).toBeGreaterThanOrEqual(groups.sample[i + 1].sampleUrl.length)
+                expect(groups.sample[i].data.length).toBeGreaterThanOrEqual(groups.sample[i + 1].data.length)
             }
         });
 
@@ -136,11 +136,11 @@ describe('scanner test', () => {
             const groups = sampleList.groupBy('selector').orderByDesc();
             const groupsOne = sampleList.take(1);
             for (let i = 0; i < groupsOne.sample.length - 1; i++) {
-                expect(groupsOne.sample[i].sampleUrl.length).toBeLessThanOrEqual(1)
+                expect(groupsOne.sample[i].data.length).toBeLessThanOrEqual(1)
             }
             const groupsTwo = sampleList.take(4);
             for (let i = 0; i < groupsTwo.sample.length - 1; i++) {
-                expect(groupsTwo.sample[i].sampleUrl.length).toBeLessThanOrEqual(4)
+                expect(groupsTwo.sample[i].data.length).toBeLessThanOrEqual(4)
             }
         });
 
@@ -148,19 +148,15 @@ describe('scanner test', () => {
             const sample: Sample[] = [new Sample('test', [{href: 'test'}])];
             const list: SampleList = new SampleList(sample);
             const groups = list.resolveRelativeUrl('http://test.com/');
-            expect(groups.sample[0].sampleUrl[0].href).toBe('http://test.com/test')
+            expect(groups.sample[0].data[0].href).toBe('http://test.com/test')
         });
 
         it('should find all group and return one sample per group', async () => {
             const allSamples = await scannerService.fetchAll(urlPath);
-            expect(allSamples.sample.length).toBeGreaterThan(0);
-
-            allSamples.sample.map(x =>
-                expect(typeof x.sampleUrl[0]).toBe('string')
-            );
-
-            allSamples.sample.map(x =>
-                expect(x.sampleUrl.length).toBe(1)
+            expect(allSamples.selectors.length).toBeGreaterThan(0);
+            expect(allSamples.selectors.length).toBeLessThanOrEqual(10);
+            allSamples.selectors.map(x =>
+                expect(typeof x.sample.length).toBe("undefined")
             );
 
         });
@@ -188,7 +184,7 @@ describe('scanner test', () => {
             const sampleUrl = 'https://jobs.tut.by/#ua:top_menu_news.tut.by~12';
             const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]');
             const resultBeforeSample = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]', sampleUrl);
-            const index = result.sampleUrl.indexOf(sampleUrl);
+            const index = result.sampleUrl.findIndex(x=> x.url === sampleUrl);
             expect(resultBeforeSample.sampleUrl.length).toBe(index);
         });
 
