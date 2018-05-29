@@ -39,7 +39,6 @@ export class CssPath {
         let imagePart = node.children.find(x => x.name === 'img');
         if(imagePart !== undefined) {
             isImageInside = true;
-            meta = {image: imagePart.attribs.src, title: imagePart.attribs.alt}
         }
 
         return {href: value, isImageInside, meta}
