@@ -20,7 +20,7 @@ import {FetchExploreScannerResultDto, FetchScannerResultDto} from './dto/scanner
 import {FetchMessage} from './dto/fetch.message';
 import FetchDataService from './fetch.service.data';
 import PersonService from '../person/person.service';
-import {Meta, SampleOut} from "../../../../scanner/src/scanner.sample";
+import {Meta, SampleOut} from "../../../../scanner/src/modules/scanner.sample";
 
 
 @Component()
@@ -156,7 +156,8 @@ export class FetchService {
             return {
                 clientName: clientName,
                 person: person,
-                fetchUrl: value.fetchUrl
+                fetchUrl: value.fetchUrl,
+                meta: value.meta
             }
         })
     }

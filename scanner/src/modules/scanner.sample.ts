@@ -48,6 +48,7 @@ export class SampleList {
         return new SampleList([...this.sample].slice(from,count));
     };
 
+    //удаляет повторы внутри каждой группы
     distinct = (): SampleList => {
         const result = this.sample.map(sample => {
             return new Sample(sample.selector, sample.data.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index));
@@ -65,6 +66,7 @@ export class SampleList {
         return new SampleList(result);
     };
 
+    //удаляет одинаковые группы
     unique = (): SampleList => {
         const indices = [];
         const keys = [];
@@ -120,7 +122,7 @@ export class Meta {
     title: string;
 
     static isCompleted (meta: Meta): boolean{
-        return (<any>Object).values(meta).every(x=> x !== null)
+        return Object.values(meta).every(x => x)
     }
 }
 

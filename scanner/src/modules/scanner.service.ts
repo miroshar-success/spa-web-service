@@ -11,6 +11,7 @@ const needle = require('needle');
 const metascraper = require('metascraper').load([
     require('metascraper-image')(),
     require('metascraper-title')(),
+    require('metascraper-logo')()
 ]);
 
 @Component()
@@ -35,8 +36,8 @@ export class ScannerService {
             .groupBy('selector')
             .distinct()
             .orderByDesc(sortEuristic)
-            .unique()
             .takeSample(1)
+            .unique()
             .take(0, 10);
 
         const selectorList: SelectorOut[] = await this.updateMeta(listPaths.toOut(), url);
@@ -74,19 +75,20 @@ export class ScannerService {
     };
 
     getPathsByUrl = async (url: string, selector: string): Promise<[CssPath[], Meta]> => {
-        let res;
+        let res, meta;
         try {
             res = (await this.download(url));
         }
         catch (e) {
             throw e;
         }
+        meta = res.meta;
         const cheerioObject: CheerioStatic = this.parse(res.body);
         const scannerInstance: ScannerInstance = ScannerInstance.fromCheerio(cheerioObject, selector);
-        return [scannerInstance.resolve(url).filter(FILTERS.INVALID_HREF, {}).getPaths(), res.meta];
+        return [scannerInstance.resolve(url).filter(FILTERS.INVALID_HREF, {}).getPaths(), meta];
     };
 
-    updateMeta = async (selectors: SelectorOut[], url: string): Promise<SelectorOut[]> => {
+    protected updateMeta = async (selectors: SelectorOut[], url: string): Promise<SelectorOut[]> => {
         const promises = selectors.map(async (x) => {
             if (!Meta.isCompleted(x.sample.meta)) {
                 const newMeta = await this.downloadMeta(x.sample.url);
@@ -112,10 +114,14 @@ export class ScannerService {
             jsdom.env({
                 url,
                 cookieJar: jar,
+                userAgent: 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
                 features: {
                     FetchExternalResources: ['script'],
                     ProcessExternalResources: ['script'],
                     SkipExternalResources: false
+                },
+                headers: {
+                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
                 },
                 // proxy: 'https://api.enthought.com/',
                 done: function (err, window) {
@@ -129,7 +135,7 @@ export class ScannerService {
                 },
             });
         }));
-        const meta = metascraper({url, html: domHtml});
+        const meta = await this.scrapeMeta(url, domHtml as string);
         return {body: domHtml, meta};
     };
 
@@ -139,12 +145,22 @@ export class ScannerService {
             follow_max: 10,    // follow up to five redirects
             rejectUnauthorized: true  // verify SSL certificate
         };
-        const meta = await needle('get', url, options).then(res => {
-            return metascraper({url, html: res.body});
+        const html = await needle('get', url, options).then(res => {
+            return res.body;
         }).catch(err => {
             return undefined;
         });
-        return await meta;
+
+        return await this.scrapeMeta(url,html);
+    };
+
+    protected scrapeMeta = async (url: string, html: string): Promise<Meta> => {
+        let meta = await metascraper({url,html});
+        if(!meta.image && meta.logo) {
+            meta.image = meta.logo;
+        }
+        delete meta.logo;
+        return meta;
     }
 }
 

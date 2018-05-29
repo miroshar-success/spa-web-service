@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate'
 import {FetchState} from './fetch.enums';
 import {ClientName} from '../clients/clients.enums';
-import {Meta} from '../scanner/scanner.sample';
+import {Meta} from '../../../../scanner/src/modules/scanner.sample';
 
 
 export interface FetchExploreSelectorModel {
@@ -37,6 +37,8 @@ export interface FetchModel extends Document {
     readonly personKey: Object
     readonly fetchUrl: string
     readonly createDate: Date
+    readonly meta: Meta
+
     state: FetchState
     selectors: FetchExploreSelectorModel[]
 
@@ -52,6 +54,7 @@ export const FetchSchema = new mongoose.Schema(
         personKey: {type: Object, require: true},
         fetchUrl: {type: String, require: true},
         createDate: {type: Date, require: true},
+        meta: {type: Object},
         state: {type: String, require: true},
         selectors: [FetchExploreSelectorsSchema],
 
@@ -68,7 +71,7 @@ FetchSchema.index({
     state: 'text',
     selector: 'text',
     updateDate: 'text',
-})
+});
 
 
 FetchSchema.plugin(mongoosePaginate);
