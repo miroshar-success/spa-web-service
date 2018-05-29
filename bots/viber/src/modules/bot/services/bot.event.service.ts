@@ -2,11 +2,11 @@ import {Injectable} from '@nestjs/common';
 import * as viber from 'viber-bot';
 import axios from 'axios';
 import {AppLogger} from '../../../app.logger';
-import {
-    FetchDtoOut, FetchExploreDtoOut, PersonCoreDtoOut, PersonInfo
-} from '../dto/bot.dto.out';
+import {FetchDtoOut, FetchExploreDtoOut, PersonCoreDtoOut, PersonInfo} from '../dto/bot.dto.out';
 import * as urlRegex from 'url-regex';
 import {BotMessageService} from './bot.message.service';
+import {LangEnum} from '../translator/lang.enum';
+import * as translations from '../translator/translations.json';
 
 @Injectable()
 export class BotEventService {
@@ -22,22 +22,28 @@ export class BotEventService {
         let deleteRegex = /^\/delete/i;
         let helpRegex = /^\/help/i;
 
+        let lang = 'en';
+
+        if (response.userProfile.language in LangEnum) {
+            lang = response.userProfile.language;
+        }
+
         if (exploreRegex.test(message.text))
-            this.commandExploreHandler(message, response);
+            this.commandExploreHandler(message, response, lang);
         else if (fetchRegex.test(message.text))
-            this.commandFetchHandler(message, response);
+            this.commandFetchHandler(message, response, lang);
         else if (getRegex.test(message.text))
-            this.commandGetHandler(message, response);
+            this.commandGetHandler(message, response, lang);
         else if (deleteRegex.test(message.text))
-            this.commandDeleteHandler(message, response);
+            this.commandDeleteHandler(message, response, lang);
         else if (helpRegex.test(message.text))
-            this.botMessageService.sendHelpMessage(response.userProfile.id);
-        else
+            this.botMessageService.sendHelpMessage(response.userProfile.id, lang);
+        /*else
             this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
-                'Ошибка!', 'Неизвестная команда. Введите \n/help для получения информации', true);
+                'Ошибка!', 'Неизвестная команда. Введите \n/help для получения информации', true);*/
     }
 
-    private async commandExploreHandler(message: viber.Message, response: viber.Response) {
+    private async commandExploreHandler(message: viber.Message, response: viber.Response, lang: string) {
         let urls: string[] = message.text.match(urlRegex());
 
         urls != null && urls.length == 1 ?
@@ -48,13 +54,13 @@ export class BotEventService {
                     response.userProfile.name,
                     response.userProfile.country,
                     response.userProfile.language)
-            ), urls[0]))
+            ), urls[0]), lang)
             :
             this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
-                'Ошибка!', 'Используйте один валидный адрес', true);
+                translations[lang]['error'], translations[lang]['message.explore.error'], true);
     }
 
-    private async commandFetchHandler(message: viber.Message, response: viber.Response) {
+    private async commandFetchHandler(message: viber.Message, response: viber.Response, lang: string) {
         let urls: string[] = message.text.match(urlRegex());
 
         urls != null && urls.length == 2 ?
@@ -65,13 +71,13 @@ export class BotEventService {
                         response.userProfile.name,
                         response.userProfile.country,
                         response.userProfile.language)
-                ), urls[0], urls[1]))
+                ), urls[0], urls[1]), lang)
             :
             this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
-                'Ошибка!', 'Используйте валидный адрес страницы для анализа и адрес примера отслеживаемого товара', true);
+                translations[lang]['error'], translations[lang]['message.fetch.error'], true);
     }
 
-    private async commandGetHandler(message: viber.Message, response: viber.Response) {
+    private async commandGetHandler(message: viber.Message, response: viber.Response, lang: string) {
         let personCoreDtoOut = new PersonCoreDtoOut(response.userProfile.id,
             new PersonInfo(
                 response.userProfile.id,
@@ -80,10 +86,10 @@ export class BotEventService {
                 response.userProfile.language)
         );
 
-        this.commandGetPost(personCoreDtoOut);
+        this.commandGetPost(personCoreDtoOut, lang);
     }
 
-    private async commandDeleteHandler(message: viber.Message, response: viber.Response) {
+    private async commandDeleteHandler(message: viber.Message, response: viber.Response, lang: string) {
         let urls: string[] = message.text.match(urlRegex());
 
         urls != null && urls.length == 1 ?
@@ -94,13 +100,13 @@ export class BotEventService {
                     response.userProfile.name,
                     response.userProfile.country,
                     response.userProfile.language)
-            ), urls[0]))
+            ), urls[0]), lang)
             :
             this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
-                'Ошибка!', 'Используйте валидный адрес', true);
+                translations[lang]['error'], translations[lang]['"message.delete.error'], true);
     }
 
-    private async commandExplorePost(fetchExploreDtoOut: FetchExploreDtoOut) {
+    private async commandExplorePost(fetchExploreDtoOut: FetchExploreDtoOut, lang: string) {
         await axios.post('http://localhost:3000/fetch/explore',
             fetchExploreDtoOut, {
                 headers: {
@@ -111,12 +117,12 @@ export class BotEventService {
                 this._logger.log('/explore request success');
             }).catch(error => {
                 this.botMessageService.sendSimpleRichMessage(fetchExploreDtoOut.person.personKey,
-                    'Ошибка!', 'Не удалось получить примеры. Попробуйте еще раз', true);
+                    translations[lang]['error'], translations[lang]['message.explore.request.error'], true);
                 this._logger.error('/explore request error');
             });
     }
 
-    private async commandFetchPost(fetchDtoOut: FetchDtoOut) {
+    private async commandFetchPost(fetchDtoOut: FetchDtoOut, lang: string) {
         await axios.post('http://localhost:3000/fetch',
             fetchDtoOut, {
                 headers: {
@@ -126,15 +132,16 @@ export class BotEventService {
             .then(response => {
                 this._logger.log('/fetch request success');
                 this.botMessageService.sendSimpleRichMessage(fetchDtoOut.person.personKey,
-                    'Информация', 'Отслеживание активировано');
+                    translations[lang]['info'], translations[lang]['message.fetch.request.info']);
             }).catch(error => {
                 this.botMessageService.sendSimpleRichMessage(fetchDtoOut.person.personKey,
-                    'Ошибка!', 'Не удалось начать отслеживание. Попробуйте еще раз', true);
+                    translations[lang]['error'], translations[lang]['message.fetch.request.error'], true);
                 this._logger.error('/fetch request error');
             });
     }
 
-    private async commandGetPost(personCoreDtoOut: PersonCoreDtoOut) {
+    //TODO /get meta in response
+    private async commandGetPost(personCoreDtoOut: PersonCoreDtoOut, lang: string) {
         await axios.post('http://localhost:3000/fetch/get',
             personCoreDtoOut, {
                 headers: {
@@ -144,15 +151,16 @@ export class BotEventService {
             .then(response => {
                 response.data.length != 0 ?
                     this.botMessageService.sendCommandGetMessage(response.data) :
-                    this.botMessageService.sendSimpleRichMessage(personCoreDtoOut.personKey, 'Информация', 'У вас нет активных отслеживаний');
+                    this.botMessageService.sendSimpleRichMessage(personCoreDtoOut.personKey,
+                        translations[lang]['info'], translations[lang]['message.get.request.info']);
             }).catch(error => {
                 this.botMessageService.sendSimpleRichMessage(personCoreDtoOut.personKey,
-                    'Ошибка!', 'Не удалось получить список активных отслеживаний. Попробуйте еще раз', true);
+                    translations[lang]['error'], translations[lang]['message.get.request.error'], true);
                 this._logger.error('/get request error - ' + error, error.stack);
             });
     }
 
-    private async commandDeletePost(fetchExploreDtoOut: FetchExploreDtoOut) {
+    private async commandDeletePost(fetchExploreDtoOut: FetchExploreDtoOut, lang: string) {
         await axios.post('http://localhost:3000/fetch/delete',
             fetchExploreDtoOut, {
                 headers: {
@@ -162,10 +170,10 @@ export class BotEventService {
             .then(response => {
                 this._logger.log('/delete request success');
                 this.botMessageService.sendSimpleRichMessage(fetchExploreDtoOut.person.personKey,
-                    'Информация', 'Отслеживание остановлено');
+                    translations[lang]['info'], translations[lang]['message.delete.request.info']);
             }).catch(error => {
                 this.botMessageService.sendSimpleRichMessage(fetchExploreDtoOut.person.personKey,
-                    'Ошибка!', 'Не удалось остановить отслеживание. Попробуйте еще раз', true);
+                    translations[lang]['error'], translations[lang]['message.delete.request.error'], true);
                 this._logger.error('/delete request error - ' + error, error.stack);
             });
     }
