@@ -43,11 +43,20 @@ const testTemplate = (url, regex) => {
         );
     });
 
-    it('each samples from first group have similar url structure', async () => {
+    it('should have similar url for each sample', async () => {
         const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
         expect(firstExample.isSampleUrlNotFound).toBeFalsy();
         firstExample.sampleUrl.map(x => {
             expect(regex.test(x.url)).toBeTruthy()
+        })
+    });
+
+    it('should have meta for each sample', async () => {
+        const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
+        expect(firstExample.isSampleUrlNotFound).toBeFalsy();
+        firstExample.sampleUrl.map(x => {
+            expect(x.meta.image).not.toBe(null);
+            expect(x.meta.title).not.toBe(null);
         })
     });
 };
