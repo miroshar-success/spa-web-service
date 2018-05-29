@@ -3,7 +3,7 @@ import {ApiModelProperty} from '@nestjs/swagger';
 
 import PersonDto from "../../person/person.dto";
 import {FetchMessage} from "./fetch.message";
-import {Meta, SampleOut} from '../../../../../scanner/src/scanner.sample';
+import {Meta, Sample, SampleOut, SelectorOut} from "../../../../../scanner/src/modules/scanner.sample";
 
 /** FETCH DTO **/
 
