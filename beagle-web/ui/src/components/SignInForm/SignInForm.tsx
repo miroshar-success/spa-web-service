@@ -68,7 +68,7 @@ class SignInForm extends React.Component<SignInFormProps> {
                   }
                 ]
               })(
-                <Input type='password' prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your email' />
+                <Input type='password' prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your password' />
               )
             }
           </FormItem>

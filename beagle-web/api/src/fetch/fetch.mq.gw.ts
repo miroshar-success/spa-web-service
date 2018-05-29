@@ -25,30 +25,27 @@ export class FetchResultsGw {
           clientName: message,
           client: ws,
         })
-        this.clients[0].client.send(JSON.stringify('message'))
-        console.log(message);
       })
     })
     // setTimeout(() => this.publishMessage({ status: 'ok', clientName: "viber" }), 5000);
   }
 
+  @MqGwConsumer({ name: 'fetchExplore', gateway: 'person.clientName' })
+  async consumeExploreMessage(message: any) {
+    console.log('up')
+    this.clients[0].client.send(JSON.stringify({
+      type: 'ADD_NEW_FETCH_FOR_EXPLORE_SUCCESS',
+      payload: JSON.stringify(message),
+    }))
+  }
+
 
   @MqGwConsumer({ name: 'fetchResult', gateway: 'person.clientName' })
   async consumeMessage(message: any) {
-    // console.log(this.clients[0]);
-    // const client = this.clients[0].client;
-    // client.send(JSON.stringify('message2'));
-    this.clients[0].client.send(JSON.stringify(message))
-    // wss.clients.forEach(client => {
-    //   client.send(JSON.stringify(message));
-    // })
-    // console.log(client);
-    // client.send(message);
-    // console.log(message);
-    // console.log('up');
-    // console.log("THIS: ", FetchResultsGw.THIS)
-    // console.log("MESSAGE:" + JSON.stringify(message));
-    // console.log("data:" + message.content);
+    this.clients[0].client.send(JSON.stringify({
+      type: 'ADD_FETCH_RESULT',
+      payload: JSON.stringify(message),
+    }))
   }
 
 }

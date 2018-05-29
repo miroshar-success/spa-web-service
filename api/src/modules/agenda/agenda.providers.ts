@@ -1,13 +1,13 @@
 import * as Agenda from 'agenda';
 import * as os from "os";
-import {async} from "rxjs/scheduler/async";
+import { async } from "rxjs/scheduler/async";
 
 export const agendaProviders = [
     {
         provide: 'agendaModelToken',
         useFactory: async (): Promise<Agenda> => {
             let agenda: Agenda = new Agenda(
-                {db: {address: 'mongodb://beagle-mongo:27017/agenda'}});
+                { db: { address: 'mongodb://beagle-mongo:27017/agenda' } });
 
             agenda.on('ready', () => {
                 agenda.name(os.hostname + '-' + process.pid);

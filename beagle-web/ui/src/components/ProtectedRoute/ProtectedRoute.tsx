@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { RootState } from '@redux/rootReducer';
+import { getUserDetails } from '@redux/auth/reducer';
+import { getCurrentUser, redirectToLoginPage } from '@redux/auth/actions';
 
 export class TokenManager {
 
@@ -12,20 +15,48 @@ export class TokenManager {
   }
 }
 
-const ProtectedRoute = (props: any) => {
-  const { component: Component, ...rest } = props;
-  return (
-    <Route {...rest} render={(props) =>
-      TokenManager.getToken()
-        ? <Component {...props} />
-        : <Redirect to={{
-          pathname: '/signin',
-          state: {
-            from: props.location,
-          }
-        }} />
-    } />
-  )
-}
+export default function secure(Component: any) {
+  class Auth extends React.Component<any> {
 
-export default ProtectedRoute;
+    componentWillMount() {
+      const {
+        redirectToLoginPage,
+        getCurrentUser,
+        userDetails
+      } = this.props;
+
+      this.checkAuth(redirectToLoginPage, getCurrentUser, userDetails);
+    }
+
+    componentWillReceiveProps(nextProps: any) {
+      const {
+        redirectToLoginPage,
+        getCurrentUser,
+        userDetails
+      } = nextProps;
+
+      this.checkAuth(redirectToLoginPage, getCurrentUser, userDetails);
+    }
+
+    checkAuth = (redirectToLoginPage: Function, getCurrentUser: Function, userDetails: any) => {
+      if (!TokenManager.getToken()) {
+        redirectToLoginPage();
+      } else if (!userDetails.authorized) {
+        getCurrentUser();
+      }
+    }
+
+    render() {
+      if (this.props.userDetails.authorized) {
+        return <Component {...this.props} />
+      }
+      return null;
+    }
+  }
+
+  const mapStateToProps = (state: RootState) => ({
+    userDetails: getUserDetails(state),
+  })
+
+  return connect(mapStateToProps, { getCurrentUser, redirectToLoginPage })(Auth);
+}
