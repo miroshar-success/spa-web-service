@@ -20,10 +20,10 @@
   "en": {
     "message.help": "/explore [link] - explore link\n\n/fetch [site link] [sample link] - track sample links on this site\n\n/get - get the list of active trackings\n\n/delete [site link] - stop tracking\n\n/help - help",
     "message.explore.error": "Use one valid address",
-    "message.explore.request.error": "Couldn't get examples. Try again",
+    "message.explore.request.error": "Can't get examples. Try again",
     "message.fetch.error": "Use the valid address of the page for analysis and the address of the sample of the tracked product",
     "message.fetch.request.info": "Tracking activated",
-    "message.fetch.request.error": "Couldn't start tracking. Try again",
+    "message.fetch.request.error": "Can't start tracking. Try again",
     "message.get.request.info": "You don't have active trackings",
     "message.get.request.error": "Failed to get list of active trackings. Try again",
     "message.delete.error": "Use valid address",

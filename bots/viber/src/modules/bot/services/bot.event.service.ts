@@ -178,5 +178,5 @@ export class BotEventService {
             });
     }
 }
-
+//TODO /explore - check if fetchUrl exists
 //FIXME static url 'localhost'

@@ -1,7 +1,10 @@
 import {Injectable} from '@nestjs/common';
 import * as viber from 'viber-bot';
 import {BotInitService} from './bot.init.service';
-import {FetchExploreResultDto, FetchResultDto} from '../../../../../../api/src/modules/fetch/dto/fetch.dto';
+import {
+    FetchExploreDto, FetchExploreResultDto,
+    FetchResultDto
+} from '../../../../../../api/src/modules/fetch/dto/fetch.dto';
 import {ClientName} from '../../../../../../api/src/modules/clients/clients.enums';
 import PersonCoreDto from '../../../../../../api/src/modules/person/person.dto';
 import * as translations from '../translator/translations.json';
@@ -22,10 +25,13 @@ export class BotMessageService {
             lang = fetchExploreResultDto.person.personInfo['language'];
         }
 
+
         this._bot.sendMessage(new viber.UserProfile(fetchExploreResultDto.person.personKey),
-            fetchExploreResultDto.samples.map((sample, index) => {
-                return this.createFetchExploreMessage(index + 1, sample.url, sample.meta.title, sample.meta.image, fetchExploreResultDto.fetchUrl, lang);
-            })
+            fetchExploreResultDto.samples
+                .map((sample, index) => {
+                    if (index < 5)
+                        return this.createFetchExploreMessage(index + 1, sample.url, sample.meta.title, sample.meta.image, fetchExploreResultDto.fetchUrl, lang);
+                })
         );
     }
 
@@ -43,17 +49,17 @@ export class BotMessageService {
         );
     }
 
-    public async sendCommandGetMessage(activeFetches: { clientName: ClientName, person: PersonCoreDto, fetchUrl: string }[]) {
+    public async sendCommandGetMessage(fetchExploreDtos: FetchExploreDto[]) {
         let groupTitle = 'Test group URL title';
 
         let lang = 'en';
 
-        if (activeFetches[0].person.personInfo && activeFetches[0].person.personInfo['language'] in LangEnum) {
-            lang = activeFetches[0].person.personInfo['language'];
+        if (fetchExploreDtos[0].person.personInfo && fetchExploreDtos[0].person.personInfo['language'] in LangEnum) {
+            lang = fetchExploreDtos[0].person.personInfo['language'];
         }
 
-        this._bot.sendMessage(new viber.UserProfile(activeFetches[0].person.personKey),
-            activeFetches.map((activeFetch, index) => {
+        this._bot.sendMessage(new viber.UserProfile(fetchExploreDtos[0].person.personKey),
+            fetchExploreDtos.map((activeFetch, index) => {
                 return this.createCommandGetMessage(index + 1, activeFetch.fetchUrl, groupTitle, lang);
             })
         );
@@ -285,5 +291,3 @@ export class BotMessageService {
         return new viber.Message.RichMedia(getMessageTemplate);
     }
 }
-
-//TODO ! multilang
