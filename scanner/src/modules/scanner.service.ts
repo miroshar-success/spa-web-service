@@ -114,10 +114,14 @@ export class ScannerService {
             jsdom.env({
                 url,
                 cookieJar: jar,
+                userAgent: 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
                 features: {
                     FetchExternalResources: ['script'],
                     ProcessExternalResources: ['script'],
                     SkipExternalResources: false
+                },
+                headers: {
+                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
                 },
                 // proxy: 'https://api.enthought.com/',
                 done: function (err, window) {
