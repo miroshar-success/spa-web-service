@@ -4,6 +4,12 @@ import {Meta, Sample, SampleList, SelectorOut} from './scanner.sample';
 
 const fs = require('fs');
 
+const testMuchTemplate = (site,urls) => {
+    urls.forEach((x,index)=>{
+        describe(site + ` test ${index + 1}`, () => testTemplate(x.url,x.regex);
+    });
+};
+
 const testTemplate = (url, regex) => {
     let allExamples;
     let scannerService;
@@ -228,14 +234,6 @@ describe('scanner test', () => {
         });
     });
 
-    describe('parse', () => {
-        it('should return cheerio static object', async () => {
-            const html = defaultHtml;
-            const cheerioObject = scannerService.parse(html);
-            expect(cheerioObject.parseHTML).not.toBeUndefined();
-        });
-    });
-
     describe('site test', () => {
 
         describe('allegro', () => testTemplate(
@@ -243,9 +241,16 @@ describe('scanner test', () => {
             /^(https?)(:)(\/)(\/)(allegro\.pl)(\/)([a-z\d\\-]+)(\.)(html)/
         ));
 
-        describe('av', () => testTemplate(
-            'https://cars.av.by/infiniti?sort=date&order=desc',
-            /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
+        describe('av', () => testMuchTemplate('av',[
+            {
+                url: 'https://cars.av.by/infiniti?sort=date&order=desc',
+                regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
+            },
+            {
+                url: 'https://cars.av.by/search?year_from=&year_to=&currency=USD&price_from=&price_to=&sort=date&order=desc',
+                regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)((?:[a-z][a-z]+)).*?(\/).*?((?:[a-z0-9]+)).*?(\/)(\d+)/i
+            }
+            ]
         ));
 
         describe('booking', () => testTemplate(
