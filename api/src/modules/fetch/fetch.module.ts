@@ -6,7 +6,7 @@ import { rabbitMqModule } from "../rabbit-mq/rabbit-mq.module";
 import { fetchProviders } from "./fetch.providers";
 import { DatabaseModule } from "../database/database.module";
 import { AgendaModule } from "../agenda/agenda.module";
-import { ScannerModule } from "../../../../scanner/src/scanner.module";
+import { ScannerModule } from "../../../../scanner/src/modules/scanner.module";
 import FetchDataController from "./fetch.controller.data";
 import { ScannerClient } from "./scanner.client";
 import FetchDataService from "./fetch.service.data";

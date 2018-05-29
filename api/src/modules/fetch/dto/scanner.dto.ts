@@ -1,5 +1,5 @@
 import {FetchExploreSamplesDto} from "./fetch.dto";
-import {Meta, Sample, SampleOut} from '../../scanner/scanner.sample';
+import {Meta, Sample, SampleOut} from "../../../../../scanner/src/modules/scanner.sample";
 import {SampleModel} from "../fetch.model";
 
 /** SCANNER DTO **/
