@@ -1,5 +1,4 @@
 import {CssPath, CssValue} from './scanner.csspath';
-import * as path from 'url';
 import {EuristicMeta, EuristicOrderService} from './scanner.euristic';
 import {resolve} from 'url';
 
@@ -95,7 +94,6 @@ export class SampleList {
 }
 
 export class Sample {
-
     constructor(public readonly selector: string, public readonly data: CssValue[]){
 
     }
@@ -120,6 +118,10 @@ export class SampleOut {
 export class Meta {
     image: string;
     title: string;
+
+    static isCompleted (meta: Meta): boolean{
+        return (<any>Object).values(meta).every(x=> x !== null)
+    }
 }
 
 export class SampleResponse {
