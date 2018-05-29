@@ -156,7 +156,8 @@ export class FetchService {
             return {
                 clientName: clientName,
                 person: person,
-                fetchUrl: value.fetchUrl
+                fetchUrl: value.fetchUrl,
+                meta: value.meta
             }
         })
     }

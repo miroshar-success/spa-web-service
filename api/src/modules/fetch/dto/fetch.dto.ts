@@ -16,6 +16,9 @@ export class CoreFetchDto {
 export class FetchExploreDto  extends CoreFetchDto{
     @ApiModelProperty()
     readonly fetchUrl: string;
+    @ApiModelProperty()
+    readonly meta: Meta;
+
 }
 
 //fetch explore result MQ

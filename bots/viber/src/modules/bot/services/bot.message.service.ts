@@ -50,8 +50,6 @@ export class BotMessageService {
     }
 
     public async sendCommandGetMessage(fetchExploreDtos: FetchExploreDto[]) {
-        let groupTitle = 'Test group URL title';
-
         let lang = 'en';
 
         if (fetchExploreDtos[0].person.personInfo && fetchExploreDtos[0].person.personInfo['language'] in LangEnum) {
@@ -60,7 +58,7 @@ export class BotMessageService {
 
         this._bot.sendMessage(new viber.UserProfile(fetchExploreDtos[0].person.personKey),
             fetchExploreDtos.map((activeFetch, index) => {
-                return this.createCommandGetMessage(index + 1, activeFetch.fetchUrl, groupTitle, lang);
+                return this.createCommandGetMessage(index + 1, activeFetch.fetchUrl, activeFetch.meta.title, lang);
             })
         );
     }
