@@ -1,26 +1,17 @@
 import {Model} from 'mongoose';
 import {Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
-
 import {FetchExploreSelectorModel, FetchModel, SampleModel} from './fetch.model';
 import {FetchState} from './fetch.enums';
 import * as Agenda from 'agenda';
-
-
-import {async} from 'rxjs/scheduler/async';
-import {ScannerClient} from './scanner.client';
-import {
-    CoreFetchDto,
-    FetchDto, FetchExploreDto, FetchExploreSamplesDto
-} from './dto/fetch.dto';
-import {ClientName} from '../clients/clients.enums';
+import {ScannerClient} from './fetch.scanner.client';
+import { FetchDto, FetchExploreDto } from './dto/fetch.dto';
 import PersonCoreDto from '../person/person.dto';
 import {FetchResultsGw} from './fetch.mq.gw';
-import {ApiModelProperty} from '@nestjs/swagger';
 import {FetchExploreScannerResultDto, FetchScannerResultDto} from './dto/scanner.dto';
 import {FetchMessage} from './dto/fetch.message';
 import FetchDataService from './fetch.service.data';
 import PersonService from '../person/person.service';
-import {Meta, SampleOut} from "../../../../scanner/src/scanner.sample";
+import {Meta, SampleOut} from "../../../../scanner/src/modules/scanner.sample";
 
 
 @Component()
@@ -65,7 +56,7 @@ export class FetchService {
             state: FetchState.new,
         }).save();
         let fetchId: string = currentFetchModel._id.toString();
-        this.scannerClient.fetchExploreProduce({fetchId: fetchId, fetchUrl: fetchUrl})
+        this.scannerClient.produceFetchExplore({fetchId,fetchUrl})
     }
 
     public async fetchExploreResultConsumer({fetchId, selectors, meta}: FetchExploreScannerResultDto) {
@@ -194,7 +185,7 @@ export class FetchService {
 
                 // TODO move to data service
                 this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}, () => {
-                    this.scannerClient.fetchProduce(
+                    this.scannerClient.produceFetch(
                         {
                             fetchId: fetchId,
                             fetchUrl: fetchUrl,

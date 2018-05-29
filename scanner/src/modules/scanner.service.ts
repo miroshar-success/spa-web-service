@@ -5,15 +5,14 @@ import {SELECTORS, ScannerInstance, FILTERS} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
 import {FetchOut, Meta, SampleList, SampleOut, SampleResponse, SelectorOut} from './scanner.sample';
 import {EuristicMeta} from './scanner.euristic';
+import {ApiClient} from "./scanner.api.client";
 
 @Component()
 export class ScannerService {
 
-    constructor() {
+    constructor(private readonly apiClient: ApiClient) {}
 
-    }
-
-    fetchAll = async (url: string): Promise<FetchOut> => {
+    fetchAll = async ({fetchId, fetchUrl: url}): Promise<FetchOut> => {
         const sortEuristic: EuristicMeta = new EuristicMeta();
         let cssPaths: CssPath[];
         try {
@@ -32,10 +31,12 @@ export class ScannerService {
             .takeSample(1)
             .take(0, 10);
 
-        return {selectors: listPaths.toOut(), meta: {image: 'ggg', title: 'dfghdfhdhf'}};
+        const fetchExploreResult = {fetchId, selectors: listPaths.toOut(), meta: {image: 'image', title: 'Title'}};
+
+        this.apiClient.produceFetchExploreResult(fetchExploreResult);
     };
 
-    fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
+    fetchOne = async ({fetchId, fetchUrl:url, selector, lastResult:before}): Promise<SampleResponse> => {
         const response: SampleResponse = new SampleResponse();
         let cssPaths: CssPath[];
         try {
@@ -59,7 +60,7 @@ export class ScannerService {
         }
 
         response.sampleUrl = listPaths.toOut().map(x => x.sample);
-        return response;
+        this.apiClient.produceFetchResult({fetchId,fetchUrl:url,...response});
     };
 
     getPathsByUrl = async (url: string, selector: string): Promise<CssPath[]> => {

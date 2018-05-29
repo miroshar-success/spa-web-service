@@ -1,6 +1,6 @@
 import {MqGwGuards} from "../guards/mq.gw.guards";
-import isMqGwMethod = MqGwGuards.isMqGwMethod;
-import MqGwMethodType = MqGwTypes.MqGwMethodType;
+import isMqMethod = MqGwGuards.isMqMethod;
+import MqGwMethodType = MqGwTypes.MqMethodType;
 import {MqGwTypes} from "../types/mq.gw.types";
 import MqGwScanResult = MqGwTypes.MqGwScanResult;
 import {MqGwConstants} from "../constants/mq.gw.constants";
@@ -23,7 +23,7 @@ class MqGwScanService {
     }
 
     static scanObject = (prototype: object): {uuid:string, target: MqGwScanResult}[] => Object.getOwnPropertyNames(prototype)
-        .filter(key => key !== 'constructor' && isMqGwMethod(prototype[key]))
+        .filter(key => key !== 'constructor' && isMqMethod(prototype[key]))
         .map(key => ({
                 uuid: MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_UUID_METADATA),
                 target: {
@@ -31,8 +31,8 @@ class MqGwScanService {
                     prototype,
                     method: prototype[key],
                     mRoute: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_NAME_METADATA)}`,
-                    gwKey: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`,
-                    client: MqGwScanService.hasKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA) ? `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)}` : null
+                    gwKey: MqGwScanService.hasKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)?`${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`:void 0,
+                    client: MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)?`${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)}`:void 0,
                 }
             })
         );
@@ -42,4 +42,4 @@ class MqGwScanService {
 
 }
 
-export default MqGwScanService
+export default MqGwScanService;

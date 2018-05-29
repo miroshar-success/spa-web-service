@@ -12,12 +12,13 @@ import MQ_GW_METHOD_GATEWAY_METADATA = MqGwConstants.MQ_GW_METHOD_GATEWAY_METADA
 import MQ_GW_METHOD_CONSUMER_METADATA = MqGwConstants.MQ_GW_METHOD_CONSUMER_METADATA;
 import MQ_GW_METHOD_PRODUCER_METADATA = MqGwConstants.MQ_GW_METHOD_PRODUCER_METADATA;
 import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
-
-
+import MqGwDecoratorParam = MqGwTypes.MqGwDecoratorParam;
+import MqDecoratorParam = MqGwTypes.MqDecoratorParam;
+import MQ_GW_METHOD_CLIENT_METADATA = MqGwConstants.MQ_GW_METHOD_CLIENT_METADATA;
 
 export namespace MqGwDecorators {
 
-    import MQ_GW_METHOD_CLIENT_METADATA = MqGwConstants.MQ_GW_METHOD_CLIENT_METADATA;
+
     export function MqGwConfig(value: MqGwConfigType): Function {
         return function(target: any) {
             console.log(chalk.green(`[mq-gw-api] - [decorator-enable-mq-gw] class ${target.name} [config] `), value);
@@ -27,23 +28,42 @@ export namespace MqGwDecorators {
         }
     }
 
-    export function MqGwConsumer({name, gateway = 'clientKey', client = null}: DecoratorParam) {
+    export function MqGwConsumer({name, gateway = 'clientKey'}: MqGwDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-consumer] method ${methodName} [params] `), {name,gateway,client});
+            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-consumer] method ${methodName} [params] `), {name,gateway});
             Reflect.defineMetadata(MQ_GW_METHOD_CONSUMER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_GATEWAY_METADATA, gateway, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_UUID_METADATA, uuid(), descriptor.value);
-            client && Reflect.defineMetadata(MQ_GW_METHOD_CLIENT_METADATA, client, descriptor.value);
         };
     }
 
-    export function MqGwProducer({name, gateway = 'clientKey'}: DecoratorParam) {
+    export function MqGwProducer({name, gateway = 'clientKey'}: MqGwDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-consumer] method ${methodName} [params] `), {name,gateway});
+            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-producer] method ${methodName} [params] `), {name,gateway});
             Reflect.defineMetadata(MQ_GW_METHOD_PRODUCER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_GATEWAY_METADATA, gateway, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_UUID_METADATA, uuid(), descriptor.value);
+        };
+    }
+
+    export function MqProducer({name, client}: MqDecoratorParam) {
+        return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
+            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-producer] method ${methodName} [params] `), {name, client});
+            Reflect.defineMetadata(MQ_GW_METHOD_PRODUCER_METADATA, true, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_CLIENT_METADATA, client, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_UUID_METADATA, uuid(), descriptor.value);
+        };
+    }
+
+    export function MqConsumer({name, client}: MqDecoratorParam) {
+        return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
+            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-consumer] method ${methodName} [params] `), {name, client});
+            Reflect.defineMetadata(MQ_GW_METHOD_CONSUMER_METADATA, true, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_CLIENT_METADATA, client, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_UUID_METADATA, uuid(), descriptor.value);
         };
     }

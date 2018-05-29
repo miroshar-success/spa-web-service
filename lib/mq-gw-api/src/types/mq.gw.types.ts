@@ -17,22 +17,28 @@ export namespace MqGwTypes {
 
     export interface DecoratorParam {
         name: string
-        gateway?: string
-        client?: string
+    }
+    export interface MqDecoratorParam extends DecoratorParam {
+        client: string
+    }
+    export interface MqGwDecoratorParam extends DecoratorParam {
+        gateway: string
     }
     export interface MqGwScanResult {
         key: string,
         prototype: object,
-        method: MqGwMethodType,
+        method: MqMethodType,
         mRoute: string,
-        gwKey: string,
+        gwKey?: string,
         client?: string
     }
 
-    export interface MqGwMethodType extends Function {
+    export interface MqMethodType extends Function {
         (...args: any[]): any
     }
-    export interface MqGwConsumerType extends MqGwMethodType{}
-    export interface MqGwProducerType extends MqGwMethodType{}
+    export interface MqGwConsumerType extends MqMethodType{}
+    export interface MqGwProducerType extends MqMethodType{}
+    export interface MqConsumerType extends MqMethodType{}
+    export interface MqProducerType extends MqMethodType{}
 
 }

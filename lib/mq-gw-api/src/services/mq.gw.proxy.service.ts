@@ -1,6 +1,5 @@
 import {connect, Connection} from 'amqplib';
 import {MqGwTypes} from "../types/mq.gw.types";
-
 import MqGwScanService from './mq.gw.scan.service';
 import {MqGwGuards} from "../guards/mq.gw.guards";
 import isMqGwConsumer = MqGwGuards.isMqGwConsumer;
@@ -11,12 +10,15 @@ import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
 import MqGwConfigType = MqGwTypes.MqGwConfigType;
 import ConnectionConfig = MqGwTypes.ConnectionConfig;
 import Bluebird = require("bluebird");
+import isMqProducer = MqGwGuards.isMqProducer;
+import isMqConsumer = MqGwGuards.isMqConsumer;
 const chalk = require('chalk');
 const warn = chalk.keyword('orange');
 
 
 class MqGwProxyService {
 
+    protected readonly root: string;
     protected readonly rootClients: string[];
     protected readonly components: Function[];
     protected readonly connectionConfig: ConnectionConfig;
@@ -26,6 +28,7 @@ class MqGwProxyService {
     protected connection: Connection;
 
     constructor({root, clients, components, connection}: MqGwConfigType){
+        this.root = root;
         this.components = components;
         this.rootClients = clients.map(client => `${root}.${client}`);
         this.scanResultsMap = MqGwScanService.scan(this.components);
@@ -61,6 +64,8 @@ class MqGwProxyService {
         this.scanResultsArr.forEach(({key, method, prototype}) => {
             if (isMqGwConsumer(method)) this.consumer(method).then(proxyFn => prototype[key] = proxyFn);
             else if (isMqGwProducer(method)) this.producer(method).then(proxyFn => prototype[key] = proxyFn);
+            else if (isMqProducer(method)) this.producer(method).then(proxyFn => prototype[key] = proxyFn);
+            else if (isMqConsumer(method)) this.consumer(method).then(proxyFn => prototype[key] = proxyFn);
         });
     }
 
@@ -69,61 +74,75 @@ class MqGwProxyService {
     }
     protected async producer(target: Function) {
         const channel = await this.channel();
+        const root = this.root;
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
-        const targetGwKey = this.scanResultsMap[targetUuid].gwKey.split('.');
+        const targetGwKey = this.scanResultsMap[targetUuid].gwKey && this.scanResultsMap[targetUuid].gwKey.split('.');
+        const targetClient = this.scanResultsMap[targetUuid].client;
         const targetMethodRoute = this.scanResultsMap[targetUuid].mRoute;
         const targetRoutes = this.routes.filter(route => route.indexOf(`.${targetMethodRoute}`) > 0);
         const proxyFn = function () {
             const result: any = target.apply(this, arguments);
-            if (result) console.log(chalk.yellow(`[mq-gw-api] - [producer] ${targetMethodRoute} [return] `), result);
+            if (result) console.log(chalk.yellow(`[mq-gw-api] - [producer] ${targetMethodRoute} [return] `), result.fields);
             else {
                 console.log(warn(`[mq-gw-api] - [producer] ${targetMethodRoute} [ WARNING ] Message rejected! Producer result is null.`));
                 return result;
             }
             if (result.then && typeof result.then === 'function') {
                 return result.then(data => {
-                    const msgGateway = targetGwKey.reduce((msg,key)=>msg && msg[key],data);
-                    if (data && msgGateway) console.log(chalk.yellow(`[mq-gw-api] - [producer] ${targetMethodRoute} [resolved] `), data);
-                    else if (data && !msgGateway){
-                        console.log(warn(`[mq-gw-api] - [producer] [ WARNING ] Message rejected! Missing gateway property ${targetGwKey}.`));
-                        return Promise.resolve(data);
-                    }
-                    else {
+                    if(!data){
                         console.log(warn(`[mq-gw-api] - [producer] [ WARNING ] Message rejected! Can not send null.`));
                         return Promise.resolve(data);
                     }
-                    return Promise.resolve(targetRoutes
-                        .filter(route => msgGateway === route.split('.')[1])
-                        .map(route => console.log(chalk.blue(`[mq-gw-api] - [producer] ${targetMethodRoute} [route] send to ${route}`)) || route)
-                        .map(route => channel.sendToQueue(route, new Buffer(JSON.stringify(data), 'utf8'))))
+                    console.log(chalk.yellow(`[mq-gw-api] - [producer] ${targetMethodRoute} [resolved] `), data.fields);
+                    if(typeof targetGwKey !== 'undefined'){
+                        const msgGateway = targetGwKey.reduce((msg,key)=>msg && msg[key],data);
+                        if (msgGateway) {
+                            return Promise.resolve(targetRoutes
+                                .filter(route => msgGateway === route.split('.')[1])
+                                .map(route => console.log(chalk.blue(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [route] send to ${route}`)) || route)
+                                .map(route => channel.sendToQueue(route, Buffer.from(JSON.stringify(data), 'utf8'), {durable:true})))
+                        }
+                        console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [ WARNING ] Message rejected! Missing gateway property ${targetGwKey}.`));
+                        return Promise.resolve(data);
+                    } else if (targetClient) {
+                        const route = `${root}.${targetClient}.${targetMethodRoute}`;
+                        console.log(chalk.blue(`[mq-gw-api] - [mq-producer] ${targetMethodRoute} [route] send to ${route}`))
+                        return Promise.resolve(channel.sendToQueue(route, Buffer.from(JSON.stringify(data), 'utf8'), {durable:true}));
+                    }
                 });
             }
-            const msgGateway = targetGwKey.reduce((msg,key)=>msg && msg[key],result);
-            if (msgGateway){
-                return targetRoutes
-                    .filter(route => msgGateway === route.split('.')[1])
-                    .map(route => console.log(chalk.blue(`[mq-gw-api] - [producer] ${targetMethodRoute} [route] send to ${route}`)) || route)
-                    .map(route => channel.sendToQueue(route, new Buffer(JSON.stringify(result), 'utf8')));
-
+            if(targetGwKey){
+                const msgGateway = targetGwKey.reduce((msg,key)=>msg && msg[key],result);
+                if (msgGateway){
+                    return targetRoutes
+                        .filter(route => msgGateway === route.split('.')[1])
+                        .map(route => console.log(chalk.blue(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [route] send to ${route}`)) || route)
+                        .map(route => channel.sendToQueue(route, Buffer.from(JSON.stringify(result),'utf8'),{durable:true}));
+                }
+                console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [ WARNING ]  Message rejected! Missing gateway property ${targetGwKey}.`));
+                return Promise.resolve(result);
+            } else if (targetClient) {
+                const route = `${root}.${targetClient}.${targetMethodRoute}`;
+                console.log(chalk.blue(`[mq-gw-api] - [mq-producer] ${targetMethodRoute} [route] send to ${route}`))
+                return Promise.resolve(channel.sendToQueue(route, Buffer.from(JSON.stringify(result), 'utf8'),{durable:true}));
             }
-            console.log(warn(`[mq-gw-api] - [producer] [ WARNING ]  Message rejected! Missing gateway property ${targetGwKey}.`));
             return Promise.resolve(result);
-
         };
         return proxyFn;
     }
     protected async consumer(target: Function) {
         const channel = await this.channel();
+        const root = this.root;
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
-        const targetGwKey = this.scanResultsMap[targetUuid].gwKey.split('.');
+        const targetGwKey = this.scanResultsMap[targetUuid].gwKey && this.scanResultsMap[targetUuid].gwKey.split('.');
         const targetMethodRoute = this.scanResultsMap[targetUuid].mRoute;
         const targetClient = this.scanResultsMap[targetUuid].client;
         const targetClass: any = this.scanResultsMap[targetUuid].prototype.constructor;
         const proxyFn = function (message){
 
-            if(message) console.log(chalk.yellow(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [message] `), message);
+            if(message) console.log(chalk.yellow(`[mq-gw-api] - [consumer] ${targetMethodRoute} [message] `), message.fields);
             else {
-                console.log(warn(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [ WARNING ] Message rejected! Can not consume null.`));
+                console.log(warn(`[mq-gw-api] - [consumer] ${targetMethodRoute} [ WARNING ] Message rejected! Can not consume null.`));
                 return Promise.resolve(message);
             }
 
@@ -131,37 +150,43 @@ class MqGwProxyService {
             try {
                 content = JSON.parse(message.content);
             } catch (error){
-                console.log(chalk.red(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [message-content] Can not parse json object `), error);
+                console.log(chalk.red(`[mq-gw-api] - [consumer] ${targetMethodRoute} [message-content] Can not parse json object `), error);
                 return Promise.reject(error);
             }
-            const msgGateway = targetGwKey.reduce((msg,key)=>msg && msg[key],content);
-            if(content && msgGateway) console.log(chalk.yellow(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [message-content] `), content);
-            else if (content && !msgGateway) {
-                console.log(warn(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [ WARNING ] Message rejected! Missing gateway property ${targetGwKey}.`));
+            if(!content){
+                console.log(warn(`[mq-gw-api] - [consumer] ${targetMethodRoute} [ WARNING ] Message rejected! Content is null.`));
                 return Promise.resolve(content);
             }
-            else {
-                console.log(warn(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [ WARNING ] Message rejected! Content is null.`));
-                return Promise.resolve(content);
+            content && console.log(chalk.yellow(`[mq-gw-api] - [consumer] ${targetMethodRoute} [message-content] `), content);
+            if (targetGwKey){
+                const msgGateway = targetGwKey.reduce((msg,key)=>msg && msg[key],content);
+                if (!msgGateway) {
+                    console.log(warn(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [ WARNING ] Message rejected! Missing gateway property ${targetGwKey}.`));
+                    return Promise.resolve(content);
+                }
             }
-            try{
+            try {
                 target.call(targetClass.THIS, content);
                 channel.ack(message);
+                console.log(warn(`[mq-gw-api] - [consumer] ${targetMethodRoute} [ SUCCESS ] Message consumed.`));
                 return Promise.resolve(content);
             } catch (error){
-                console.log(chalk.red(`[mq-gw-api] - [consumer] ${targetClient||''}.${targetMethodRoute} [error] `), error);
+                console.log(chalk.red(`[mq-gw-api] - [consumer] ${targetMethodRoute} [error] `), error);
                 channel.nack(message);
                 return Promise.reject(error);
             }
         };
-        this.routes
-            .filter(route => route.indexOf(`.${targetMethodRoute}`) > 0 )
-            .filter(route => {
-                if(targetClient) return targetClient === route.split('.')[1];
-                else return true;
-            })
-            .map(route => console.log(chalk.blue(`[mq-gw-api] - [consumer] ${targetMethodRoute} [route] consume from ${route}`)) || route)
-            .forEach(route => channel.consume(route, proxyFn));
+        if(targetGwKey){
+            this.routes
+                .filter(route => route.indexOf(`.${targetMethodRoute}`) > 0 )
+                .map(route => console.log(chalk.blue(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [route] consume from ${route}`)) || route)
+                .forEach(route => channel.consume(route, proxyFn));
+        }
+        else if (targetClient){
+            const route = `${root}.${targetClient}.${targetMethodRoute}`;
+            console.log(chalk.blue(`[mq-gw-api] - [mq-consumer] ${targetMethodRoute} [route] consume from ${route}`));
+            channel.consume(route, proxyFn);
+        }
         return target;
     }
 }
