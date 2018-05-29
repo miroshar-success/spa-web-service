@@ -1,6 +1,8 @@
 
 import * as React from 'react';
 import { Table } from 'antd';
+const cat = require('../../../assets/images/cat.jpeg')
+
 
 export default class FetchResultsTable extends React.Component<any> {
 
@@ -9,6 +11,7 @@ export default class FetchResultsTable extends React.Component<any> {
       title: 'Image',
       dataIndex: 'image',
       key: 'image',
+      render: (text: any, record: any) => <img src={cat} width={130} height={100} alt="image" />
     },
     {
       title: 'Title',

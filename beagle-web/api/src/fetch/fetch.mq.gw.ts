@@ -27,12 +27,10 @@ export class FetchResultsGw {
         })
       })
     })
-    // setTimeout(() => this.publishMessage({ status: 'ok', clientName: "viber" }), 5000);
   }
 
   @MqGwConsumer({ name: 'fetchExplore', gateway: 'person.clientName' })
   async consumeExploreMessage(message: any) {
-    console.log('up')
     this.clients[0].client.send(JSON.stringify({
       type: 'ADD_NEW_FETCH_FOR_EXPLORE_SUCCESS',
       payload: JSON.stringify(message),

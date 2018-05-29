@@ -3,7 +3,8 @@ import * as React from 'react';
 import { Table, Button, Icon } from 'antd';
 import AddNewFetchExplore from './AddNewFetchExplore';
 import FetchResultsTable from './FetchResultsTable';
-import WatchFetchModal from './WatchFetchModal';
+import WatchFetchModal from './WatchFetchModal'
+const cat = require('../../../assets/images/cat.jpeg')
 
 export default class UserFetchsTable extends React.Component<any> {
 
@@ -87,6 +88,8 @@ export default class UserFetchsTable extends React.Component<any> {
         title: 'Image',
         dataIndex: 'image',
         key: 'image',
+        width: 200,
+        render: (text: any, record: any) => <img src={cat} width={130} height={100} alt="image" />
       },
       {
         title: 'Title',
@@ -100,14 +103,12 @@ export default class UserFetchsTable extends React.Component<any> {
         render: (text: any, record: any) => <a href={text}>{text}</a>
       }
     ]
-    debugger
-    const dataSource = this.props.sampleUrls;
 
     return (
       <Table
         columns={columns}
         pagination={false}
-        dataSource={dataSource}
+        dataSource={this.props.sampleUrls}
       />
     )
   }
@@ -135,6 +136,17 @@ export default class UserFetchsTable extends React.Component<any> {
           style={{ width: '100%', lineHeight: 1.8 }}
         />
         <FetchResultsTable dataSource={resultUrls} />
+        {/* <ImageLoader
+          src='https://img.av.by/images/vendor/google-play-badge.png'
+          renderFetched={(image: any) => (
+            <div>
+              <img src="https://img.av.by/images/vendor/google-play-badge.png" alt="image" />
+              <span>
+                {image.naturalWidth}
+              </span>
+            </div>
+          )}
+        /> */}
       </div>
     )
   }

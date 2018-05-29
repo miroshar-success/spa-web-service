@@ -40,7 +40,7 @@ function initWebsocket() {
     ws.onmessage = (event) => {
       const { type, payload } = JSON.parse(event.data);
       const payloadObj = JSON.parse(payload);
-      debugger
+
       switch (type) {
         case UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE_SUCCESS: {
           return emit({
@@ -60,7 +60,6 @@ function initWebsocket() {
           })
         }
         case UserFetchsActions.ADD_FETCH_RESULT: {
-          debugger
           return emit({
             type: UserFetchsActions.ADD_FETCH_RESULT,
             payload: {
