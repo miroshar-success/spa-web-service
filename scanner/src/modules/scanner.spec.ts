@@ -1,8 +1,14 @@
 import {ScannerService} from './scanner.service';
 import {ScannerInstance, SELECTORS} from './scanner.instance';
-import {Meta, Sample, SampleList} from './scanner.sample';
+import {Meta, Sample, SampleList, SelectorOut} from './scanner.sample';
 
 const fs = require('fs');
+
+const testMuchTemplate = (site,urls) => {
+    urls.forEach((x,index)=>{
+        describe(site + ` test ${index + 1}`, () => testTemplate(x.url,x.regex);
+    });
+};
 
 const testTemplate = (url, regex) => {
     let allExamples;
@@ -10,6 +16,7 @@ const testTemplate = (url, regex) => {
 
     beforeAll(async () => {
         jest.unmock('jsdom');
+        jest.unmock('needle');
         scannerService = new ScannerService();
         const html = (await scannerService.download(url)).body;
         jest.mock('jsdom');
@@ -17,11 +24,11 @@ const testTemplate = (url, regex) => {
         allExamples = await scannerService.fetchAll(url);
     });
 
-    it('sample list isn\'t empty',() => {
+    it('sample list isn\'t empty', () => {
         expect(allExamples.selectors.length).toBeGreaterThan(0);
     });
 
-    it('first sample look like good url',() => {
+    it('first sample look like good url', () => {
         allExamples.selectors.forEach((x, index) => {
                 if (regex.test(x.sample.url))
                     console.log('look like good:', index);
@@ -30,17 +37,26 @@ const testTemplate = (url, regex) => {
         expect(regex.test(allExamples.selectors[0].sample.url)).toBeTruthy();
     });
 
-    it('another not',() => {
+    it('another not', () => {
         allExamples.selectors.filter((item, index) => index !== 0).map(x =>
             expect(regex.test(x.sample.url)).toBeFalsy()
         );
     });
 
-    it('each samples from first group have similar url structure', async () => {
+    it('should have similar url for each sample', async () => {
         const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
         expect(firstExample.isSampleUrlNotFound).toBeFalsy();
         firstExample.sampleUrl.map(x => {
             expect(regex.test(x.url)).toBeTruthy()
+        })
+    });
+
+    it('should have meta for each sample', async () => {
+        const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
+        expect(firstExample.isSampleUrlNotFound).toBeFalsy();
+        firstExample.sampleUrl.map(x => {
+            expect(x.meta.image).not.toBe(null);
+            expect(x.meta.title).not.toBe(null);
         })
     });
 };
@@ -84,6 +100,7 @@ describe('scanner test', () => {
 
         beforeAll(() => {
             jest.mock('jsdom');
+            jest.mock('needle');
         });
 
         it('should return list Cheerio Element containings only links with href', async () => {
@@ -101,6 +118,9 @@ describe('scanner test', () => {
             const csspath = ScannerInstance.fromCheerio(cheerioObject, SELECTORS.LINKS).getPaths();
             expect(csspath[0].path).toEqual(selectorPath);
             expect(csspath[0].value.href).toEqual(urlPath);
+            expect(csspath[0].value.isImageInside).toEqual(false);
+            expect(csspath[0].value.meta.title).toEqual(null);
+            expect(csspath[0].value.meta.image).toEqual(null);
         });
 
         it('should build SampleList from CssPath', async () => {
@@ -119,7 +139,7 @@ describe('scanner test', () => {
         it('should distinct elements', async () => {
             const sampleList = SampleList.fromPaths(cssPath, 0);
             const groups = sampleList.groupBy('selector');
-            const unique = groups.sample[0].data.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index);
+            const unique = groups.sample[0].data.filter((value, index, self) => self.findIndex(x => x.href === value.href) === index);
             expect(groups.distinct().sample[0].data.length).toBe(unique.length);
         });
 
@@ -151,12 +171,18 @@ describe('scanner test', () => {
             expect(groups.sample[0].data[0].href).toBe('http://test.com/test')
         });
 
+        it('should return meta', async () => {
+            const allSamples = await scannerService.fetchAll(urlPath);
+            expect(allSamples.meta.title).not.toEqual(null);
+            expect(allSamples.meta.image).not.toEqual(null);
+        });
+
         it('should find all group and return one sample per group', async () => {
             const allSamples = await scannerService.fetchAll(urlPath);
             expect(allSamples.selectors.length).toBeGreaterThan(0);
             expect(allSamples.selectors.length).toBeLessThanOrEqual(10);
             allSamples.selectors.map(x =>
-                expect(typeof x.sample.length).toBe("undefined")
+                expect(typeof x.sample.length).toBe('undefined')
             );
 
         });
@@ -166,6 +192,7 @@ describe('scanner test', () => {
 
         beforeAll(() => {
             jest.mock('jsdom');
+            jest.mock('needle');
         });
 
         it('should return all sample by url and selector', async () => {
@@ -184,7 +211,7 @@ describe('scanner test', () => {
             const sampleUrl = 'https://jobs.tut.by/#ua:top_menu_news.tut.by~12';
             const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]');
             const resultBeforeSample = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]', sampleUrl);
-            const index = result.sampleUrl.findIndex(x=> x.url === sampleUrl);
+            const index = result.sampleUrl.findIndex(x => x.url === sampleUrl);
             expect(resultBeforeSample.sampleUrl.length).toBe(index);
         });
 
@@ -195,6 +222,27 @@ describe('scanner test', () => {
         });
     });
 
+    describe('updateMeta', () => {
+        beforeAll(() => {
+            jest.mock('jsdom');
+            jest.mock('needle');
+            scannerService = new ScannerService();
+        });
+
+        it('should download meta from html', async () => {
+            const meta = (await scannerService.downloadMeta(urlPath));
+            expect(meta.title).not.toEqual(null);
+            expect(meta.image).not.toEqual(null);
+        });
+
+        it('should add meta where need', async () => {
+            let selectors: SelectorOut[] = [{sample: {meta: {}}}];
+            selectors = (await scannerService.updateMeta(selectors, urlPath));
+            expect(selectors[0].sample.meta.title).not.toEqual(null);
+            expect(selectors[0].sample.meta.image).not.toEqual(null);
+        });
+    });
+
     describe('site test', () => {
 
         describe('allegro', () => testTemplate(
@@ -202,9 +250,16 @@ describe('scanner test', () => {
             /^(https?)(:)(\/)(\/)(allegro\.pl)(\/)([a-z\d\\-]+)(\.)(html)/
         ));
 
-        describe('av', () => testTemplate(
-            'https://cars.av.by/infiniti?sort=date&order=desc',
-            /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
+        describe('av', () => testMuchTemplate('av',[
+            {
+                url: 'https://cars.av.by/infiniti?sort=date&order=desc',
+                regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
+            },
+            {
+                url: 'https://cars.av.by/search?year_from=&year_to=&currency=USD&price_from=&price_to=&sort=date&order=desc',
+                regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)((?:[a-z][a-z]+)).*?(\/).*?((?:[a-z0-9]+)).*?(\/)(\d+)/i
+            }
+            ]
         ));
 
         describe('booking', () => testTemplate(

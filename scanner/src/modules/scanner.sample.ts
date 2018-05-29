@@ -1,5 +1,4 @@
 import {CssPath, CssValue} from './scanner.csspath';
-import * as path from 'url';
 import {EuristicMeta, EuristicOrderService} from './scanner.euristic';
 import {resolve} from 'url';
 
@@ -49,6 +48,7 @@ export class SampleList {
         return new SampleList([...this.sample].slice(from,count));
     };
 
+    //удаляет повторы внутри каждой группы
     distinct = (): SampleList => {
         const result = this.sample.map(sample => {
             return new Sample(sample.selector, sample.data.filter((value, index, self) => self.findIndex(x=> x.href === value.href) === index));
@@ -66,6 +66,7 @@ export class SampleList {
         return new SampleList(result);
     };
 
+    //удаляет одинаковые группы
     unique = (): SampleList => {
         const indices = [];
         const keys = [];
@@ -119,6 +120,10 @@ export class SampleOut {
 export class Meta {
     image: string;
     title: string;
+
+    static isCompleted (meta: Meta): boolean{
+        return Object.values(meta).every(x => x)
+    }
 }
 
 export class SampleResponse {
