@@ -37,7 +37,7 @@ export class CssPath {
         let meta = {image: null, title: null};
 
         let imagePart = node.children.find(x => x.name === 'img');
-        if(imagePart !== undefined) {
+        if (imagePart !== undefined) {
             isImageInside = true;
         }
 
@@ -48,11 +48,10 @@ export class CssPath {
         const parent = node.parent;
         if (parent === null || parent.children.length <= 1)
             return node.name;
-        const filtered = parent.children.filter(x => x.name && x.name.trim().length > 0);
+        const filtered = parent.children.filter(x => x.name && x.name.trim().length > 0).map(x => CssPath.nodeStructure(x, 2));
         let isEqualChildTag;
         if (filtered.length > 1)
-            isEqualChildTag = filtered.every(x => x.name === filtered[0].name &&
-                _.isEqual(x.children.map(ch1 => ch1.name), filtered[0].children.map(ch2 => ch2.name)));
+            isEqualChildTag = filtered.every(x=> _.isEqual(x,filtered[0]));
         else
             isEqualChildTag = false;
         if (isEqualChildTag) {
@@ -69,6 +68,22 @@ export class CssPath {
             return node.name;
         }
     };
+
+    static nodeStructure(node: CheerioElement, deep: number): any {
+        if (deep === 0)
+            return {name: node.name || node.type};
+        else {
+            let current = node;
+            if (current.children === undefined)
+                return {name: current.name || current.type};
+            else {
+                return {
+                    name: current.name || current.type,
+                    children: current.children.map(x => CssPath.nodeStructure(x, deep - 1))
+                }
+            }
+        }
+    }
 
     cssSelector = (): string => {
         return this.path.join(' > ');
