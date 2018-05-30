@@ -18,7 +18,7 @@ import {Meta, SampleOut} from "../../../../scanner/src/modules/scanner.sample";
 export class FetchService {
 
     private static FETCH_WATCH_JOB_NAME: string = 'fetchWatcherJob';
-    private static FETCH_WATCH_JOB_REPEAT_TIME: string = '10 seconds';
+    private static FETCH_WATCH_JOB_REPEAT_TIME: string = '1 seconds';
 
     private static FETCH_REINIT_PERIOD: number = 500;
 
