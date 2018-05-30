@@ -38,6 +38,7 @@ export class ScannerService {
             .groupBy('selector')
             .distinct()
             .orderByDesc(sortEuristic)
+            .takeSample(1)
             .unique()
             .take(0, 10);
 
@@ -45,6 +46,7 @@ export class ScannerService {
 
         const fetchExploreResult = {fetchId,selectors: selectorList, meta: meta};
         this.apiClient.produceFetchExploreResult(fetchExploreResult);
+        return {selectors: selectorList, meta: meta};
     };
 
     fetchOne = async ({fetchId, fetchUrl:url, selector, lastResult:before}): Promise<SampleResponse> => {
@@ -74,6 +76,7 @@ export class ScannerService {
 
         response.sampleUrl = selectorList.map(x => x.sample);
         const res = await this.apiClient.produceFetchResult({fetchId,fetchUrl:url,...response});
+        return response;
     };
 
     getPathsByUrl = async (url: string, selector: string): Promise<[CssPath[], Meta]> => {
@@ -108,7 +111,7 @@ export class ScannerService {
     };
 
     download = async (url: string): Promise<any> => {
-        let horseman = new Horseman();
+        let horseman = new Horseman({loadImages: false});
         const domHtml = await horseman
             .userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36')
             .open(url)
@@ -119,7 +122,7 @@ export class ScannerService {
             })
             .catch( error => {
                 return error;
-            });
+            }).close();
         const meta = await this.scrapeMeta(url, domHtml as string);
         return {html: domHtml, meta};
     };
