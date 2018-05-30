@@ -78,8 +78,8 @@ export default class UserFetchsTable extends React.Component<any> {
     this.props.watchFetch(this.state.fetchUrl, sampleUrl);
   }
 
-  removeFetch = (id: string) => {
-    this.props.removeFetch(id);
+  removeFetch = (fetchUrl: string) => {
+    this.props.removeFetch(fetchUrl);
   }
 
   expandedRowRender = (record: any) => {

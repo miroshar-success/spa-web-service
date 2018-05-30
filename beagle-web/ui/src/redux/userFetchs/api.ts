@@ -19,7 +19,7 @@ export const createFetchExplore = (fetchUrl: string, personKey: string) => {
   })
 }
 
-export const createWatchFetch = (fetchUrl: string, sampleUrl: string, personKey: string) => {
+export const createFetch = (fetchUrl: string, sampleUrl: string, personKey: string) => {
   return axios.post('/fetch', {
     person: {
       clientName: 'beagleWeb',
@@ -28,5 +28,17 @@ export const createWatchFetch = (fetchUrl: string, sampleUrl: string, personKey:
     },
     fetchUrl,
     sampleUrl,
+  })
+}
+
+export const removeFetch = (fetchUrl: string, personKey: string) => {
+  return axios.post('/fetch/delete', {
+    person: {
+      clientName: 'beagleWeb',
+      personKey,
+      personInfo: null,
+    },
+    fetchUrl,
+    meta: null,
   })
 }

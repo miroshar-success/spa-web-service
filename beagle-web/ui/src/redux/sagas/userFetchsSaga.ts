@@ -85,9 +85,17 @@ function* addNewFetchUrlForExplore(fetchUrl: string, personKey: string): Iterabl
 
 function* watchFetch(fetchUrl: string, sampleUrl: string, personKey: string): IterableIterator<any> {
   try {
-    yield call(Api.createWatchFetch, fetchUrl, sampleUrl, personKey);
+    yield call(Api.createFetch, fetchUrl, sampleUrl, personKey);
   } catch (error) {
     // TODO: handle errors
+  }
+}
+
+function* removeFetch(fetchUrl: string, personKey: string): IterableIterator<any> {
+  try {
+    yield call(Api.removeFetch, fetchUrl, personKey);
+  } catch (error) {
+
   }
 }
 
@@ -121,6 +129,14 @@ export function* watchFetchSaga(): IterableIterator<any> {
     const { payload: { fetchUrl, sampleUrl } } = yield take(UserFetchsActions.WATCH_FETCH);
     const userDetails = yield select(getUserDetails);
     yield fork(watchFetch, fetchUrl, sampleUrl, userDetails.name);
+  }
+}
+
+export function* removeFetchSaga(): IterableIterator<any> {
+  while (true) {
+    const { payload: { fetchUrl } } = yield take(UserFetchsActions.REMOVE_FETCH);
+    const userDetails = yield select(getUserDetails);
+    yield fork(removeFetch, fetchUrl, userDetails.name);
   }
 }
 

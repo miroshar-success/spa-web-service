@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
-import { loadUserFetchs, addNewFetchUrlForExplore, watchFetch } from '@redux/userFetchs/actions';
+import { loadUserFetchs, addNewFetchUrlForExplore, watchFetch, removeFetch } from '@redux/userFetchs/actions';
 import {
   getUserFetchs, getFetchSampleUrls, getResultUrls, getLoadingStatus,
 } from '@redux/userFetchs/reducer';
@@ -14,4 +14,4 @@ const mapStateToProps = (state: RootState) => ({
   loading: getLoadingStatus(state),
 })
 
-export default connect(mapStateToProps, { loadUserFetchs, addNewFetchUrlForExplore, watchFetch })(UserFetchsTable);
+export default connect(mapStateToProps, { loadUserFetchs, addNewFetchUrlForExplore, watchFetch, removeFetch })(UserFetchsTable);

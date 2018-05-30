@@ -29,3 +29,7 @@ export const saveFetchResults = createAction(UserFetchsActions.SAVE_FETCH_RESULT
 export const watchFetch = createAction(UserFetchsActions.WATCH_FETCH, resolve => {
   return (fetchUrl: string, sampleUrl: string) => resolve({ fetchUrl, sampleUrl })
 })
+
+export const removeFetch = createAction(UserFetchsActions.REMOVE_FETCH, resolve => {
+  return (fetchUrl: string) => resolve({ fetchUrl });
+})
