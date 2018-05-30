@@ -20,6 +20,7 @@ const chalk = require('chalk');
 const warn = chalk.keyword('orange');
 
 
+
 class MqGwProxyService {
 
     protected readonly root: string;
@@ -49,7 +50,7 @@ class MqGwProxyService {
 
         try {
             this.connection =  await Promise.resolve(connect(this.connectionConfig));
-            console.log(chalk.green(`[mq-gw-api] - [connect] success ${this.connection}`));
+            // console.log(chalk.green(`[mq-gw-api] - [connect] success ${this.connection}`));
         } catch (err){
             console.log(chalk.red(err));
         }
@@ -63,7 +64,7 @@ class MqGwProxyService {
             console.log(chalk.red(err));
         }
 
-        console.log(chalk.green(`[mq-gw-api] - [scan-components] ${this.components.map(cmp=>cmp.name)} [methods] `), this.scanResultsArr);
+        // console.log(chalk.green(`[mq-gw-api] - [scan-components] ${this.components.map(cmp=>cmp.name)} [methods] `), this.scanResultsArr);
 
         this.scanResultsArr.forEach(({key, method, prototype}) => {
             if (isMqGwConsumer(method)) this.mqGwConsumer(method).then(proxyFn => prototype[key] = proxyFn);
@@ -85,7 +86,7 @@ class MqGwProxyService {
         const targetRoutes = this.routes.filter(route => route.indexOf(`.${targetMethodRoute}`) > 0);
         const proxyFn = function () {
             const result: any = target.apply(this, arguments);
-            if (result) console.log(chalk.yellow(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [return] `), result);
+            if (result) console.log(chalk.yellow(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [return] `))//, result);
             else {
                 console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [ WARNING ] Message rejected! Producer result is null.`));
                 return result;
@@ -129,7 +130,7 @@ class MqGwProxyService {
         const route = `${root}.${targetClient}.${targetMethodRoute}`;
         const proxyFn = function () {
             const result: any = target.apply(this, arguments);
-            if (result) console.log(chalk.yellow(`[mq-gw-api] - [mq-producer] ${targetClient}.${targetMethodRoute} [return] `), result);
+            if (result) console.log(chalk.yellow(`[mq-gw-api] - [mq-producer] ${targetClient}.${targetMethodRoute} [return] `))//, result);
             else {
                 console.log(warn(`[mq-gw-api] - [mq-producer] ${targetClient}.${targetMethodRoute} [ WARNING ] Message rejected! Producer result is null.`));
                 return result;

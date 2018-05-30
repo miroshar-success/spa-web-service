@@ -22,6 +22,11 @@ async function bootstrap() {
     changeOrigin: true,
   }))
 
+  app.use('/fetch', proxy({
+    target: 'http://localhost:3000',
+    changeOrigin: true,
+  }))
+
   // VALIDATION CONFIG
   app.use(bodyParser.json());
   // app.useStaticAssets({

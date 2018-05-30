@@ -54,6 +54,14 @@ export function authReducer(state: any = initialState, action: any) {
         error,
       }
     }
+    case AuthActions.GET_CURRENT_USER_SUCCESS: {
+      const { userDetails } = action.payload;
+      return {
+        ...state,
+        error: '',
+        userDetails,
+      }
+    }
     default: return state;
   }
 

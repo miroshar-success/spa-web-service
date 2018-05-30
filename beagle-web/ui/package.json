@@ -12,10 +12,12 @@
   "dependencies": {
     "antd": "^3.2.1",
     "axios": "^0.18.0",
+    "axios-https-proxy-fix": "^0.17.1",
     "history": "^4.7.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.7",
+    "react-remote-image": "^0.4.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.8",
     "redux": "^4.0.0",

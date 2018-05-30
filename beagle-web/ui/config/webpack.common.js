@@ -75,7 +75,7 @@ module.exports = {
         use: ['url-loader?limit=10000&mimetype=image/gif']
       },
       {
-        test: /\.jpg/,
+        test: /\.jp(e)g/,
         exclude: /node_modules/,
         use: ['url-loader?limit=10000&mimetype=image/jpg']
       },

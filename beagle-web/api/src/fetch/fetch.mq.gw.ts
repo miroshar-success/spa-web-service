@@ -10,45 +10,54 @@ export class FetchResultsGw {
 
   static THIS: FetchResultsGw;
 
-  private clients: any[] = []
-
   constructor() {
     FetchResultsGw.THIS = this
-    console.log('clients1', wss.clients);
+
     wss.on('connection', ws => {
-      // ws.clientName = 'admin';
-      // wss.clients.forEach(element => {
-      //   console.log(element);
-      // });
+
       ws.on('message', message => {
-        this.clients.push({
-          clientName: message,
-          client: ws,
-        })
-        this.clients[0].client.send(JSON.stringify('message'))
-        console.log(message);
+        const { type, name } = JSON.parse(message);
+        switch (type) {
+          case 'ADD_USER': {
+            ws.personKey = name;
+            break;
+          }
+        }
       })
     })
-    // setTimeout(() => this.publishMessage({ status: 'ok', clientName: "viber" }), 5000);
+
+    const interval = setInterval(() => {
+      wss.clients.forEach(ws => {
+        if (ws.readyState === WebSocket.CLOSE) {
+          ws.terminate();
+        }
+      })
+    }, 30000);
+
   }
 
+  @MqGwConsumer({ name: 'fetchExploreResult', gateway: 'person.clientName' })
+  async consumeExploreMessage(message: any) {
+    wss.clients.forEach(ws => {
+      if (ws.personKey === message.person.personKey) {
+        ws.send(JSON.stringify({
+          type: 'SAVE_EXPLORED_FETCH_SAMPLES',
+          payload: JSON.stringify(message),
+        }))
+      }
+    })
+  }
 
   @MqGwConsumer({ name: 'fetchResult', gateway: 'person.clientName' })
   async consumeMessage(message: any) {
-    // console.log(this.clients[0]);
-    // const client = this.clients[0].client;
-    // client.send(JSON.stringify('message2'));
-    this.clients[0].client.send(JSON.stringify(message))
-    // wss.clients.forEach(client => {
-    //   client.send(JSON.stringify(message));
-    // })
-    // console.log(client);
-    // client.send(message);
-    // console.log(message);
-    // console.log('up');
-    // console.log("THIS: ", FetchResultsGw.THIS)
-    // console.log("MESSAGE:" + JSON.stringify(message));
-    // console.log("data:" + message.content);
+    wss.clients.forEach(ws => {
+      if (ws.personKey === message.person.personKey) {
+        ws.send(JSON.stringify({
+          type: 'SAVE_FETCH_RESULTS',
+          payload: JSON.stringify(message),
+        }))
+      }
+    })
   }
 
 }
