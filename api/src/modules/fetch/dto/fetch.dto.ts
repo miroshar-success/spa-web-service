@@ -3,7 +3,7 @@ import {ApiModelProperty} from '@nestjs/swagger';
 
 import PersonDto from "../../person/person.dto";
 import {FetchMessage} from "./fetch.message";
-import {Meta, Sample, SampleOut, SelectorOut} from '../../scanner/scanner.sample';
+import {Meta, Sample, SampleOut, SelectorOut} from "../../../../../scanner/src/modules/scanner.sample";
 
 /** FETCH DTO **/
 
@@ -16,6 +16,9 @@ export class CoreFetchDto {
 export class FetchExploreDto  extends CoreFetchDto{
     @ApiModelProperty()
     readonly fetchUrl: string;
+    @ApiModelProperty()
+    readonly meta: Meta;
+
 }
 
 //fetch explore result MQ
