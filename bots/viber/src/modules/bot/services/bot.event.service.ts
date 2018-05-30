@@ -43,6 +43,17 @@ export class BotEventService {
                 'Ошибка!', 'Неизвестная команда. Введите \n/help для получения информации', true);*/
     }
 
+    public async subscribedHandler(response: viber.Response) {
+        let lang = 'en';
+
+        if (response.userProfile.language in LangEnum) {
+            lang = response.userProfile.language;
+        }
+
+        this.botMessageService.sendSimpleRichMessage(response.userProfile.id,
+            translations[lang]['info'], translations[lang]['message.subscribed']);
+    }
+
     private async commandExploreHandler(message: viber.Message, response: viber.Response, lang: string) {
         let urls: string[] = message.text.match(urlRegex());
 
@@ -140,7 +151,6 @@ export class BotEventService {
             });
     }
 
-    //TODO /get meta in response
     private async commandGetPost(personCoreDtoOut: PersonCoreDtoOut, lang: string) {
         await axios.post('http://localhost:3000/fetch/get',
             personCoreDtoOut, {

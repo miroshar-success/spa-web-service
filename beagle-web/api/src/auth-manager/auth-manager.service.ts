@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { SignInUserDto } from '../clients/user.dto';
 import { UserService } from '../clients/user.service';
 import { AuthService } from '../auth/auth.service';
@@ -22,6 +22,19 @@ export class AuthManagerService {
       }
     }
     throw new BadRequestException('authentication error');
+  }
+
+  async getCurrentUser(accessToken: string): Promise<any> {
+    // verify token
+    const decoded = jwt.verify(accessToken, 'secretKey')
+    if (decoded) {
+      const foundedUser = await this.userService.findOneByEmail(decoded.email);
+      if (!foundedUser) {
+        throw new UnauthorizedException();
+      }
+      return foundedUser.name;
+    }
+    throw new UnauthorizedException('unauthorized exception');
   }
 
   async logout() {

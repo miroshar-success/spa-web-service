@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const testMuchTemplate = (site,urls) => {
     urls.forEach((x,index)=>{
-        describe(site + ` test ${index + 1}`, () => testTemplate(x.url,x.regex);
+        describe(site + ` test ${index + 1}`, () => testTemplate(x.url,x.regex));
     });
 };
 
@@ -15,12 +15,13 @@ const testTemplate = (url, regex) => {
     let scannerService;
 
     beforeAll(async () => {
-        jest.unmock('jsdom');
-        jest.unmock('needle');
+
         scannerService = new ScannerService();
-        const html = (await scannerService.download(url)).body;
-        jest.mock('jsdom');
-        require('jsdom').__setMockHTML(html);
+
+        const {html} = await scannerService.download(url);
+
+        jest.mock('node-horseman');
+
         allExamples = await scannerService.fetchAll(url);
     });
 
@@ -76,15 +77,16 @@ describe('scanner test', () => {
 
     describe('download', () => {
         beforeAll(() => {
-            jest.unmock('jsdom');
+
+            jest.mock('node-horseman');
+
             scannerService = new ScannerService();
         });
 
-        it('should return string containing html and execute inline scripts', async () => {
-            const html = (await scannerService.download(urlPath)).body;
+        it('should return string containing html ', async () => {
+            const html = (await scannerService.download(urlPath)).html;
             expect(typeof html).toBe('string');
             expect(html.length).toBeGreaterThan(0);
-            expect(defaultHtml.length).toBeGreaterThan(html.length);
         });
     });
 
@@ -244,6 +246,11 @@ describe('scanner test', () => {
     });
 
     describe('site test', () => {
+
+        describe('airbnb', () => testTemplate(
+            'https://www.airbnb.ru/s/Paris/homes?refinement_paths%5B%5D=%2Fhomes&allow_override%5B%5D=&s_tag=uYpZSDbN',
+            /(https)(:)(\/)(\/)(www\.airbnb\.ru)(\/)(rooms)(\/)(\d+)(\?)(location)(=)((?:[a-z][a-z]+))/i
+        ));
 
         describe('allegro', () => testTemplate(
             'https://allegro.pl/kategoria/samochody-osobowe-4029?order=n',

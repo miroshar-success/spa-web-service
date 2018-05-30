@@ -13,6 +13,9 @@ module.exports = merge(common, {
   devtool: 'cheap-module-source-map',
 
   devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
     proxy: {
       '*': {
         target: 'http://localhost:3001',
@@ -20,6 +23,14 @@ module.exports = merge(common, {
       },
       // '/beagle-web/**': {
       //   target: 'http://localhost:3001',
+      //   secure: false,
+      // },
+      // '/beagle-web/**': {
+      //   target: 'http://localhost:3001',
+      //   secure: false,
+      // },
+      // '/u_fetchs/**': {
+      //   target: 'http://localhost:3000',
       //   secure: false,
       // },
       // '/data/**': {

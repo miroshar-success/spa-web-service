@@ -40,7 +40,7 @@ export class FetchDto extends FetchExploreDto {
 //fetch result MQ
 export class FetchResultDto extends CoreFetchDto {
     readonly resultUrls: SampleOut[] = [];
-    readonly meta: Meta = {} as  Meta;
+    readonly meta: Meta;
 }
 
 /** ME MESSAGE DTO **/

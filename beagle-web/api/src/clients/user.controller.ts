@@ -12,19 +12,9 @@ export class UserController {
 
   constructor(private readonly userService: UserService) { }
 
-  @Post('auth/signup')
+  @Post('signup')
   async signUp(@Body() user: SignUpUserDto): Promise<void> {
     await this.userService.signUp(user);
-  }
-
-  @Get('test')
-  test(): string {
-    return 'test';
-  }
-
-  @Get('test2')
-  test2(): string {
-    return 'test2';
   }
 
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, BadRequestException, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req, BadRequestException, UseGuards } from '@nestjs/common';
 import { AuthManagerService } from './auth-manager.service';
 import { SignInUserDto } from '../clients/user.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,6 +13,11 @@ export class AuthManagerController {
   @Post('auth/signin')
   async signIn(@Body() user: SignInUserDto): Promise<any> {
     return await this.authManagerService.authenticate(user);
+  }
+
+  @Get('auth/current')
+  async getCurrentUser(@Req() req): Promise<any> {
+    return await this.authManagerService.getCurrentUser(req.headers.authorized);
   }
 
   // @Get('auth/test')

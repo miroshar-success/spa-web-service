@@ -7,10 +7,12 @@ import PersonsTableContainer from './containers/PersonsTableContainer';
 import FilterableFetchsContainer from './containers/FetchsTableContainer';
 import SignInFormContainer from './containers/SignInFormContainer';
 import SignUpFormContainer from './containers/SignUpFormContainer';
+import UserFetchsTableContainer from './containers/UserFetchsTableContainer';
 import Home from './components/Home/Home';
 import Navigation from './components/Navigation/Navigation';
 
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import secure from './components/ProtectedRoute/ProtectedRoute';
+
 import { createBrowserHistory } from 'history';
 import { Store } from 'redux';
 import configureStore from '@redux/store';
@@ -22,8 +24,9 @@ export const Path = {
   home: '/home',
   signin: '/signin',
   signup: '/signup',
-  persons: '/persons',
-  fetch: '/fetch',
+  persons: '/a_persons',
+  fetch: '/a_fetchs',
+  userFetchs: '/u_fetchs',
 }
 
 const browserHistory = createBrowserHistory()
@@ -39,10 +42,10 @@ export default () => (
             <Switch>
               <Route path={Path.signin} component={SignInFormContainer} />
               <Route path={Path.signup} component={SignUpFormContainer} />
-
-              <ProtectedRoute exact path={Path.root} component={Home} />
-              <ProtectedRoute path={Path.fetch} component={FilterableFetchsContainer} />
-              <ProtectedRoute path={Path.persons} component={PersonsTableContainer} />
+              <Route exact path={Path.root} component={secure(Home)} />
+              <Route path={Path.fetch} component={secure(FilterableFetchsContainer)} />
+              <Route path={Path.persons} component={secure(PersonsTableContainer)} />
+              <Route path={Path.userFetchs} component={secure(UserFetchsTableContainer)} />
             </Switch>
           </main>
         </div>

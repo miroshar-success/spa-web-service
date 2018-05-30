@@ -21,7 +21,7 @@ const LinkItem = ({ path, title }: LinkItemProps) => (
 const renderUserNavigation = () => (
   <React.Fragment>
     <LinkItem path='/' title='Home' />
-    <LinkItem path='/fetchs' title='Fetchs' />
+    <LinkItem path='/u_fetchs' title='Fetchs' />
   </React.Fragment>
 )
 
