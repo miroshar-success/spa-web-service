@@ -31,20 +31,6 @@ async function bootstrap() {
     await app.listen(3000);
 }
 
-let context = require('request');
-
-let proxied = context.Request;
-context.Request = function (options) {
-    options.timeout = 10000;
-    let result;
-    try {
-        result = proxied.apply(this, [options]);
-    }
-    catch (e) {
-        console.log(e);
-    }
-};
-context.Request.prototype = proxied.prototype;
 
 bootstrap();
 

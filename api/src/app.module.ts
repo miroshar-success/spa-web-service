@@ -5,6 +5,6 @@ import {ScannerModule} from "../../scanner/src/modules/scanner.module";
 
 
 @Module({
-    modules: [FetchModuleModule, PersonModule, ScannerModule],
+    modules: [FetchModuleModule, PersonModule],
 })
 export class ApplicationModule { }

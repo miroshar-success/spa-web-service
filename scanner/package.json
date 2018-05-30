@@ -19,13 +19,15 @@
     "@types/cheerio": "^0.22.7",
     "cheerio": "^1.0.0-rc.2",
     "dotenv": "^5.0.1",
-    "jsdom": "9.12.0",
     "lodash": "^4.17.10",
     "metascraper": "^3.11.4",
     "metascraper-author": "^3.11.4",
     "needle": "^2.2.1",
+    "node-horseman": "^3.3.0",
+    "phantomjs-prebuilt": "^2.1.16",
     "reflect-metadata": "^0.1.12",
     "request": "^2.87.0",
+    "rxjs": "^5.5.6",
     "typescript": "^2.8.3"
   },
   "devDependencies": {

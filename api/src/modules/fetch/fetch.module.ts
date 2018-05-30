@@ -8,13 +8,13 @@ import { DatabaseModule } from "../database/database.module";
 import { AgendaModule } from "../agenda/agenda.module";
 import { ScannerModule } from "../../../../scanner/src/modules/scanner.module";
 import FetchDataController from "./fetch.controller.data";
-import { ScannerClient } from "./scanner.client";
+import { ScannerClient } from "./fetch.scanner.client";
 import FetchDataService from "./fetch.service.data";
 import {FetchResultsGw} from "./fetch.mq.gw";
 import PersonModule from "../person/person.module";
 
 @Module({
-  modules: [AgendaModule, rabbitMqModule, ScannerModule, DatabaseModule, PersonModule],
+  modules: [AgendaModule, rabbitMqModule, DatabaseModule, PersonModule],
   controllers: [FetchController, FetchDataController],
   components: [FetchService, ScannerClient, ...fetchProviders, FetchDataService, FetchResultsGw]
 })

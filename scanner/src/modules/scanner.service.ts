@@ -5,6 +5,10 @@ import {SELECTORS, ScannerInstance, FILTERS} from './scanner.instance';
 import {CssPath} from './scanner.csspath';
 import {FetchOut, Meta, SampleList, SampleOut, SampleResponse, SelectorOut} from './scanner.sample';
 import {EuristicMeta} from './scanner.euristic';
+const Horseman = require('node-horseman');
+
+
+import {ApiClient} from "./scanner.api.client";
 
 const needle = require('needle');
 
@@ -17,11 +21,9 @@ const metascraper = require('metascraper').load([
 @Component()
 export class ScannerService {
 
-    constructor() {
+    constructor(private readonly apiClient: ApiClient) {}
 
-    }
-
-    fetchAll = async (url: string): Promise<FetchOut> => {
+    fetchAll = async ({fetchId, fetchUrl: url}): Promise<FetchOut> => {
         const sortEuristic: EuristicMeta = new EuristicMeta();
         let cssPaths: CssPath[], meta: Meta;
         try {
@@ -36,16 +38,16 @@ export class ScannerService {
             .groupBy('selector')
             .distinct()
             .orderByDesc(sortEuristic)
-            .takeSample(1)
             .unique()
             .take(0, 10);
 
         const selectorList: SelectorOut[] = await this.updateMeta(listPaths.toOut(), url);
 
-        return {selectors: selectorList, meta: meta};
+        const fetchExploreResult = {fetchId,selectors: selectorList, meta: meta};
+        this.apiClient.produceFetchExploreResult(fetchExploreResult);
     };
 
-    fetchOne = async (url: string, selector: string, before?: string): Promise<SampleResponse> => {
+    fetchOne = async ({fetchId, fetchUrl:url, selector, lastResult:before}): Promise<SampleResponse> => {
         const response: SampleResponse = new SampleResponse();
         let cssPaths: CssPath[], meta: Meta;
         try {
@@ -71,7 +73,7 @@ export class ScannerService {
         const selectorList: SelectorOut[] = await this.updateMeta(listPaths.toOut(), url);
 
         response.sampleUrl = selectorList.map(x => x.sample);
-        return response;
+        const res = await this.apiClient.produceFetchResult({fetchId,fetchUrl:url,...response});
     };
 
     getPathsByUrl = async (url: string, selector: string): Promise<[CssPath[], Meta]> => {
@@ -83,7 +85,7 @@ export class ScannerService {
             throw e;
         }
         meta = res.meta;
-        const cheerioObject: CheerioStatic = this.parse(res.body);
+        const cheerioObject: CheerioStatic = this.parse(res.html);
         const scannerInstance: ScannerInstance = ScannerInstance.fromCheerio(cheerioObject, selector);
         return [scannerInstance.resolve(url).filter(FILTERS.INVALID_HREF, {}).getPaths(), meta];
     };
@@ -106,37 +108,20 @@ export class ScannerService {
     };
 
     download = async (url: string): Promise<any> => {
-        /*const request = (await needle('get', url));
-        const html = request.body;*/
-        const jsdom = require('jsdom');
-        const jar = jsdom.createCookieJar();
-        const domHtml = await (new Promise((resolve, reject) => {
-            jsdom.env({
-                url,
-                cookieJar: jar,
-                userAgent: 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
-                features: {
-                    FetchExternalResources: ['script'],
-                    ProcessExternalResources: ['script'],
-                    SkipExternalResources: false
-                },
-                headers: {
-                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
-                },
-                // proxy: 'https://api.enthought.com/',
-                done: function (err, window) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        const output = jsdom.serializeDocument(window.document);
-                        setTimeout(() => window.close(), 100);
-                        resolve(output);
-                    }
-                },
+        let horseman = new Horseman();
+        const domHtml = await horseman
+            .userAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36')
+            .open(url)
+            .waitForNextPage()
+            .html()
+            .then( body =>{
+                return body;
+            })
+            .catch( error => {
+                return error;
             });
-        }));
         const meta = await this.scrapeMeta(url, domHtml as string);
-        return {body: domHtml, meta};
+        return {html: domHtml, meta};
     };
 
     downloadMeta = async (url: string): Promise<Meta> => {
@@ -150,6 +135,8 @@ export class ScannerService {
         }).catch(err => {
             return undefined;
         });
+        if(html === undefined)
+            return undefined;
 
         return await this.scrapeMeta(url,html);
     };

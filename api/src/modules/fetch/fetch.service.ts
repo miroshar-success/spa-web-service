@@ -1,26 +1,17 @@
-import { Model } from 'mongoose';
-import { Component, HttpStatus, Inject, HttpException } from '@nestjs/common';
-
-import { FetchExploreSelectorModel, FetchModel, SampleModel } from './fetch.model';
-import { FetchState } from './fetch.enums';
+import {Model} from 'mongoose';
+import {Component, HttpStatus, Inject, HttpException} from '@nestjs/common';
+import {FetchExploreSelectorModel, FetchModel, SampleModel} from './fetch.model';
+import {FetchState} from './fetch.enums';
 import * as Agenda from 'agenda';
-
-
-import { async } from 'rxjs/scheduler/async';
-import { ScannerClient } from './scanner.client';
-import {
-    CoreFetchDto,
-    FetchDto, FetchExploreDto, FetchExploreSamplesDto
-} from './dto/fetch.dto';
-import { ClientName } from '../clients/clients.enums';
+import {ScannerClient} from './fetch.scanner.client';
+import { FetchDto, FetchExploreDto } from './dto/fetch.dto';
 import PersonCoreDto from '../person/person.dto';
-import { FetchResultsGw } from './fetch.mq.gw';
-import { ApiModelProperty } from '@nestjs/swagger';
-import { FetchExploreScannerResultDto, FetchScannerResultDto } from './dto/scanner.dto';
-import { FetchMessage } from './dto/fetch.message';
+import {FetchResultsGw} from './fetch.mq.gw';
+import {FetchExploreScannerResultDto, FetchScannerResultDto} from './dto/scanner.dto';
+import {FetchMessage} from './dto/fetch.message';
 import FetchDataService from './fetch.service.data';
 import PersonService from '../person/person.service';
-import { Meta, SampleOut } from "../../../../scanner/src/modules/scanner.sample";
+import {Meta, SampleOut} from "../../../../scanner/src/modules/scanner.sample";
 
 
 @Component()
@@ -29,14 +20,14 @@ export class FetchService {
     private static FETCH_WATCH_JOB_NAME: string = 'fetchWatcherJob';
     private static FETCH_WATCH_JOB_REPEAT_TIME: string = '1 seconds';
 
-    private static FETCH_REINIT_PERIOD: number = 30000;
+    private static FETCH_REINIT_PERIOD: number = 5000;
 
     constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>,
-        @Inject('agendaModelToken') private readonly agenda: Agenda,
-        private readonly scannerClient: ScannerClient,
-        private readonly fetchResultsGw: FetchResultsGw,
-        private readonly fetchDataService: FetchDataService,
-        private readonly personService: PersonService) {
+                @Inject('agendaModelToken') private readonly agenda: Agenda,
+                private readonly scannerClient: ScannerClient,
+                private readonly fetchResultsGw: FetchResultsGw,
+                private readonly fetchDataService: FetchDataService,
+                private readonly personService: PersonService) {
         this.initFetchWatcher();
     }
 
@@ -45,11 +36,11 @@ export class FetchService {
     /** FETCH EXPLORE **/
 
     // fetchExplore request
-    public async fetchExplore({ person, fetchUrl }: FetchExploreDto) {
+    public async fetchExplore({person, fetchUrl}: FetchExploreDto) {
 
         this.personService.merge(person);
 
-        const { clientName, personKey } = person;
+        const {clientName, personKey} = person;
 
         let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
@@ -65,10 +56,10 @@ export class FetchService {
             state: FetchState.new,
         }).save();
         let fetchId: string = currentFetchModel._id.toString();
-        this.scannerClient.fetchExploreProduce({ fetchId: fetchId, fetchUrl: fetchUrl })
+        this.scannerClient.produceFetchExplore({fetchId,fetchUrl})
     }
 
-    public async fetchExploreResultConsumer({ fetchId, selectors, meta }: FetchExploreScannerResultDto) {
+    public async fetchExploreResultConsumer({fetchId, selectors, meta}: FetchExploreScannerResultDto) {
         let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
         if (fetchModel) {
             await this.fetchModel.updateOne(fetchModel, {
@@ -95,16 +86,16 @@ export class FetchService {
 
     /********* FETCH ********/
 
-    public async fetch({ person, fetchUrl, sampleUrl }: FetchDto) {
+    public async fetch({person, fetchUrl, sampleUrl}: FetchDto) {
 
         this.personService.merge(person);
 
-        const { personKey, clientName } = person;
+        const {personKey, clientName} = person;
 
         // get current job if exists
         let fetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
-        console.log('**********************************fetch**************************');
+        console.log('FETCH: ', fetchModel);
 
         if (!fetchModel) {
             throw new HttpException(FetchMessage.FETCH_EXISTS_ERROR.messageKey, HttpStatus.BAD_REQUEST);
@@ -115,7 +106,9 @@ export class FetchService {
         if (!selectors || selectors.length < 1) {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
-        let selectorModel = selectors.find(selector => selector.sample.url === sampleUrl);
+        let selectorModel = selectors.find(selector => selector.sample && selector.sample.url && selector.sample.url === sampleUrl);
+
+        console.log('SELECTOR: ', selectorModel);
 
         if (!selectorModel == null && selectorModel.selector) {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
@@ -123,8 +116,7 @@ export class FetchService {
         await this.fetchDataService.updateFetchModelWithInitData(fetchModel, selectorModel.selector);
     }
 
-
-    public async fetchResultConsumer({ fetchUrl, fetchId, resultUrls, isSelectorEmpty, isSampleUrlNotFound }: FetchScannerResultDto) {
+    public async fetchResultConsumer({fetchUrl, fetchId, resultUrls, isSelectorEmpty, isSampleUrlNotFound}: FetchScannerResultDto) {
 
         let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
 
@@ -136,11 +128,11 @@ export class FetchService {
             }).exec();
 
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
-            this.fetchResultsGw.publishFetchResult({ person: personCoreDto, resultUrls: resultUrls, meta: new Meta() });
+            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls, meta: fetchModel.meta});
         }
     }
 
-    public async fetchDelete({ person: { clientName, personKey }, fetchUrl }) {
+    public async fetchDelete({person: {clientName, personKey}, fetchUrl}) {
         // get current job if exists
         let currentFetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
         if (currentFetchModel) {
@@ -149,7 +141,7 @@ export class FetchService {
     }
 
     public async fetchGet(person: PersonCoreDto): Promise<FetchExploreDto[]> {
-        const { personKey, clientName } = person;
+        const {personKey, clientName} = person;
         let userFetches: FetchModel[] = await this.fetchDataService.getByPersonAndClientName(personKey, clientName);
 
         return userFetches.map(value => {
@@ -171,34 +163,33 @@ export class FetchService {
         });
 
         // await agenda ready
-        // await new Promise(resolve => this.agenda.once('ready', resolve));
-        this.agenda.on('ready', function () {
-            this.agenda.start();
-        });
+        await new Promise(resolve => this.agenda.once('ready', resolve));
         // start fetch task
         this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
     }
 
     private async initWatch(initDate: Date) {
 
+        console.log("AGENDA INIT");
+
         let currentFetches: FetchModel[] = await this.fetchModel.find({
             'state': FetchState.active,
-            'updateDate': { '$lt': initDate }
-        }).sort({ 'updateDate': -1 }).limit(100).exec();
+            'updateDate': {'$lt': initDate}
+        }).sort({'updateDate': -1}).limit(100).exec();
 
         if (currentFetches && currentFetches.length > 0) {
 
             // init watch and
             currentFetches.forEach(fetch => {
-                console.log(fetch)
+
                 let fetchId: string = fetch._id;
                 let fetchUrl: string = fetch.fetchUrl;
                 let selector: string = fetch.selector;
-                let lastResult: string = fetch.lastResult.length > 0 ? fetch.lastResult[0].url : '';
+                let lastResult: string = fetch.lastResult[0] ? fetch.lastResult[0].url : void 0;
 
                 // TODO move to data service
-                this.fetchModel.updateOne(fetch, { $set: { updateDate: new Date() } }, () => {
-                    this.scannerClient.fetchProduce(
+                this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}, () => {
+                    this.scannerClient.produceFetch(
                         {
                             fetchId: fetchId,
                             fetchUrl: fetchUrl,
@@ -215,8 +206,8 @@ export class FetchService {
 
     /** COMMON PRIVATE METHODS **/
 
-    private initPersonCoreDtoFromFetchModel({ clientName, personKey }: FetchModel): PersonCoreDto {
-        return { clientName: clientName, personKey: personKey, personInfo: null };
+    private initPersonCoreDtoFromFetchModel({clientName, personKey}: FetchModel): PersonCoreDto {
+        return {clientName: clientName, personKey: personKey, personInfo: null};
     }
 
 }
