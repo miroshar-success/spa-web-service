@@ -20,7 +20,7 @@ export class FetchService {
     private static FETCH_WATCH_JOB_NAME: string = 'fetchWatcherJob';
     private static FETCH_WATCH_JOB_REPEAT_TIME: string = '1 seconds';
 
-    private static FETCH_REINIT_PERIOD: number = 500;
+    private static FETCH_REINIT_PERIOD: number = 5000;
 
     constructor(@Inject('fetchModelToken') private readonly fetchModel: Model<FetchModel>,
                 @Inject('agendaModelToken') private readonly agenda: Agenda,
@@ -115,7 +115,6 @@ export class FetchService {
         }
         await this.fetchDataService.updateFetchModelWithInitData(fetchModel, selectorModel.selector);
     }
-
 
     public async fetchResultConsumer({fetchUrl, fetchId, resultUrls, isSelectorEmpty, isSampleUrlNotFound}: FetchScannerResultDto) {
 

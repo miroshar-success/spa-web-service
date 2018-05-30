@@ -102,7 +102,7 @@ class MqGwProxyService {
                         return Promise.resolve(targetRoutes
                             .filter(route => msgGateway === route.split('.')[1])
                             .map(route => console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [route] send to ${route}`)) || route)
-                            .map(route => channel.sendToQueue(route, Buffer.from(JSON.stringify(data), 'utf8'), {durable:true})))
+                            .map(route => channel.sendToQueue(route, Buffer.from(JSON.stringify(data), 'utf8'), {persistent:true})))
                     }
                     console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [ WARNING ] Message rejected! Missing gateway property ${targetGwKey}.`));
                     return Promise.resolve(data);
@@ -113,7 +113,7 @@ class MqGwProxyService {
                 return targetRoutes
                     .filter(route => msgGateway === route.split('.')[1])
                     .map(route => console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [route] send to ${route}`)) || route)
-                    .map(route => channel.sendToQueue(route, Buffer.from(JSON.stringify(result),'utf8'),{durable:true}));
+                    .map(route => channel.sendToQueue(route, Buffer.from(JSON.stringify(result),'utf8'),{persistent:true}));
             }
             console.log(warn(`[mq-gw-api] - [mq-gw-producer] ${targetMethodRoute} [ WARNING ]  Message rejected! Missing gateway property ${targetGwKey}.`));
             return Promise.resolve(result);
@@ -143,11 +143,11 @@ class MqGwProxyService {
                     console.log(chalk.yellow(`[mq-gw-api] - [mq-producer] ${targetClient}.${targetMethodRoute} [resolved] `), data);
                     const route = `${root}.${targetClient}.${targetMethodRoute}`;
                     console.log(warn(`[mq-gw-api] - [mq-producer] ${targetClient}.${targetMethodRoute} [SEND] ${route}`));
-                    return Promise.resolve(channel.sendToQueue(route, Buffer.from(JSON.stringify(data), 'utf8'), {durable:true}));
+                    return Promise.resolve(channel.sendToQueue(route, Buffer.from(JSON.stringify(data), 'utf8'), {persistent:true}));
                 });
             }
             console.log(warn(`[mq-gw-api] - [mq-producer] ${targetClient}.${targetMethodRoute} [SEND] ${route}`));
-            return Promise.resolve(channel.sendToQueue(route, Buffer.from(JSON.stringify(result), 'utf8'),{durable:true}));
+            return Promise.resolve(channel.sendToQueue(route, Buffer.from(JSON.stringify(result), 'utf8'),{persistent:true}));
         };
         const res = await Promise.resolve(channel.assertQueue(route));
         return proxyFn;
@@ -182,10 +182,17 @@ class MqGwProxyService {
                 return Promise.resolve(content);
             }
             try {
-                target.call(targetClass.THIS, content);
-                channel.ack(message);
-                console.log(warn(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [ SUCCESS ] Message consumed.`));
-                return Promise.resolve(content);
+                const result = target.call(targetClass.THIS, content);
+                if (result && result.then && typeof result.then === 'function') {
+                    result
+                        .then(_ => console.log(warn(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [ SUCCESS ] Message consumed.`)) || channel.ack(message))
+                        .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [error] `), err) || channel.nack(message));
+                    return Promise.resolve(content);
+                } else {
+                    channel.ack(message);
+                    console.log(warn(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [ SUCCESS ] Message consumed.`));
+                    return Promise.resolve(content);
+                }
             } catch (error){
                 console.log(chalk.red(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [error] `), error);
                 channel.nack(message);
@@ -226,10 +233,17 @@ class MqGwProxyService {
             }
             content && console.log(chalk.yellow(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [message-content] `), content);
             try {
-                target.call(targetClass.THIS, content);
-                channel.ack(message);
-                console.log(warn(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [ SUCCESS ] Message consumed.`));
-                return Promise.resolve(content);
+                const result = target.call(targetClass.THIS, content);
+                if (result && result.then && typeof result.then === 'function') {
+                    result
+                        .then(_ => console.log(warn(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [ SUCCESS ] Message consumed.`)) || channel.ack(message))
+                        .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [error] `), err) || channel.nack(message));
+                    return Promise.resolve(content);
+                } else {
+                    channel.ack(message);
+                    console.log(warn(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [ SUCCESS ] Message consumed.`));
+                    return Promise.resolve(content);
+                }
             } catch (error){
                 console.log(chalk.red(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [error] `), error);
                 channel.nack(message);
