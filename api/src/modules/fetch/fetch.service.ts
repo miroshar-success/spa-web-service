@@ -128,7 +128,7 @@ export class FetchService {
             }).exec();
 
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
-            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls, meta: new Meta()});
+            this.fetchResultsGw.publishFetchResult({person: personCoreDto, resultUrls: resultUrls, meta: fetchModel.meta});
         }
     }
 
@@ -169,6 +169,8 @@ export class FetchService {
     }
 
     private async initWatch(initDate: Date) {
+
+        console.log("AGENDA INIT");
 
         let currentFetches: FetchModel[] = await this.fetchModel.find({
             'state': FetchState.active,
