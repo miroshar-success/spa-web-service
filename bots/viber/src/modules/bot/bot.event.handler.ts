@@ -3,6 +3,7 @@ import * as viber from 'viber-bot';
 import {BotInitService} from './services/bot.init.service';
 import {AppLogger} from '../../app.logger';
 import {BotEventService} from './services/bot.event.service';
+import {BotMessageService} from './services/bot.message.service';
 
 @Injectable()
 export class BotEventHandler {
@@ -12,24 +13,23 @@ export class BotEventHandler {
     constructor(private readonly botInitService: BotInitService,
                 private readonly botEventService: BotEventService) {
         this._bot = this.botInitService.bot;
-        //  this.eventSubscribe();
+        this.initEventListener();
+    }
+
+    private initEventListener(){
+        this.eventSubscribe();
         this.eventMsgReceived();
     }
 
-    /*private eventSubscribe() {
-        this._bot.on(viber.Events.CONVERSATION_STARTED, response => {
-            this.sendTextMessage('Thanks for subscribe!', response);
-            this.sendHelpMessage(response);
+    private eventSubscribe() {
+        this._bot.on(viber.Events.SUBSCRIBED, response => {
+            this.botEventService.subscribedHandler(response);
         });
-    }*/
+    }
 
 
     private eventMsgReceived() {
-        //Wqp88ccqY9fgk9lIH0y5LQ==
-
         this._bot.on(viber.Events.MESSAGE_RECEIVED, (message, response) => {
-            /*this._bot.sendMessage(new viber.UserProfile('Wqp88ccqY9fgk9lIH0y5LQ=='),
-                new viber.Message.RichMedia(''));*/
             this.botEventService.messageReceivedHandler(message, response);
         });
     }

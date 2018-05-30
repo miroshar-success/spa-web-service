@@ -1,5 +1,6 @@
 {
   "ru": {
+    "message.subscribed": "Привет!\n\n/help для получения информации \n\n*придумать текст*",
     "message.help": "/explore [explore url] - исследовать ссылку\n\n/fetch [explore url] [fetch url] - отслеживать ссылки данного типа\n\n/get - получить список активных отсеживаний\n\n/delete [explore url] - остановить отслеживание\n\n/help - помощь",
     "message.explore.error": "Используйте один валидный адрес",
     "message.explore.request.error": "Не удалось получить примеры. Попробуйте еще раз",
@@ -18,6 +19,7 @@
     "button.stop": "Остановить"
   },
   "en": {
+    "message.subscribed": "Hi!\n\n/help for more info \n\n*придумать текст*",
     "message.help": "/explore [link] - explore link\n\n/fetch [site link] [sample link] - track sample links on this site\n\n/get - get the list of active trackings\n\n/delete [site link] - stop tracking\n\n/help - help",
     "message.explore.error": "Use one valid address",
     "message.explore.request.error": "Can't get examples. Try again",
