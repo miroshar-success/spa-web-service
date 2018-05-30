@@ -2,22 +2,24 @@
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { TableActions } from '@redux/common/table/types';
-import { UserFetchsActions } from '@redux/userFetchs/types';
+import { UserFetchsActions, FetchSample } from '@redux/userFetchs/types';
 import { getUserDetails } from '@redux/auth/reducer';
 import * as Api from '@redux/userFetchs/api';
+import { saveExploredFetchSamples, saveFetchResults } from '@redux/userFetchs/actions';
+import { AuthActions, UserDetails } from '@redux/auth/types';
 
 
 // worker sagas
 function* loadUserFetchs(personKey: string): IterableIterator<any> {
   try {
-
-    const data = yield call(Api.fetchData, '/fetch/get', personKey);
+    const response = yield call(Api.fetchData, personKey);
 
     yield put({
       type: TableActions.LOAD_DATA_SUCCESS,
       payload: {
-        data: data.map((dataItem: any) => {
+        data: response.data.map((dataItem: any) => {
           return {
+            key: '123',
             fetchUrl: dataItem.fetchUrl,
           }
         })
@@ -28,51 +30,43 @@ function* loadUserFetchs(personKey: string): IterableIterator<any> {
   }
 }
 
-function initWebsocket() {
+function* initWebsocket() {
+  const userDetails: UserDetails = yield select(getUserDetails);
+
   return eventChannel(emit => {
     const ws = new WebSocket('ws://localhost:9000');
 
     ws.onopen = () => {
-      // TODO: send correct user name
-      ws.send('test');
+      ws.send(JSON.stringify({
+        type: 'ADD_USER',
+        name: userDetails.name,
+      }))
     }
 
     ws.onmessage = (event) => {
-      const { type, payload } = JSON.parse(event.data);
+      const { type: actionType, payload } = JSON.parse(event.data);
       const payloadObj = JSON.parse(payload);
 
-      switch (type) {
-        case UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE_SUCCESS: {
-          return emit({
-            type: UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE_SUCCESS,
-            payload: {
-              fetch: {
-                key: '12345',
-                fetchUrl: payloadObj.fetchUrl,
-              },
-              sampleUrls: payloadObj.samples.map((sample: any) => ({
-                key: sample.url,
-                url: sample.url,
-                title: sample.meta.title,
-                image: sample.meta.image,
-              })),
+      switch (actionType) {
+        case UserFetchsActions.SAVE_EXPLORED_FETCH_SAMPLES: {
+          const { fetchUrl, samples } = payloadObj;
+          return emit(saveExploredFetchSamples(
+            {
+              key: fetchUrl,
+              fetchUrl,
             },
-          })
+            mapFetchs(samples as FetchSample[]),
+          ));
         }
-        case UserFetchsActions.ADD_FETCH_RESULT: {
-          return emit({
-            type: UserFetchsActions.ADD_FETCH_RESULT,
-            payload: {
-              resultUrls: payloadObj.resultUrls.map((result: any) => ({
-                key: result.url,
-                url: result.url,
-                title: result.meta.title,
-                image: result.meta.image,
-              }))
-            }
-          })
+        case UserFetchsActions.SAVE_FETCH_RESULTS: {
+          const fetchResults = mapFetchs(payloadObj.resultUrls as FetchSample[]);
+          return emit(saveFetchResults(fetchResults));
         }
       }
+    }
+
+    ws.onclose = () => {
+      alert('close');
     }
 
     return () => {
@@ -85,7 +79,7 @@ function* addNewFetchUrlForExplore(fetchUrl: string, personKey: string): Iterabl
   try {
     yield call(Api.createFetchExplore, fetchUrl, personKey);
   } catch (error) {
-
+    // TODO: handle errors
   }
 }
 
@@ -93,7 +87,7 @@ function* watchFetch(fetchUrl: string, sampleUrl: string, personKey: string): It
   try {
     yield call(Api.createWatchFetch, fetchUrl, sampleUrl, personKey);
   } catch (error) {
-
+    // TODO: handle errors
   }
 }
 
@@ -106,6 +100,7 @@ export function* loadUserFetchsSaga(): IterableIterator<any> {
 }
 
 export function* wsSaga(): IterableIterator<any> {
+  yield take(AuthActions.INIT_WEBSOCKET);
   const channel = yield call(initWebsocket);
   while (true) {
     const action = yield take(channel);
@@ -127,4 +122,15 @@ export function* watchFetchSaga(): IterableIterator<any> {
     const userDetails = yield select(getUserDetails);
     yield fork(watchFetch, fetchUrl, sampleUrl, userDetails.name);
   }
+}
+
+// helpers
+
+const mapFetchs = (fetchs: FetchSample[]) => {
+  return fetchs.map(({ url, meta: { title, image } }) => ({
+    key: url,
+    url,
+    title,
+    image,
+  }))
 }

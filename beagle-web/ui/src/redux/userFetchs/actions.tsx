@@ -18,8 +18,12 @@ export const addNewFetchUrlForExplore = createAction(UserFetchsActions.ADD_NEW_F
   return (fetchUrl: string) => resolve({ fetchUrl })
 })
 
-export const addNewFetchUrlForExploreSuccess = createAction(UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE, resolve => {
-  return (fetchUrl: string) => resolve({ fetchUrl })
+export const saveExploredFetchSamples = createAction(UserFetchsActions.SAVE_EXPLORED_FETCH_SAMPLES, resolve => {
+  return (fetch: any, sampleUrls: any) => resolve({ fetch, sampleUrls })
+})
+
+export const saveFetchResults = createAction(UserFetchsActions.SAVE_FETCH_RESULTS, resolve => {
+  return (resultUrls: any) => resolve({ resultUrls })
 })
 
 export const watchFetch = createAction(UserFetchsActions.WATCH_FETCH, resolve => {

@@ -6,6 +6,7 @@ export interface AddNewFetchExploreState {
 }
 
 export interface AddNewFetchExploreProps {
+  fetchSamplesReceived: boolean;
   addNewFetchUrlForExplore: (fetchUrl: string) => any;
 }
 
@@ -27,16 +28,22 @@ export default class AddNewFetchExplore extends React.Component<AddNewFetchExplo
   }
 
   render() {
+    const {
+      fetchSamplesReceived,
+    } = this.props;
+
     return (
       <div style={{ display: 'flex', marginBottom: 20 }}>
         <Input
           placeholder='Enter fetch url for explore'
+          disabled={!fetchSamplesReceived}
           value={this.state.fetchInput}
           style={{ width: 400, borderRadius: 0 }}
           onChange={this.handleChange}
         />
         <Button
           type='primary'
+          disabled={!fetchSamplesReceived}
           style={{ borderRadius: 0 }}
           onClick={this.handleAdd}
         >

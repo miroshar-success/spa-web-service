@@ -7,6 +7,7 @@ import {
   signInFailure,
   getCurrentUserSuccess,
   getCurrentUserFailure,
+  initWebsocket,
 } from '@redux/auth/actions';
 import { push } from 'react-router-redux';
 import { TokenManager } from '@components/ProtectedRoute/ProtectedRoute';
@@ -50,6 +51,7 @@ function* getCurrentUser(): IterableIterator<any> {
       role: Roles.USER,
       authorized: true,
     }))
+    yield put(initWebsocket())
   } catch (error) {
     yield put(getCurrentUserFailure(error.message))
   }
@@ -67,7 +69,6 @@ export function* signInUserSaga(): IterableIterator<any> {
     const { payload: { user } } = yield take(AuthActions.SIGN_IN)
     yield call(signInUser, user);
   }
-
 }
 
 export function* getCurrentUserSaga(): IterableIterator<any> {

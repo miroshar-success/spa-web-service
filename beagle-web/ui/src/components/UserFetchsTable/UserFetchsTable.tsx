@@ -104,24 +104,33 @@ export default class UserFetchsTable extends React.Component<any> {
       }
     ]
 
-    return (
-      <Table
-        columns={columns}
-        pagination={false}
-        dataSource={this.props.sampleUrls}
-      />
-    )
+    if (this.props.sampleUrls.length > 0) {
+      return (
+        <Table
+          columns={columns}
+          pagination={false}
+          dataSource={this.props.sampleUrls}
+        />
+      )
+    }
+
+    return null;
+
   }
 
   render() {
     const {
       fetches,
+      loading,
       resultUrls,
     } = this.props;
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <AddNewFetchExplore addNewFetchUrlForExplore={this.props.addNewFetchUrlForExplore} />
+        <AddNewFetchExplore
+          fetchSamplesReceived={!loading}
+          addNewFetchUrlForExplore={this.props.addNewFetchUrlForExplore}
+        />
         <WatchFetchModal
           onOk={this.onOk}
           onCancel={this.onCancel}
@@ -130,12 +139,15 @@ export default class UserFetchsTable extends React.Component<any> {
         <Table
           columns={this.columns}
           pagination={false}
+          loading={loading}
           dataSource={fetches}
-          expandedRowRender={this.expandedRowRender}
+          expandedRowRender={this.props.sampleUrls.length > 0 ? this.expandedRowRender : undefined}
           size='small'
           style={{ width: '100%', lineHeight: 1.8 }}
         />
-        <FetchResultsTable dataSource={resultUrls} />
+        {
+          resultUrls.length > 0 && <FetchResultsTable dataSource={resultUrls} />
+        }
         {/* <ImageLoader
           src='https://img.av.by/images/vendor/google-play-badge.png'
           renderFetched={(image: any) => (

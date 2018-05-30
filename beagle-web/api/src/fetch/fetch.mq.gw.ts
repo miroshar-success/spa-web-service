@@ -10,40 +10,54 @@ export class FetchResultsGw {
 
   static THIS: FetchResultsGw;
 
-  private clients: any[] = []
-
   constructor() {
     FetchResultsGw.THIS = this
-    console.log('clients1', wss.clients);
+
     wss.on('connection', ws => {
-      // ws.clientName = 'admin';
-      // wss.clients.forEach(element => {
-      //   console.log(element);
-      // });
+
       ws.on('message', message => {
-        this.clients.push({
-          clientName: message,
-          client: ws,
-        })
+        const { type, name } = JSON.parse(message);
+        switch (type) {
+          case 'ADD_USER': {
+            ws.personKey = name;
+            break;
+          }
+        }
       })
     })
+
+    const interval = setInterval(() => {
+      wss.clients.forEach(ws => {
+        if (ws.readyState === WebSocket.CLOSE) {
+          ws.terminate();
+        }
+      })
+    }, 30000);
+
   }
 
   @MqGwConsumer({ name: 'fetchExplore', gateway: 'person.clientName' })
   async consumeExploreMessage(message: any) {
-    this.clients[0].client.send(JSON.stringify({
-      type: 'ADD_NEW_FETCH_FOR_EXPLORE_SUCCESS',
-      payload: JSON.stringify(message),
-    }))
+    wss.clients.forEach(ws => {
+      if (ws.personKey === message.person.personKey) {
+        ws.send(JSON.stringify({
+          type: 'SAVE_EXPLORED_FETCH_SAMPLES',
+          payload: JSON.stringify(message),
+        }))
+      }
+    })
   }
-
 
   @MqGwConsumer({ name: 'fetchResult', gateway: 'person.clientName' })
   async consumeMessage(message: any) {
-    this.clients[0].client.send(JSON.stringify({
-      type: 'ADD_FETCH_RESULT',
-      payload: JSON.stringify(message),
-    }))
+    wss.clients.forEach(ws => {
+      if (ws.personKey === message.person.personKey) {
+        ws.send(JSON.stringify({
+          type: 'SAVE_FETCH_RESULTS',
+          payload: JSON.stringify(message),
+        }))
+      }
+    })
   }
 
 }

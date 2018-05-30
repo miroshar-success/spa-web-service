@@ -1,13 +1,11 @@
 import axios from 'axios'
 
-export const fetchData = (url: string, personKey: string) => {
-  return axios.post(url, {
+export const fetchData = (personKey: string) => {
+  return axios.post('/fetch/get', {
     clientName: 'beagleWeb',
     personKey,
     personInfo: null,
   })
-    .then(response => response.data)
-    .catch(error => error)
 }
 
 export const createFetchExplore = (fetchUrl: string, personKey: string) => {

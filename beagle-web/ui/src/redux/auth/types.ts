@@ -15,7 +15,8 @@ export enum AuthActions {
   GET_CURRENT_USER_SUCCESS = 'GET_CURRENT_USER_SUCCESS',
   GET_CURRENT_USER_FAILURE = 'GET_CURRENT_USER_FAILURE',
 
-  REDIRECT_TO_LOGIN_PAGE = 'REDIRECT_TO_LOGIN_PAGE'
+  REDIRECT_TO_LOGIN_PAGE = 'REDIRECT_TO_LOGIN_PAGE',
+  INIT_WEBSOCKET = 'INIT_WEBSOCKET'
 }
 
 export enum Roles {
@@ -30,4 +31,10 @@ export interface SignInUser {
 
 export interface SignUpUser extends SignInUser {
   name: string;
+}
+
+export interface UserDetails {
+  name: string;
+  authorized: boolean;
+  role: Roles;
 }
