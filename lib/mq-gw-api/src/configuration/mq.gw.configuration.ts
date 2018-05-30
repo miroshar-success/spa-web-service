@@ -36,10 +36,8 @@ export class MqGwConfiguration {
 
 
     enable(){
-         this.proxyService.connect()
-             .catch(error => console.log(chalk.red(`[mq-gw-api] - [connection-error] `, error)))
-             .then(_ => this.proxyService.proxify())
-             .catch(error => console.log(chalk.red(`[mq-gw-api] - [proxy-error] `, error)));
+         this.proxyService.connectProxies()
+             .catch(error => console.log(chalk.red(`[mq-gw-api] - [connection-error] `, error)));
     }
 
 }

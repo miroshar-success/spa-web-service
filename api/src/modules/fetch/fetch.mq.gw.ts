@@ -18,9 +18,9 @@ export class FetchResultsGw {
     }
 
 
-    @MqGwProducer({name:'fetchExplore', gateway:'person.clientName'})
+    @MqGwProducer({name:'fetchExploreResult', gateway:'person.clientName'})
     async publishFetchExploreResult(fetchExploreResultDto: FetchExploreResultDto) {
-        console.log("publishFetchExplore: " + JSON.stringify(fetchExploreResultDto));
+        console.log("publishFetchExploreResult: " + JSON.stringify(fetchExploreResultDto));
         return fetchExploreResultDto;
     }
 
@@ -39,8 +39,7 @@ export class FetchResultsGw {
 
     @MqGwConsumer({name:'fetchMessage', gateway:'person.clientName'})
     async consumeMessage(message: any) {
-        console.log("THIS: ", this);
-        console.log("MESSAGE:"+ message.status);
+        console.log("consumeMessage:", message);
     }
 
 }

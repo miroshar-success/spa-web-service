@@ -18,7 +18,7 @@ import {Meta, SampleOut} from "../../../../scanner/src/modules/scanner.sample";
 export class FetchService {
 
     private static FETCH_WATCH_JOB_NAME: string = 'fetchWatcherJob';
-    private static FETCH_WATCH_JOB_REPEAT_TIME: string = '1 seconds';
+    private static FETCH_WATCH_JOB_REPEAT_TIME: string = '10 seconds';
 
     private static FETCH_REINIT_PERIOD: number = 500;
 
@@ -95,7 +95,7 @@ export class FetchService {
         // get current job if exists
         let fetchModel = await this.fetchDataService.getByPersonKeyClientNameFetchUrl(personKey, clientName, fetchUrl);
 
-        console.log('**********************************fetch**************************');
+        console.log('FETCH: ', fetchModel);
 
         if (!fetchModel) {
             throw new HttpException(FetchMessage.FETCH_EXISTS_ERROR.messageKey, HttpStatus.BAD_REQUEST);
@@ -106,7 +106,9 @@ export class FetchService {
         if (!selectors || selectors.length < 1) {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
         }
-        let selectorModel = selectors.find(selector => selector.sample.url === sampleUrl);
+        let selectorModel = selectors.find(selector => selector.sample && selector.sample.url && selector.sample.url === sampleUrl);
+
+        console.log('SELECTOR: ', selectorModel);
 
         if (!selectorModel == null && selectorModel.selector) {
             throw new HttpException(FetchMessage.FETCH_SELECTOR_NOT_FOUND_ERROR.messageKey, HttpStatus.BAD_REQUEST);
@@ -181,7 +183,7 @@ export class FetchService {
                 let fetchId: string = fetch._id;
                 let fetchUrl: string = fetch.fetchUrl;
                 let selector: string = fetch.selector;
-                let lastResult: string = fetch.lastResult[0].url;
+                let lastResult: string = fetch.lastResult[0] ? fetch.lastResult[0].url : void 0;
 
                 // TODO move to data service
                 this.fetchModel.updateOne(fetch, {$set: {updateDate: new Date()}}, () => {

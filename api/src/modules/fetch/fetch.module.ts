@@ -14,7 +14,7 @@ import {FetchResultsGw} from "./fetch.mq.gw";
 import PersonModule from "../person/person.module";
 
 @Module({
-  modules: [AgendaModule, rabbitMqModule, ScannerModule, DatabaseModule, PersonModule],
+  modules: [AgendaModule, rabbitMqModule, DatabaseModule, PersonModule],
   controllers: [FetchController, FetchDataController],
   components: [FetchService, ScannerClient, ...fetchProviders, FetchDataService, FetchResultsGw]
 })

@@ -1,6 +1,6 @@
 import {NestFactory} from '@nestjs/core';
 import {ApplicationModule} from './app.module';
-import MqGwScannerConfig from "./modules/config/mq.gw.scanner.config";
+import MqGwScannerConfig from "./modules/config/scanner.mq.gw.config";
 // import MqGwApi from "./modules/config/mq.gw.api.config";
 
 
