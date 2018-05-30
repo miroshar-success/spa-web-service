@@ -163,15 +163,15 @@ export class FetchService {
         });
 
         // await agenda ready
-        await new Promise(resolve => this.agenda.once('ready', resolve));
+        // await new Promise(resolve => this.agenda.once('ready', resolve));
+        this.agenda.on('ready', function () {
+            this.agenda.start();
+        });
         // start fetch task
         this.agenda.every(FetchService.FETCH_WATCH_JOB_REPEAT_TIME, FetchService.FETCH_WATCH_JOB_NAME);
     }
 
     private async initWatch(initDate: Date) {
-
-        console.log("AGENDA INIT");
-
         let currentFetches: FetchModel[] = await this.fetchModel.find({
             'state': FetchState.active,
             'updateDate': {'$lt': initDate}
