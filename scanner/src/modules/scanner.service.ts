@@ -71,8 +71,7 @@ export class ScannerService {
         const selectorList: SelectorOut[] = await this.updateMeta(listPaths.toOut(), url);
 
         response.sampleUrl = selectorList.map(x => x.sample);
-
-        this.apiClient.produceFetchResult({fetchId,fetchUrl:url,...response});
+        const res = await this.apiClient.produceFetchResult({fetchId,fetchUrl:url,...response});
     };
 
     getPathsByUrl = async (url: string, selector: string): Promise<[CssPath[], Meta]> => {
