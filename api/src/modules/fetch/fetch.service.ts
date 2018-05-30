@@ -172,9 +172,6 @@ export class FetchService {
     }
 
     private async initWatch(initDate: Date) {
-
-        console.log("AGENDA INIT");
-
         let currentFetches: FetchModel[] = await this.fetchModel.find({
             'state': FetchState.active,
             'updateDate': { '$lt': initDate }
