@@ -36,7 +36,7 @@ export class FetchResultsGw {
 
   }
 
-  @MqGwConsumer({ name: 'fetchExplore', gateway: 'person.clientName' })
+  @MqGwConsumer({ name: 'fetchExploreResult', gateway: 'person.clientName' })
   async consumeExploreMessage(message: any) {
     wss.clients.forEach(ws => {
       if (ws.personKey === message.person.personKey) {

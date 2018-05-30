@@ -51,9 +51,10 @@ export default class UserFetchsTable extends React.Component<any> {
   componentDidMount() {
     const {
       loadUserFetchs,
+      userDetails: { name },
     } = this.props;
 
-    loadUserFetchs('test');
+    loadUserFetchs(name);
   }
 
   openWatchFetchModal = (fetchUrl: string) => {
@@ -148,17 +149,6 @@ export default class UserFetchsTable extends React.Component<any> {
         {
           resultUrls.length > 0 && <FetchResultsTable dataSource={resultUrls} />
         }
-        {/* <ImageLoader
-          src='https://img.av.by/images/vendor/google-play-badge.png'
-          renderFetched={(image: any) => (
-            <div>
-              <img src="https://img.av.by/images/vendor/google-play-badge.png" alt="image" />
-              <span>
-                {image.naturalWidth}
-              </span>
-            </div>
-          )}
-        /> */}
       </div>
     )
   }

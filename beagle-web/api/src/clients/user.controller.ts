@@ -17,14 +17,4 @@ export class UserController {
     await this.userService.signUp(user);
   }
 
-  @Get('test')
-  test(): string {
-    return 'test';
-  }
-
-  @Get('test2')
-  test2(): string {
-    return 'test2';
-  }
-
 }

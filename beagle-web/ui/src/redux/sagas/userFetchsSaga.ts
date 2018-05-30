@@ -94,6 +94,8 @@ function* watchFetch(fetchUrl: string, sampleUrl: string, personKey: string): It
 function* removeFetch(fetchUrl: string, personKey: string): IterableIterator<any> {
   try {
     yield call(Api.removeFetch, fetchUrl, personKey);
+    // review this
+    yield fork(loadUserFetchs, personKey)
   } catch (error) {
 
   }

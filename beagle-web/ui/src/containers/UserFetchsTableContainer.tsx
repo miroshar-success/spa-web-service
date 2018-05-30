@@ -5,9 +5,11 @@ import {
   getUserFetchs, getFetchSampleUrls, getResultUrls, getLoadingStatus,
 } from '@redux/userFetchs/reducer';
 import UserFetchsTable from '@components/UserFetchsTable/UserFetchsTable';
+import { getUserDetails } from '@redux/auth/reducer';
 
 
 const mapStateToProps = (state: RootState) => ({
+  userDetails: getUserDetails(state),
   fetches: getUserFetchs(state),
   sampleUrls: getFetchSampleUrls(state),
   resultUrls: getResultUrls(state),
