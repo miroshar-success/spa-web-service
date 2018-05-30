@@ -21,7 +21,7 @@ export namespace MqGwDecorators {
 
     export function MqGwConfig(value: MqGwConfigType): Function {
         return function(target: any) {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-enable-mq-gw] class ${target.name} [config] `), value);
+            // console.log(chalk.green(`[mq-gw-api] - [decorator-enable-mq-gw] class ${target.name} [config] `), value);
             if (value.components.length < 1) console.log(warn('[mq-gw-api] WARNING! No components to scan specified!'));
             Object.defineProperty(target.prototype, `config`, {value});
 
@@ -30,7 +30,7 @@ export namespace MqGwDecorators {
 
     export function MqGwConsumer({name, gateway = 'clientKey'}: MqGwDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-consumer] method ${methodName} [params] `), {name,gateway});
+            // console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-consumer] method ${methodName} [params] `), {name,gateway});
             Reflect.defineMetadata(MQ_GW_METHOD_CONSUMER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_GATEWAY_METADATA, gateway, descriptor.value);
@@ -40,7 +40,7 @@ export namespace MqGwDecorators {
 
     export function MqGwProducer({name, gateway = 'clientKey'}: MqGwDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-producer] method ${methodName} [params] `), {name,gateway});
+            // console.log(chalk.green(`[mq-gw-api] - [decorator-mq-gw-producer] method ${methodName} [params] `), {name,gateway});
             Reflect.defineMetadata(MQ_GW_METHOD_PRODUCER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_GATEWAY_METADATA, gateway, descriptor.value);
@@ -50,7 +50,7 @@ export namespace MqGwDecorators {
 
     export function MqProducer({name, client}: MqDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-producer] method ${methodName} [params] `), {name, client});
+            // console.log(chalk.green(`[mq-gw-api] - [decorator-mq-producer] method ${methodName} [params] `), {name, client});
             Reflect.defineMetadata(MQ_GW_METHOD_PRODUCER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_CLIENT_METADATA, client, descriptor.value);
@@ -60,7 +60,7 @@ export namespace MqGwDecorators {
 
     export function MqConsumer({name, client}: MqDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-consumer] method ${methodName} [params] `), {name, client});
+            // console.log(chalk.green(`[mq-gw-api] - [decorator-mq-consumer] method ${methodName} [params] `), {name, client});
             Reflect.defineMetadata(MQ_GW_METHOD_CONSUMER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_CLIENT_METADATA, client, descriptor.value);
