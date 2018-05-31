@@ -4,6 +4,40 @@ import {Meta, Sample, SampleList, SelectorOut} from './scanner.sample';
 
 const fs = require('fs');
 
+jest.mock('node-horseman', () => {
+    return jest.fn().mockImplementation(() => {
+        return {
+            userAgent: userAgent,
+            open: open,
+            waitForNextPage: waitForNextPage,
+            html: html,
+            close: close,
+            foo: () => {}
+        };
+    });
+});
+
+function userAgent () {
+    return {open}
+}
+
+function open () {
+    return {waitForNextPage}
+}
+
+function waitForNextPage () {
+    return {html}
+}
+
+function html () {
+    return new Promise((res,rej) => setTimeout(()=>res(defaultHTML),10))
+}
+
+function close() {
+    return new Promise((res,rej) => setTimeout(()=>res(defaultHTML),10));
+}
+
+
 const testMuchTemplate = (site,urls) => {
     urls.forEach((x,index)=>{
         describe(site + ` test ${index + 1}`, () => testTemplate(x.url,x.regex));
@@ -19,8 +53,6 @@ const testTemplate = (url, regex) => {
         scannerService = new ScannerService();
 
         const {html} = await scannerService.download(url);
-
-        jest.mock('node-horseman');
 
         allExamples = await scannerService.fetchAll(url);
     });
@@ -77,10 +109,8 @@ describe('scanner test', () => {
 
     describe('download', () => {
         beforeAll(() => {
-
-            jest.mock('node-horseman');
-
             scannerService = new ScannerService();
+
         });
 
         it('should return string containing html ', async () => {
@@ -101,7 +131,6 @@ describe('scanner test', () => {
     describe('findAll', () => {
 
         beforeAll(() => {
-            jest.mock('jsdom');
             jest.mock('needle');
         });
 
@@ -193,7 +222,6 @@ describe('scanner test', () => {
     describe('findOne', () => {
 
         beforeAll(() => {
-            jest.mock('jsdom');
             jest.mock('needle');
         });
 
@@ -226,7 +254,6 @@ describe('scanner test', () => {
 
     describe('updateMeta', () => {
         beforeAll(() => {
-            jest.mock('jsdom');
             jest.mock('needle');
             scannerService = new ScannerService();
         });
