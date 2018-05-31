@@ -28,12 +28,12 @@ export default class WatchFetchModal extends React.Component<WatchFetchModalProp
     this.onCancel();
   }
 
-  onCancel = () => {
-    this.setState({ visible: false });
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ sampleUrl: event.target.value })
   }
 
-  handleChange = (event: React.EventHandler<HTMLInputElement>) => {
-    this.setState({ sampleUrl: event.target.value })
+  onCancel = () => {
+    this.setState({ visible: false });
   }
 
   showModal = () => {
@@ -50,7 +50,7 @@ export default class WatchFetchModal extends React.Component<WatchFetchModalProp
           Watch <Icon type='play-circle-o' />
         </Button>
         <Modal
-          title='Watch fetch'
+          title='Watch fetch dialog'
           footer={null}
           onCancel={this.onCancel}
           visible={this.state.visible}

@@ -1,9 +1,13 @@
 
 import * as React from 'react';
 import { Table } from 'antd';
+
 const cat = require('../../../assets/images/cat.jpeg')
 const fingerPointer = require('../../../assets/images/finger-pointer.png')
 
+export interface FetchResultsTableProps {
+
+}
 
 export default class FetchResultsTable extends React.Component<any> {
 
@@ -12,7 +16,7 @@ export default class FetchResultsTable extends React.Component<any> {
       title: 'Image',
       dataIndex: 'image',
       key: 'image',
-      render: (text: any, record: any) => <img src={cat} width={130} height={100} alt="image" />
+      render: (text: string, record: any) => <img src={cat} width={130} height={100} alt="image" />
     },
     {
       title: 'Title',
@@ -23,7 +27,7 @@ export default class FetchResultsTable extends React.Component<any> {
       title: 'Result url',
       dataIndex: 'url',
       key: 'url',
-      render: (text: any, record: any) => <a href={text}>{text}</a>
+      render: (text: string, record: any) => <a href={text}>{text}</a>
     },
 
   ]
