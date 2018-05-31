@@ -5,29 +5,43 @@ import { Table } from 'antd';
 const cat = require('../../../assets/images/cat.jpeg')
 const fingerPointer = require('../../../assets/images/finger-pointer.png')
 
-export interface FetchResultsTableProps {
+export interface TableRecord {
+  key: string;
+  url: string;
+  image: string;
+  title: string;
+}
 
+export interface FetchResultsTableProps {
+  dataSource: Array<TableRecord>;
 }
 
 export default class FetchResultsTable extends React.Component<any> {
 
-  private readonly columns: any = [
+  private readonly columns = [
     {
       title: 'Image',
-      dataIndex: 'image',
+      dataIndex: 'meta',
       key: 'image',
-      render: (text: string, record: any) => <img src={cat} width={130} height={100} alt="image" />
+      render: (text: string, record: TableRecord) => <img src={cat} width={130} height={100} alt="image" />
     },
     {
       title: 'Title',
-      dataIndex: 'title',
+      dataIndex: 'meta',
       key: 'title',
+      render: (text: any, record: any) => <span>{record.meta.title}</span>
+    },
+    {
+      title: 'Fetch url',
+      dataIndex: 'fetchUrl',
+      key: 'fetchUrl',
+      render: (text: string) => <a href={text}>{text}</a>
     },
     {
       title: 'Result url',
       dataIndex: 'url',
       key: 'url',
-      render: (text: string, record: any) => <a href={text}>{text}</a>
+      render: (text: string) => <a href={text}>{text}</a>
     },
 
   ]

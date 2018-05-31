@@ -4,7 +4,7 @@ import { RootState } from '@redux/rootReducer';
 
 export const initialState: UserFetchsState = {
   fetches: [],
-  sampleUrls: [],
+  sampleUrls: {},
   resultUrls: [],
   loading: false,
 }
@@ -18,6 +18,7 @@ export function userFetchsReducer(state: UserFetchsState = initialState, action:
         fetches: data,
       }
     }
+    case UserFetchsActions.REMOVE_FETCH:
     case UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE: {
       return {
         ...state,
@@ -25,19 +26,36 @@ export function userFetchsReducer(state: UserFetchsState = initialState, action:
       }
     }
     case UserFetchsActions.SAVE_EXPLORED_FETCH_SAMPLES: {
-      const { fetch, sampleUrls } = action.payload;
+      const {
+        exploredFetchWithSamples: {
+          key,
+          url,
+          meta,
+          sampleUrls,
+        }
+      } = action.payload;
+
       return {
         ...state,
-        fetches: state.fetches.concat(fetch),
-        sampleUrls: state.sampleUrls.concat(sampleUrls),
+        fetches: state.fetches.concat({ key, url, meta }),
+        sampleUrls: {
+          ...state.sampleUrls,
+          [key]: sampleUrls,
+        },
         loading: false,
       }
     }
     case UserFetchsActions.SAVE_FETCH_RESULTS: {
-      const { resultUrls } = action.payload;
+      const { fetchResults } = action.payload;
       return {
         ...state,
-        resultUrls: state.resultUrls.concat(resultUrls),
+        resultUrls: state.resultUrls.concat(...fetchResults),
+      }
+    }
+    case UserFetchsActions.REMOVE_FETCH_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
       }
     }
     default: return state;

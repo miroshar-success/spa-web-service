@@ -1,32 +1,41 @@
 
 import * as React from 'react';
 import { Table, Button, Icon } from 'antd';
+import { ColumnProps } from 'antd/lib/table';
 import AddNewFetchExplore from './AddNewFetchExplore';
 import FetchResultsTable from './FetchResultsTable';
 import WatchFetchModal from './WatchFetchModal';
+import { UserFetch, UserFetchSamples } from '@redux/userFetchs/types';
 
 const cat = require('../../../assets/images/cat.jpeg');
 
-export interface TableRecord {
-  key: string;
-  fetchUrl: string;
-}
-
 export default class UserFetchsTable extends React.Component<any> {
 
-  private readonly columns: any = [
+  private readonly columns: ColumnProps<UserFetch>[] = [
+    {
+      title: 'Image',
+      dataIndex: 'meta',
+      key: 'image',
+      render: (text, record) => <img src={cat} width={130} height={100} alt="image" />
+    },
+    {
+      title: 'Title',
+      dataIndex: 'meta',
+      key: 'title',
+      render: (text, record) => <span>{record.meta.title}</span>
+    },
     {
       title: 'Fetch url',
-      dataIndex: 'fetchUrl',
-      key: 'fetchUrl',
-      render: (text: string, ) => <a href={text}>{text}</a>
+      dataIndex: 'url',
+      key: 'url',
+      render: (text) => <a href={text}>{text}</a>
     },
     {
       dataIndex: 'Watch Action',
-      render: (record: TableRecord) => {
+      render: (text, record) => {
         return (
           <WatchFetchModal
-            fetchUrl={record.fetchUrl}
+            fetchUrl={record && record.url}
             watchFetch={this.props.watchFetch}
           />
         )
@@ -34,11 +43,11 @@ export default class UserFetchsTable extends React.Component<any> {
     },
     {
       dataIndex: 'Remove Action',
-      render: (record: TableRecord) => {
+      render: (text, record) => {
         return (
           <Button
             type='danger'
-            onClick={() => this.removeFetch(record.fetchUrl)}
+            onClick={() => this.removeFetch(record.url)}
           >
             Remove <Icon type='delete' />
           </Button>
@@ -60,34 +69,35 @@ export default class UserFetchsTable extends React.Component<any> {
     this.props.removeFetch(fetchUrl);
   }
 
-  expandedRowRender = (record: any) => {
-    const columns: any = [
+  expandedRowRender = (record: UserFetchSamples) => {
+    const columns: ColumnProps<UserFetchSamples>[] = [
       {
         title: 'Image',
-        dataIndex: 'image',
+        dataIndex: 'meta',
         key: 'image',
         width: 200,
-        render: (text: any, record: any) => <img src={cat} width={130} height={100} alt="image" />
+        render: (text, record) => <img src={cat} width={130} height={100} alt="image" />
       },
       {
         title: 'Title',
-        dataIndex: 'title',
-        key: 'title'
+        dataIndex: 'meta',
+        key: 'title',
+        render: (text, record) => <span>{record.meta.title}</span>
       },
       {
         title: 'Sample url',
         dataIndex: 'url',
         key: 'url',
-        render: (text: any, record: any) => <a href={text}>{text}</a>
+        render: (text, record) => <a href={text}>{text}</a>
       }
     ]
 
-    if (this.props.sampleUrls.length > 0) {
+    if (Object.keys(this.props.sampleUrls).length > 0) {
       return (
         <Table
           columns={columns}
           pagination={false}
-          dataSource={this.props.sampleUrls}
+          dataSource={this.props.sampleUrls[record.key]}
         />
       )
     }
@@ -114,7 +124,7 @@ export default class UserFetchsTable extends React.Component<any> {
           pagination={false}
           loading={loading}
           dataSource={fetches}
-          expandedRowRender={this.props.sampleUrls.length > 0 ? this.expandedRowRender : undefined}
+          expandedRowRender={Object.keys(this.props.sampleUrls).length > 0 ? this.expandedRowRender : undefined}
           size='small'
           style={{ width: '100%', lineHeight: 1.8 }}
         />

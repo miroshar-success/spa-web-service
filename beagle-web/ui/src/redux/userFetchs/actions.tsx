@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 import { TableActions } from '@redux/common/table/types';
-import { UserFetchsActions } from './types';
+import { UserFetchsActions, ExploredUserFetch, UserFetchResults } from './types';
 
 export const loadUserFetchs = createAction(`${TableActions.LOAD_DATA}`, resolve => {
   return (personKey: string) => resolve({ personKey })
@@ -19,11 +19,11 @@ export const addNewFetchUrlForExplore = createAction(UserFetchsActions.ADD_NEW_F
 })
 
 export const saveExploredFetchSamples = createAction(UserFetchsActions.SAVE_EXPLORED_FETCH_SAMPLES, resolve => {
-  return (fetch: any, sampleUrls: any) => resolve({ fetch, sampleUrls })
+  return (exploredFetchWithSamples: ExploredUserFetch) => resolve({ exploredFetchWithSamples })
 })
 
 export const saveFetchResults = createAction(UserFetchsActions.SAVE_FETCH_RESULTS, resolve => {
-  return (resultUrls: any) => resolve({ resultUrls })
+  return (fetchResults: UserFetchResults[]) => resolve({ fetchResults })
 })
 
 export const watchFetch = createAction(UserFetchsActions.WATCH_FETCH, resolve => {
@@ -32,4 +32,8 @@ export const watchFetch = createAction(UserFetchsActions.WATCH_FETCH, resolve =>
 
 export const removeFetch = createAction(UserFetchsActions.REMOVE_FETCH, resolve => {
   return (fetchUrl: string) => resolve({ fetchUrl });
+})
+
+export const removeFetchSuccess = createAction(UserFetchsActions.REMOVE_FETCH_SUCCESS, resolve => {
+  return () => resolve();
 })
