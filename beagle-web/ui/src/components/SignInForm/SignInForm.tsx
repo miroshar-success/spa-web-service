@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Form, Input, Button, Icon, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Link } from 'react-router-dom';
-import { SignInUser } from '@redux/auth/types';
 import ErrorMessage from '@components/common/ErrorMessage/ErrorMessage';
+import { SignInSignature } from '@redux/auth/types';
 
 const FormItem = Form.Item;
 
@@ -11,7 +11,7 @@ export interface SignInFormProps {
   form: WrappedFormUtils;
   loading: boolean;
   error: string;
-  signIn: (user: SignInUser) => any;
+  signIn: SignInSignature;
 }
 
 class SignInForm extends React.Component<SignInFormProps> {
@@ -19,9 +19,14 @@ class SignInForm extends React.Component<SignInFormProps> {
   handleSubmit = (event: React.SyntheticEvent<EventTarget>) => {
     event.preventDefault();
 
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.props.signIn(values);
+    const {
+      form: { validateFields },
+      signIn,
+    } = this.props;
+
+    validateFields((errors, values) => {
+      if (!errors) {
+        signIn(values);
       }
     });
 
@@ -54,7 +59,10 @@ class SignInForm extends React.Component<SignInFormProps> {
                   }
                 ]
               })(
-                <Input prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your email' />
+                <Input
+                  placeholder='Input your email'
+                  prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                />
               )
             }
           </FormItem>
@@ -68,12 +76,20 @@ class SignInForm extends React.Component<SignInFormProps> {
                   }
                 ]
               })(
-                <Input type='password' prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your password' />
+                <Input
+                  type='password'
+                  prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  placeholder='Input your password'
+                />
               )
             }
           </FormItem>
           <FormItem>
-            <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+            <Button
+              htmlType='submit'
+              type='primary'
+              style={{ width: '100%' }}
+            >
               Sign in
              </Button>
           </FormItem>

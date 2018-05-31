@@ -1,43 +1,73 @@
 import * as React from 'react';
-import { Input, Button, Modal } from 'antd';
+import { Input, Button, Modal, Icon } from 'antd';
 
 export interface WatchFetchModalProps {
-  open: boolean,
-  onOk: Function,
-  onCancel: Function,
+  fetchUrl: string;
+  watchFetch: Function;
 }
 
-export default class WatchFetchModal extends React.Component<WatchFetchModalProps> {
+export interface WatchFetchModalState {
+  sampleUrl: string;
+  visible: boolean;
+}
 
-  state = {
-    inputValue: '',
+export default class WatchFetchModal extends React.Component<WatchFetchModalProps, WatchFetchModalState> {
+
+  readonly state: WatchFetchModalState = {
+    sampleUrl: '',
+    visible: false,
   }
 
   handleSubmit = () => {
-    this.props.onOk(this.state.inputValue);
+    const {
+      fetchUrl,
+      watchFetch,
+    } = this.props;
+
+    watchFetch(fetchUrl, this.state.sampleUrl);
+    this.onCancel();
   }
 
   onCancel = () => {
-    this.props.onCancel();
+    this.setState({ visible: false });
   }
 
-  handleChange = (event: any) => {
-    this.setState({
-      inputValue: event.target.value
-    })
+  handleChange = (event: React.EventHandler<HTMLInputElement>) => {
+    this.setState({ sampleUrl: event.target.value })
+  }
+
+  showModal = () => {
+    this.setState({ visible: true });
   }
 
   render() {
     return (
-      <Modal
-        title='Watch fetch'
-        footer={null}
-        onCancel={this.onCancel}
-        visible={this.props.open}
-      >
-        <Input placeholder='Enter fetch sample url' style={{ marginBottom: 20 }} onChange={this.handleChange} />
-        <Button type='primary' onClick={this.handleSubmit}>OK</Button>
-      </Modal>
+      <React.Fragment>
+        <Button
+          type='primary'
+          onClick={this.showModal}
+        >
+          Watch <Icon type='play-circle-o' />
+        </Button>
+        <Modal
+          title='Watch fetch'
+          footer={null}
+          onCancel={this.onCancel}
+          visible={this.state.visible}
+        >
+          <Input
+            placeholder='Enter fetch sample url'
+            style={{ marginBottom: 20 }}
+            onChange={this.handleChange}
+          />
+          <Button
+            type='primary'
+            onClick={this.handleSubmit}
+          >
+            Start watch
+          </Button>
+        </Modal>
+      </React.Fragment>
     )
   }
 }

@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import ErrorBoundary from '@components/ErrorBoundary/ErrorBoundary';
 import Root from './Root';
 
 ReactDOM.render(

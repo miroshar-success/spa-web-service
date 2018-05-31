@@ -1,15 +1,15 @@
 import { TableActions } from '@redux/common/table/types';
-import { UserFetchsActions } from './types';
+import { UserFetchsActions, UserFetchsState } from './types';
 import { RootState } from '@redux/rootReducer';
 
-export const initialState: any = {
+export const initialState: UserFetchsState = {
   fetches: [],
   sampleUrls: [],
   resultUrls: [],
-  loading: false
+  loading: false,
 }
 
-export function userFetchsReducer(state: any = initialState, action: any) {
+export function userFetchsReducer(state: UserFetchsState = initialState, action: any) {
   switch (action.type) {
     case TableActions.LOAD_DATA_SUCCESS: {
       const { data } = action.payload;

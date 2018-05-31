@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
 import { getUserDetails } from '@redux/auth/reducer';
+import { UserDetails } from '@redux/auth/types';
 import { getCurrentUser, redirectToLoginPage } from '@redux/auth/actions';
 
 export class TokenManager {
@@ -15,30 +16,38 @@ export class TokenManager {
   }
 }
 
-export default function secure(Component: any) {
-  class Auth extends React.Component<any> {
+const secure = <P extends object>(Component: React.ComponentType<P>) => {
+
+  interface AuthProps {
+    userDetails: UserDetails;
+    getCurrentUser: Function;
+    redirectToLoginPage: Function;
+  }
+
+  class Auth extends React.Component<P & AuthProps> {
 
     componentWillMount() {
       const {
-        redirectToLoginPage,
-        getCurrentUser,
         userDetails
       } = this.props;
 
-      this.checkAuth(redirectToLoginPage, getCurrentUser, userDetails);
+      this.checkAuth(userDetails);
     }
 
-    componentWillReceiveProps(nextProps: any) {
+    componentWillReceiveProps(nextProps: P & AuthProps) {
       const {
-        redirectToLoginPage,
-        getCurrentUser,
         userDetails
       } = nextProps;
 
-      this.checkAuth(redirectToLoginPage, getCurrentUser, userDetails);
+      this.checkAuth(userDetails);
     }
 
-    checkAuth = (redirectToLoginPage: Function, getCurrentUser: Function, userDetails: any) => {
+    checkAuth = (userDetails: UserDetails) => {
+      const {
+        getCurrentUser,
+        redirectToLoginPage,
+      } = this.props;
+
       if (!TokenManager.getToken()) {
         redirectToLoginPage();
       } else if (!userDetails.authorized) {
@@ -60,3 +69,5 @@ export default function secure(Component: any) {
 
   return connect(mapStateToProps, { getCurrentUser, redirectToLoginPage })(Auth);
 }
+
+export default secure;

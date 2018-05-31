@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { SignInUser, SignUpUser } from './types'
-import { TokenManager } from '../../components/ProtectedRoute/ProtectedRoute';
+import { TokenManager } from '@components/ProtectedRoute/ProtectedRoute';
 
 export const signUp = (user: SignUpUser) => {
   return axios.post('/beagle-web/signup', { ...user })

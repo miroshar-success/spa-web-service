@@ -24,13 +24,19 @@ export default class UserFetchsTable extends React.Component<any> {
       dataIndex: 'Watch Action',
       render: (text: any, record: any) => {
         return (
-          <Button
-            type='primary'
-            onClick={() => this.openWatchFetchModal(record.fetchUrl)}
-          >
-            Watch <Icon type='play-circle-o' />
-          </Button>
+          <WatchFetchModal
+            fetchUrl={record.fetchUrl}
+            watchFetch={this.props.watchFetch}
+          />
         )
+        // return (
+        //   <Button
+        //     type='primary'
+        //     onClick={() => this.openWatchFetchModal(record.fetchUrl)}
+        //   >
+        //     Watch <Icon type='play-circle-o' />
+        //   </Button>
+        // )
       }
     },
     {
@@ -132,11 +138,11 @@ export default class UserFetchsTable extends React.Component<any> {
           fetchSamplesReceived={!loading}
           addNewFetchUrlForExplore={this.props.addNewFetchUrlForExplore}
         />
-        <WatchFetchModal
+        {/* <WatchFetchModal
           onOk={this.onOk}
           onCancel={this.onCancel}
           open={this.state.open}
-        />
+        /> */}
         <Table
           columns={this.columns}
           pagination={false}

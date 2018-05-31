@@ -6,6 +6,17 @@ export enum UserFetchsActions {
   REMOVE_FETCH = 'REMOVE_FETCH',
 }
 
+// user fetchs state shape
+
+export interface UserFetchsState {
+  readonly fetches: Array<FetchSample>;
+  readonly sampleUrls: Array<FetchSample>;
+  readonly resultUrls: Array<FetchSample>,
+  readonly loading: boolean;
+}
+
+// models
+
 export interface FetchSample {
   url: string;
   meta: {

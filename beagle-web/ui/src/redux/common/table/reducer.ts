@@ -74,4 +74,4 @@ export const getData = (state: RootState, prefix: TableReducerNameSubscribers) =
 export const getSearchString = (state: RootState, prefix: TableReducerNameSubscribers) => state.persons.searchString
 export const getPagination = (state: RootState, prefix: TableReducerNameSubscribers) => state.persons.pagination
 export const getLoadingStatus = (state: RootState, prefix: TableReducerNameSubscribers) => state.persons.loading
-export const getError = (state: RootState, prefix: TableReducerNameSubscribers) => state.persons.error
+export const getErrorMessage = (state: RootState, prefix: TableReducerNameSubscribers) => state.persons.error
