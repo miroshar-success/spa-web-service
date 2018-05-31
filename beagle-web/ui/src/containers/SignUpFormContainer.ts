@@ -2,13 +2,13 @@ import { connect } from 'react-redux';
 import SignUpForm from '../components/SignUpForm/SignUpForm';
 import {
   getLoadingStatus,
-  getError,
+  getErrorMessage,
 } from '@redux/auth/reducer';
 import { signUp } from '@redux/auth/actions';
 import { RootState } from '@redux/rootReducer';
 
 const mapStateToProps = (state: RootState) => ({
-  error: getError(state),
+  error: getErrorMessage(state),
   loading: getLoadingStatus(state),
 })
 

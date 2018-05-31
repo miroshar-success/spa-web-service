@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Dropdown from './Dropdown';
+
 import './errorBoundary.css';
-// import errorImg from '../../../assets/images/error.png';
+const errorImg = require('../../../assets/images/error.png');
 
 export interface ErrorInfo {
   componentStack: string,
@@ -48,7 +49,7 @@ export default class ErrorBoundary extends React.Component<ErrorBoundaryProps, E
     return errorInfo ? (
       <div style={{ width: 800, margin: '0 auto' }}>
         <div style={{ width: 450, margin: '0 auto' }}>
-          {/* <img src={errorImg} alt="Application error" /> */}
+          <img src={errorImg} alt="Application error" />
           <p className='ErrorBoundary-error-message'>Opps! Something went wrong</p>
         </div>
         <Dropdown

@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
-import SignInForm from '../components/SignInForm/SignInForm';
+import SignInForm from '@components/SignInForm/SignInForm';
 import { signIn } from '@redux/auth/actions';
 import {
   getLoadingStatus,
-  getError,
+  getErrorMessage,
 } from '@redux/auth/reducer';
 import { RootState } from '@redux/rootReducer';
 
 const mapStateToProps = (state: RootState) => ({
-  error: getError(state),
+  error: getErrorMessage(state),
   loading: getLoadingStatus(state),
 })
 
