@@ -7,6 +7,7 @@ import FetchResultsTable from './FetchResultsTable';
 import WatchFetchModal from './WatchFetchModal';
 import { Models, Signatures } from '@redux/userFetchs/types';
 import { Models as AuthModels } from '@redux/auth/types';
+import './userFetchsTable.css';
 
 const cat = require('../../../assets/images/cat.jpeg');
 
@@ -133,6 +134,7 @@ export default class UserFetchsTable extends React.Component<UserFetchsTableProp
           addNewFetchUrlForExplore={this.props.addNewFetchUrlForExplore}
         />
         <Table
+          className='table-nested'
           columns={this.columns}
           pagination={false}
           loading={loading}
