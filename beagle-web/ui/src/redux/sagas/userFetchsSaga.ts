@@ -2,12 +2,11 @@
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { TableActions } from '@redux/common/table/types';
-import { UserFetchsActions, UserFetch } from '@redux/userFetchs/types';
+import { UserFetchsActions, Models } from '@redux/userFetchs/types';
 import { getUserDetails } from '@redux/auth/reducer';
 import * as Api from '@redux/userFetchs/api';
 import { saveExploredFetchSamples, saveFetchResults, removeFetchSuccess } from '@redux/userFetchs/actions';
-import { AuthActions, UserDetails } from '@redux/auth/types';
-
+import { AuthActions, Models as AuthModels } from '@redux/auth/types';
 
 // worker sagas
 function* loadUserFetchs(personKey: string): IterableIterator<any> {
@@ -30,7 +29,7 @@ function* loadUserFetchs(personKey: string): IterableIterator<any> {
 }
 
 function* initWebsocket() {
-  const userDetails: UserDetails = yield select(getUserDetails);
+  const userDetails: AuthModels.UserDetails = yield select(getUserDetails);
 
   return eventChannel(emit => {
     const ws = new WebSocket('ws://localhost:9000');
@@ -54,13 +53,13 @@ function* initWebsocket() {
               key: id,
               url: fetchUrl,
               meta,
-              sampleUrls: mapFetchs(samples as UserFetch[])
+              sampleUrls: mapFetchs(samples as Models.UserFetch[])
             }
           ));
         }
         case UserFetchsActions.SAVE_FETCH_RESULTS: {
           const { fetchUrl, resultUrls } = payloadObj;
-          return emit(saveFetchResults(mapFetchResults(resultUrls as UserFetch[], fetchUrl)));
+          return emit(saveFetchResults(mapFetchResults(resultUrls as Models.UserFetch[], fetchUrl)));
         }
       }
     }
@@ -145,7 +144,7 @@ export function* removeFetchSaga(): IterableIterator<any> {
 
 // helpers
 
-const mapFetchs = (fetchs: UserFetch[]) => {
+const mapFetchs = (fetchs: Models.UserFetch[]) => {
   return fetchs.map(({ url, meta }) => ({
     key: url,
     url,
@@ -153,7 +152,7 @@ const mapFetchs = (fetchs: UserFetch[]) => {
   }))
 }
 
-const mapFetchResults = (fetchs: UserFetch[], fetchUrl: string) => {
+const mapFetchResults = (fetchs: Models.UserFetch[], fetchUrl: string) => {
   return fetchs.map(({ url, meta }) => ({
     key: url,
     fetchUrl,

@@ -1,36 +1,32 @@
 import { createAction } from 'typesafe-actions';
 import { TableActions } from '@redux/common/table/types';
-import { UserFetchsActions, ExploredUserFetch, UserFetchResults } from './types';
+import { UserFetchsActions, Models, Signatures } from './types';
 
-export const loadUserFetchs = createAction(`${TableActions.LOAD_DATA}`, resolve => {
+export const loadUserFetchs: Signatures.LoadUserFetchs = createAction(`${TableActions.LOAD_DATA}`, resolve => {
   return (personKey: string) => resolve({ personKey })
 });
 
 export const loadUserFetchsSuccess = createAction(`${TableActions.LOAD_DATA_SUCCESS}`, resolve => {
-  return (fetchs: any[]) => resolve({ fetchs })
+  return (fetchs: Models.UserFetch[]) => resolve({ fetchs })
 })
 
-export const removeData = createAction(`${TableActions.REMOVE_DATA}`, resolve => {
-  return (fetchUrl: string) => resolve({ fetchUrl })
-});
-
-export const addNewFetchUrlForExplore = createAction(UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE, resolve => {
+export const addNewFetchUrlForExplore: Signatures.AddNewFetchForExplore = createAction(UserFetchsActions.ADD_NEW_FETCH_FOR_EXPLORE, resolve => {
   return (fetchUrl: string) => resolve({ fetchUrl })
 })
 
 export const saveExploredFetchSamples = createAction(UserFetchsActions.SAVE_EXPLORED_FETCH_SAMPLES, resolve => {
-  return (exploredFetchWithSamples: ExploredUserFetch) => resolve({ exploredFetchWithSamples })
+  return (exploredFetchWithSamples: Models.ExploredUserFetch) => resolve({ exploredFetchWithSamples })
 })
 
 export const saveFetchResults = createAction(UserFetchsActions.SAVE_FETCH_RESULTS, resolve => {
-  return (fetchResults: UserFetchResults[]) => resolve({ fetchResults })
+  return (fetchResults: Models.UserFetchResults[]) => resolve({ fetchResults })
 })
 
-export const watchFetch = createAction(UserFetchsActions.WATCH_FETCH, resolve => {
+export const watchFetch: Signatures.WatchFetch = createAction(UserFetchsActions.WATCH_FETCH, resolve => {
   return (fetchUrl: string, sampleUrl: string) => resolve({ fetchUrl, sampleUrl })
 })
 
-export const removeFetch = createAction(UserFetchsActions.REMOVE_FETCH, resolve => {
+export const removeFetch: Signatures.RemoveFetch = createAction(UserFetchsActions.REMOVE_FETCH, resolve => {
   return (fetchUrl: string) => resolve({ fetchUrl });
 })
 

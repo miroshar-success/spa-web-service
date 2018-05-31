@@ -3,7 +3,7 @@ import { RootState } from '@redux/rootReducer';
 
 const initialState: AuthState = {
   userDetails: {
-    name: null,
+    name: '',
     role: Roles.USER,
     authorized: false,
   },

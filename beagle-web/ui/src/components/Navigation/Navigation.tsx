@@ -4,7 +4,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { RootState } from '@redux/rootReducer';
 import { getUserDetails } from '@redux/auth/reducer';
-import { Roles, UserDetails } from '@redux/auth/types';
+import { Roles, Models as AuthModels } from '@redux/auth/types';
 
 export interface LinkItemProps {
   path: string;
@@ -34,7 +34,7 @@ const renderAdminNavigation = () => (
 )
 
 export interface NavigationProps {
-  userDetails: UserDetails;
+  userDetails: AuthModels.UserDetails;
   dispatch: Dispatch;
 }
 

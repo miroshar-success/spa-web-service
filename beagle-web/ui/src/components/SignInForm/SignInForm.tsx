@@ -3,7 +3,7 @@ import { Form, Input, Button, Icon, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '@components/common/ErrorMessage/ErrorMessage';
-import { SignInSignature } from '@redux/auth/types';
+import { Signatures } from '@redux/auth/types';
 
 const FormItem = Form.Item;
 
@@ -11,7 +11,7 @@ export interface SignInFormProps {
   form: WrappedFormUtils;
   loading: boolean;
   error: string;
-  signIn: SignInSignature;
+  signIn: Signatures.SignIn;
 }
 
 class SignInForm extends React.Component<SignInFormProps> {

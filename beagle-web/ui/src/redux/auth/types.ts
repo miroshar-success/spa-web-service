@@ -27,35 +27,51 @@ export enum Roles {
 // auth state shape
 
 export interface AuthState {
-  readonly userDetails: UserDetails;
+  readonly userDetails: Models.UserDetails;
   readonly error: string;
   readonly loading: boolean;
 }
 
 // models
 
-export interface SignInUser {
-  email: string;
-  password: string;
-}
+export namespace Models {
 
-export interface SignUpUser extends SignInUser {
-  name: string;
-}
+  export interface SignInUser {
+    email: string;
+    password: string;
+  }
 
-export interface UserDetails {
-  name: string | null;
-  authorized: boolean;
-  role: Roles;
+  export interface SignUpUser extends SignInUser {
+    name: string;
+  }
+
+  export interface UserDetails {
+    name: string;
+    authorized: boolean;
+    role: Roles;
+  }
+
 }
 
 
 // action creators return type signature
 
-export type SignInSignature = {
-  (user: SignInUser): object
-}
+export namespace Signatures {
 
-export type SignUpSignature = {
-  (user: SignUpUser): object
+  export type SignIn = {
+    (user: Models.SignInUser): object
+  }
+
+  export type SignUp = {
+    (user: Models.SignUpUser): object
+  }
+
+  export type GetCurrentUser = {
+    (): object
+  }
+
+  export type RedirectToLoginPage = {
+    (): object
+  }
+
 }

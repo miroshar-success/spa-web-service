@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
 import { getUserDetails } from '@redux/auth/reducer';
-import { UserDetails } from '@redux/auth/types';
+import { Models as AuthModels, Signatures as AuthSignatures } from '@redux/auth/types';
 import { getCurrentUser, redirectToLoginPage } from '@redux/auth/actions';
 
 export class TokenManager {
@@ -19,9 +19,9 @@ export class TokenManager {
 const secure = <P extends object>(Component: React.ComponentType<P>) => {
 
   interface AuthProps {
-    userDetails: UserDetails;
-    getCurrentUser: Function;
-    redirectToLoginPage: Function;
+    userDetails: AuthModels.UserDetails;
+    getCurrentUser: AuthSignatures.GetCurrentUser;
+    redirectToLoginPage: AuthSignatures.RedirectToLoginPage;
   }
 
   class Auth extends React.Component<P & AuthProps> {
@@ -42,7 +42,7 @@ const secure = <P extends object>(Component: React.ComponentType<P>) => {
       this.checkAuth(userDetails);
     }
 
-    checkAuth = (userDetails: UserDetails) => {
+    checkAuth = (userDetails: AuthModels.UserDetails) => {
       const {
         getCurrentUser,
         redirectToLoginPage,

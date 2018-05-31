@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Input, Button, Modal, Icon } from 'antd';
+import { Signatures } from '@redux/userFetchs/types';
 
 export interface WatchFetchModalProps {
   fetchUrl: string;
-  watchFetch: Function;
+  watchFetch: Signatures.WatchFetch;
 }
 
 export interface WatchFetchModalState {

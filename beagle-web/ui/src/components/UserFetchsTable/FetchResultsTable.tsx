@@ -1,47 +1,42 @@
 
 import * as React from 'react';
 import { Table } from 'antd';
+import { ColumnProps } from 'antd/lib/table';
+import { Models } from '@redux/userFetchs/types';
 
 const cat = require('../../../assets/images/cat.jpeg')
 const fingerPointer = require('../../../assets/images/finger-pointer.png')
 
-export interface TableRecord {
-  key: string;
-  url: string;
-  image: string;
-  title: string;
-}
-
 export interface FetchResultsTableProps {
-  dataSource: Array<TableRecord>;
+  dataSource: Array<Models.UserFetchResults>;
 }
 
-export default class FetchResultsTable extends React.Component<any> {
+export default class FetchResultsTable extends React.Component<FetchResultsTableProps> {
 
-  private readonly columns = [
+  private readonly columns: ColumnProps<Models.UserFetchResults>[] = [
     {
       title: 'Image',
       dataIndex: 'meta',
       key: 'image',
-      render: (text: string, record: TableRecord) => <img src={cat} width={130} height={100} alt="image" />
+      render: (text, record) => <img src={cat} width={130} height={100} alt="image" />
     },
     {
       title: 'Title',
       dataIndex: 'meta',
       key: 'title',
-      render: (text: any, record: any) => <span>{record.meta.title}</span>
+      render: (text, record) => <span>{record.meta.title}</span>
     },
     {
       title: 'Fetch url',
       dataIndex: 'fetchUrl',
       key: 'fetchUrl',
-      render: (text: string) => <a href={text}>{text}</a>
+      render: (text) => <a href={text}>{text}</a>
     },
     {
       title: 'Result url',
       dataIndex: 'url',
       key: 'url',
-      render: (text: string) => <a href={text}>{text}</a>
+      render: (text) => <a href={text}>{text}</a>
     },
 
   ]

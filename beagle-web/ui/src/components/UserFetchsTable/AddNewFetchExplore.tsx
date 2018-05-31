@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Input, Button } from 'antd';
+import { Signatures } from '@redux/userFetchs/types';
 
 export interface AddNewFetchExploreState {
   fetchUrl: string;
@@ -7,7 +8,7 @@ export interface AddNewFetchExploreState {
 
 export interface AddNewFetchExploreProps {
   fetchSamplesReceived: boolean;
-  addNewFetchUrlForExplore: (fetchUrl: string) => any;
+  addNewFetchUrlForExplore: Signatures.AddNewFetchForExplore;
 }
 
 export default class AddNewFetchExplore extends React.Component<AddNewFetchExploreProps, AddNewFetchExploreState> {

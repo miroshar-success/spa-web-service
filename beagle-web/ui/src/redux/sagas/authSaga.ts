@@ -1,5 +1,5 @@
 import { take, call, put } from 'redux-saga/effects';
-import { AuthActions, SignInUser, SignUpUser, Roles } from '@redux/auth/types';
+import { AuthActions, Models, Roles } from '@redux/auth/types';
 import {
   signUpSuccess,
   signUpFailure,
@@ -8,24 +8,24 @@ import {
   getCurrentUserSuccess,
   getCurrentUserFailure,
   initWebsocket,
+  redirectToLoginPage,
 } from '@redux/auth/actions';
 import { push } from 'react-router-redux';
 import { TokenManager } from '@components/ProtectedRoute/ProtectedRoute';
 
 import * as Api from '@redux/auth/api';
 
-function* signUpUser(user: SignUpUser): IterableIterator<any> {
+function* signUpUser(user: Models.SignUpUser): IterableIterator<any> {
   try {
     yield call(Api.signUp, user);
     yield put(signUpSuccess());
-    // Todo: call redirectToLoginPageSaga
-    yield put(push('/signin'));
+    yield put(redirectToLoginPage());
   } catch (error) {
     yield put(signUpFailure(error.message));
   }
 }
 
-function* signInUser(user: SignInUser): IterableIterator<any> {
+function* signInUser(user: Models.SignInUser): IterableIterator<any> {
   try {
     const { data: { accessToken, name } } = yield call(Api.signIn, user);
     TokenManager.setToken(accessToken);

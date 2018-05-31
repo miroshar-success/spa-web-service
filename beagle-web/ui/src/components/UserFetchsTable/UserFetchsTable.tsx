@@ -5,13 +5,26 @@ import { ColumnProps } from 'antd/lib/table';
 import AddNewFetchExplore from './AddNewFetchExplore';
 import FetchResultsTable from './FetchResultsTable';
 import WatchFetchModal from './WatchFetchModal';
-import { UserFetch, UserFetchSamples } from '@redux/userFetchs/types';
+import { Models, Signatures } from '@redux/userFetchs/types';
+import { Models as AuthModels } from '@redux/auth/types';
 
 const cat = require('../../../assets/images/cat.jpeg');
 
-export default class UserFetchsTable extends React.Component<any> {
+export interface UserFetchsTableProps {
+  userDetails: AuthModels.UserDetails;
+  fetches: Models.ExploredUserFetch[];
+  sampleUrls: Models.UserFetchSamples;
+  resultUrls: Models.UserFetchResults[];
+  loading: boolean;
+  loadUserFetchs: Signatures.LoadUserFetchs;
+  addNewFetchUrlForExplore: Signatures.AddNewFetchForExplore;
+  watchFetch: Signatures.WatchFetch;
+  removeFetch: Signatures.RemoveFetch;
+}
 
-  private readonly columns: ColumnProps<UserFetch>[] = [
+export default class UserFetchsTable extends React.Component<UserFetchsTableProps> {
+
+  private readonly columns: ColumnProps<Models.UserFetch>[] = [
     {
       title: 'Image',
       dataIndex: 'meta',
@@ -69,8 +82,8 @@ export default class UserFetchsTable extends React.Component<any> {
     this.props.removeFetch(fetchUrl);
   }
 
-  expandedRowRender = (record: UserFetchSamples) => {
-    const columns: ColumnProps<UserFetchSamples>[] = [
+  expandedRowRender = (record: Models.UserFetch) => {
+    const columns: ColumnProps<Models.UserFetch>[] = [
       {
         title: 'Image',
         dataIndex: 'meta',

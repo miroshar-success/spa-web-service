@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, Input, Button, Icon, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Link } from 'react-router-dom';
-import { SignUpSignature } from '@redux/auth/types';
+import { Signatures } from '@redux/auth/types';
 import ErrorMessage from '@components/common/ErrorMessage/ErrorMessage';
 
 require('../common/styles/antdForm.css');
@@ -13,7 +13,7 @@ export interface SignUpFormProps {
   form: WrappedFormUtils;
   loading: boolean;
   error: string;
-  signUp: SignUpSignature;
+  signUp: Signatures.SignUp;
 }
 
 class SignUpForm extends React.Component<SignUpFormProps> {

@@ -10,29 +10,58 @@ export enum UserFetchsActions {
 // user fetchs state shape
 
 export interface UserFetchsState {
-  readonly fetches: Array<UserFetch>;
-  readonly sampleUrls: any;
-  readonly resultUrls: any,
+  readonly fetches: Array<Models.UserFetch>;
+  readonly sampleUrls: Models.UserFetchSamples;
+  readonly resultUrls: Array<Models.UserFetchResults>,
   readonly loading: boolean;
 }
 
 // models
 
-export interface UserFetch {
-  key: string,
-  url: string;
-  meta: {
-    title: string;
-    image: string;
+export namespace Models {
+
+  export interface UserFetch {
+    key: string,
+    url: string;
+    meta: {
+      title: string;
+      image: string;
+    }
   }
+
+  export interface ExploredUserFetch extends UserFetch {
+    sampleUrls: Array<UserFetch>,
+  }
+
+  export interface UserFetchResults extends UserFetch {
+    fetchUrl: string,
+  }
+
+  export interface UserFetchSamples {
+    [key: string]: Array<UserFetch>;
+  }
+
 }
 
-export interface ExploredUserFetch extends UserFetch {
-  sampleUrls: Array<UserFetch>,
-}
 
-export interface UserFetchResults {
-  fetchUrl: string,
-}
+// action creators return type signature
 
-export interface UserFetchSamples extends UserFetch { }
+export namespace Signatures {
+
+  export type LoadUserFetchs = {
+    (personKey: string): object;
+  }
+
+  export type AddNewFetchForExplore = {
+    (fetchUrl: string): object;
+  }
+
+  export type WatchFetch = {
+    (fetchUrl: string, sampleUrl: string): object;
+  }
+
+  export type RemoveFetch = {
+    (fetchUrl: string): object;
+  }
+
+}
