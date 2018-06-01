@@ -4,8 +4,9 @@ import { Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { Models } from '@redux/userFetchs/types';
 
+import '@components/common/styles/antdTableFix.css';
+
 const cat = require('../../../assets/images/cat.jpeg')
-const fingerPointer = require('../../../assets/images/finger-pointer.png')
 
 export interface FetchResultsTableProps {
   dataSource: Array<Models.UserFetchResults>;
@@ -47,14 +48,13 @@ export default class FetchResultsTable extends React.Component<FetchResultsTable
     } = this.props;
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 50 }}>
-        <h1>Fetch results</h1>
-        <img src={fingerPointer} width={200} height={200} style={{ marginBottom: 20 }} alt="pointer" />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Table
           columns={this.columns}
           dataSource={dataSource}
           size='small'
           style={{ width: '100%', lineHeight: 1.8 }}
+          title={() => <h3 style={{ textAlign: 'center' }}>Fetch results</h3>}
         />
       </div>
     )

@@ -8,6 +8,7 @@ import WatchFetchModal from './WatchFetchModal';
 import { Models, Signatures } from '@redux/userFetchs/types';
 import { Models as AuthModels } from '@redux/auth/types';
 import './userFetchsTable.css';
+import '@components/common/styles/antdTableFix.css';
 
 const cat = require('../../../assets/images/cat.jpeg');
 
@@ -45,26 +46,23 @@ export default class UserFetchsTable extends React.Component<UserFetchsTableProp
       render: (text) => <a href={text}>{text}</a>
     },
     {
-      dataIndex: 'Watch Action',
+      title: 'Actions',
+      dataIndex: 'Actions',
       render: (text, record) => {
         return (
-          <WatchFetchModal
-            fetchUrl={record && record.url}
-            watchFetch={this.props.watchFetch}
-          />
-        )
-      }
-    },
-    {
-      dataIndex: 'Remove Action',
-      render: (text, record) => {
-        return (
-          <Button
-            type='danger'
-            onClick={() => this.removeFetch(record.url)}
-          >
-            Remove <Icon type='delete' />
-          </Button>
+          <div style={{ display: 'flex' }}>
+            <WatchFetchModal
+              fetchUrl={record && record.url}
+              watchFetch={this.props.watchFetch}
+            />
+            <Button
+              type='danger'
+              style={{ marginLeft: 10 }}
+              onClick={() => this.removeFetch(record.url)}
+            >
+              Remove <Icon type='delete' />
+            </Button>
+          </div>
         )
       }
     },
@@ -141,7 +139,8 @@ export default class UserFetchsTable extends React.Component<UserFetchsTableProp
           dataSource={fetches}
           expandedRowRender={Object.keys(this.props.sampleUrls).length > 0 ? this.expandedRowRender : undefined}
           size='small'
-          style={{ width: '100%', lineHeight: 1.8 }}
+          style={{ width: '100%', lineHeight: 1.8, marginBottom: 20 }}
+          title={() => <h3 style={{ textAlign: 'center' }}>Available fetches</h3>}
         />
         {
           resultUrls.length > 0 && <FetchResultsTable dataSource={resultUrls} />
