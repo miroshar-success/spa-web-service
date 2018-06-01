@@ -1,60 +1,30 @@
 import {ScannerService} from './scanner.service';
 import {ScannerInstance, SELECTORS} from './scanner.instance';
-import {Meta, Sample, SampleList, SelectorOut} from './scanner.sample';
+import {FetchOut, Meta, Sample, SampleList, SampleResponse, SelectorOut} from './scanner.sample';
 
 const fs = require('fs');
 
-jest.mock('node-horseman', () => {
-    return jest.fn().mockImplementation(() => {
-        return {
-            userAgent: userAgent,
-            open: open,
-            waitForNextPage: waitForNextPage,
-            html: html,
-            close: close,
-            foo: () => {}
-        };
-    });
-});
 
-function userAgent () {
-    return {open}
-}
-
-function open () {
-    return {waitForNextPage}
-}
-
-function waitForNextPage () {
-    return {html}
-}
-
-function html () {
-    return new Promise((res,rej) => setTimeout(()=>res(defaultHTML),10))
-}
-
-function close() {
-    return new Promise((res,rej) => setTimeout(()=>res(defaultHTML),10));
-}
-
-
-const testMuchTemplate = (site,urls) => {
-    urls.forEach((x,index)=>{
-        describe(site + ` test ${index + 1}`, () => testTemplate(x.url,x.regex));
+const testMuchTemplate = (site, urls) => {
+    urls.forEach((x, index) => {
+        describe(site + ` test ${index + 1}`, () => testTemplate(x.url, x.regex));
     });
 };
 
 const testTemplate = (url, regex) => {
-    let allExamples;
+    let allExamples: FetchOut;
+    let oneGroup: SampleResponse;
     let scannerService;
+    let html;
 
     beforeAll(async () => {
 
         scannerService = new ScannerService();
 
-        const {html} = await scannerService.download(url);
+        html = (await scannerService.download(url)).html;
 
-        allExamples = await scannerService.fetchAll(url);
+        allExamples = await scannerService.fetchAllResult(url,html);
+        oneGroup = await scannerService.fetchOneResult(url,html,allExamples.selectors[0].selector);
     });
 
     it('sample list isn\'t empty', () => {
@@ -70,24 +40,22 @@ const testTemplate = (url, regex) => {
         expect(regex.test(allExamples.selectors[0].sample.url)).toBeTruthy();
     });
 
-    it('another not', () => {
-        allExamples.selectors.filter((item, index) => index !== 0).map(x =>
+   /* it('another not', () => {
+        allExamples.filter((item, index) => index !== 0).map(x =>
             expect(regex.test(x.sample.url)).toBeFalsy()
         );
-    });
+    });*/
 
     it('should have similar url for each sample', async () => {
-        const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
-        expect(firstExample.isSampleUrlNotFound).toBeFalsy();
-        firstExample.sampleUrl.map(x => {
+        expect(oneGroup.isSelectorEmpty).toBeFalsy();
+        oneGroup.sampleUrl.map(x => {
             expect(regex.test(x.url)).toBeTruthy()
         })
     });
 
     it('should have meta for each sample', async () => {
-        const firstExample = await scannerService.fetchOne(url, allExamples.selectors[0].selector);
-        expect(firstExample.isSampleUrlNotFound).toBeFalsy();
-        firstExample.sampleUrl.map(x => {
+        expect(oneGroup.isSelectorEmpty).toBeFalsy();
+        oneGroup.sampleUrl.map(x => {
             expect(x.meta.image).not.toBe(null);
             expect(x.meta.title).not.toBe(null);
         })
@@ -101,16 +69,17 @@ describe('scanner test', () => {
     const cssPath = JSON.parse(fs.readFileSync('./__mocks__/__mockData__/csspaths.json'));
     const selectorPath = ['html', 'body', 'div', 'div', 'div', 'ul', 'li', 'a'];
     const urlPath = 'https://www.tut.by/resource/';
+    const url = 'https://www.ebay.com/';
     const defaultHtml = fs.readFileSync('./__mocks__/__mockData__/scanner.html', 'utf8');
 
     beforeAll(() => {
         scannerService = new ScannerService();
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
     });
 
     describe('download', () => {
         beforeAll(() => {
             scannerService = new ScannerService();
-
         });
 
         it('should return string containing html ', async () => {
@@ -202,17 +171,11 @@ describe('scanner test', () => {
             expect(groups.sample[0].data[0].href).toBe('http://test.com/test')
         });
 
-        it('should return meta', async () => {
-            const allSamples = await scannerService.fetchAll(urlPath);
-            expect(allSamples.meta.title).not.toEqual(null);
-            expect(allSamples.meta.image).not.toEqual(null);
-        });
-
         it('should find all group and return one sample per group', async () => {
-            const allSamples = await scannerService.fetchAll(urlPath);
-            expect(allSamples.selectors.length).toBeGreaterThan(0);
-            expect(allSamples.selectors.length).toBeLessThanOrEqual(10);
-            allSamples.selectors.map(x =>
+            const allSamples = await scannerService.fetchAllPure(urlPath, defaultHtml);
+            expect(allSamples.length).toBeGreaterThan(0);
+            expect(allSamples.length).toBeLessThanOrEqual(10);
+            allSamples.map(x =>
                 expect(typeof x.sample.length).toBe('undefined')
             );
 
@@ -226,29 +189,29 @@ describe('scanner test', () => {
         });
 
         it('should return all sample by url and selector', async () => {
-            const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]');
-            expect(result.isSampleUrlNotFound).toBeFalsy();
-            expect(result.isSelectorEmpty).toBeFalsy();
-            expect(result.sampleUrl.length).toBe(15);
+            const [result,isSelectorEmpty,isSampleUrlNotFound] = await scannerService.fetchOnePure(urlPath, defaultHtml, selectorPath.join(' > ') + '[href]');
+            expect(isSampleUrlNotFound).toBeFalsy();
+            expect(isSelectorEmpty).toBeFalsy();
+            expect(result.length).toBe(15);
         });
 
         it('should setup isSelectorEmpty if any nodes not found', async () => {
-            const result = await scannerService.fetchOne(urlPath, 'bad selector');
-            expect(result.isSelectorEmpty).toBeTruthy();
+            const [result,isSelectorEmpty,isSampleUrlNotFound] = await scannerService.fetchOnePure(urlPath,defaultHtml, 'bad selector');
+            expect(isSelectorEmpty).toBeTruthy();
         });
 
         it('should return all sample before given if found', async () => {
             const sampleUrl = 'https://jobs.tut.by/#ua:top_menu_news.tut.by~12';
-            const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]');
-            const resultBeforeSample = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]', sampleUrl);
-            const index = result.sampleUrl.findIndex(x => x.url === sampleUrl);
-            expect(resultBeforeSample.sampleUrl.length).toBe(index);
+            const [result,isSelectorEmpty,isSampleUrlNotFound] = await scannerService.fetchOnePure(urlPath,defaultHtml, selectorPath.join(' > ') + '[href]');
+            const [beforeResult,beforeIsSelectorEmpty,beforeIsSampleUrlNotFound] = await scannerService.fetchOnePure(urlPath, defaultHtml, selectorPath.join(' > ') + '[href]', sampleUrl);
+            const index = result.findIndex(x => x.sample.url === sampleUrl);
+            expect(beforeResult.length).toBe(index);
         });
 
         it('should setup isSampleUrlNotFound if given url doesn\'t contains', async () => {
-            const result = await scannerService.fetchOne(urlPath, selectorPath.join(' > ') + '[href]', 'sample');
-            expect(result.isSampleUrlNotFound).toBe(true);
-            expect(result.sampleUrl.length).toBe(15);
+            const [result,isSelectorEmpty,isSampleUrlNotFound] = await scannerService.fetchOnePure(urlPath,defaultHtml, selectorPath.join(' > ') + '[href]', 'sample');
+            expect(isSampleUrlNotFound).toBe(true);
+            expect(result.length).toBe(15);
         });
     });
 
@@ -284,15 +247,15 @@ describe('scanner test', () => {
             /^(https?)(:)(\/)(\/)(allegro\.pl)(\/)([a-z\d\\-]+)(\.)(html)/
         ));
 
-        describe('av', () => testMuchTemplate('av',[
-            {
-                url: 'https://cars.av.by/infiniti?sort=date&order=desc',
-                regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
-            },
-            {
-                url: 'https://cars.av.by/search?year_from=&year_to=&currency=USD&price_from=&price_to=&sort=date&order=desc',
-                regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)((?:[a-z][a-z]+)).*?(\/).*?((?:[a-z0-9]+)).*?(\/)(\d+)/i
-            }
+        describe('av', () => testMuchTemplate('av', [
+                {
+                    url: 'https://cars.av.by/infiniti?sort=date&order=desc',
+                    regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)(infiniti)(\/)([a-z\d\\-]+)(\/)(\d+)/i
+                },
+                {
+                    url: 'https://cars.av.by/search?year_from=&year_to=&currency=USD&price_from=&price_to=&sort=date&order=desc',
+                    regex: /(https)(:)(\/)(\/)(cars\.av\.by)(\/)((?:[a-z][a-z]+)).*?(\/).*?((?:[a-z0-9]+)).*?(\/)(\d+)/i
+                }
             ]
         ));
 
