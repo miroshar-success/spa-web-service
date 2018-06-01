@@ -19,6 +19,7 @@
     "@types/cheerio": "^0.22.7",
     "cheerio": "^1.0.0-rc.2",
     "dotenv": "^5.0.1",
+    "jsdom": "^11.11.0",
     "lodash": "^4.17.10",
     "metascraper": "^3.11.4",
     "metascraper-author": "^3.11.4",

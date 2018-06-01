@@ -1,48 +1,68 @@
 
 import * as React from 'react';
 import { Table, Button, Icon } from 'antd';
+import { ColumnProps } from 'antd/lib/table';
 import AddNewFetchExplore from './AddNewFetchExplore';
 import FetchResultsTable from './FetchResultsTable';
-import WatchFetchModal from './WatchFetchModal'
-const cat = require('../../../assets/images/cat.jpeg')
+import WatchFetchModal from './WatchFetchModal';
+import { Models, Signatures } from '@redux/userFetchs/types';
+import { Models as AuthModels } from '@redux/auth/types';
+import './userFetchsTable.css';
+import '@components/common/styles/antdTableFix.css';
 
-export default class UserFetchsTable extends React.Component<any> {
+const cat = require('../../../assets/images/cat.jpeg');
 
-  state = {
-    open: false,
-    fetchUrl: '',
-  }
+export interface UserFetchsTableProps {
+  userDetails: AuthModels.UserDetails;
+  fetches: Models.ExploredUserFetch[];
+  sampleUrls: Models.UserFetchSamples;
+  resultUrls: Models.UserFetchResults[];
+  loading: boolean;
+  loadUserFetchs: Signatures.LoadUserFetchs;
+  addNewFetchUrlForExplore: Signatures.AddNewFetchForExplore;
+  watchFetch: Signatures.WatchFetch;
+  removeFetch: Signatures.RemoveFetch;
+}
 
-  private readonly columns: any = [
+export default class UserFetchsTable extends React.Component<UserFetchsTableProps> {
+
+  private readonly columns: ColumnProps<Models.UserFetch>[] = [
+    {
+      title: 'Image',
+      dataIndex: 'meta',
+      key: 'image',
+      render: (text, record) => <img src={cat} width={130} height={100} alt="image" />
+    },
+    {
+      title: 'Title',
+      dataIndex: 'meta',
+      key: 'title',
+      render: (text, record) => <span>{record.meta.title}</span>
+    },
     {
       title: 'Fetch url',
-      dataIndex: 'fetchUrl',
-      key: 'fetchUrl',
-      render: (text: any, record: any) => <a href={text}>{text}</a>
+      dataIndex: 'url',
+      key: 'url',
+      render: (text) => <a href={text}>{text}</a>
     },
     {
-      dataIndex: 'Watch Action',
-      render: (text: any, record: any) => {
+      title: 'Actions',
+      dataIndex: 'Actions',
+      render: (text, record) => {
         return (
-          <Button
-            type='primary'
-            onClick={() => this.openWatchFetchModal(record.fetchUrl)}
-          >
-            Watch <Icon type='play-circle-o' />
-          </Button>
-        )
-      }
-    },
-    {
-      dataIndex: 'Remove Action',
-      render: (text: any, record: any) => {
-        return (
-          <Button
-            type='danger'
-            onClick={() => this.removeFetch(record.fetchUrl)}
-          >
-            Remove <Icon type='delete' />
-          </Button>
+          <div style={{ display: 'flex' }}>
+            <WatchFetchModal
+              fetchUrl={record && record.url}
+              watchFetch={this.props.watchFetch}
+            />
+            <Button
+              type='danger'
+              style={{ marginLeft: 10 }}
+              onClick={() => this.removeFetch(record.url)}
+            >
+              Remove <Icon type='delete' />
+            </Button>
+          </div>
         )
       }
     },
@@ -57,60 +77,39 @@ export default class UserFetchsTable extends React.Component<any> {
     loadUserFetchs(name);
   }
 
-  openWatchFetchModal = (fetchUrl: string) => {
-    this.setState({
-      open: true,
-      fetchUrl,
-    })
-  }
-
-  onCancel = () => {
-    this.setState({
-      open: false,
-      fetchUrl: null,
-    })
-  }
-
-  onOk = (sampleUrl: string) => {
-    this.setState({
-      open: false,
-      fetchUrl: null,
-    })
-    this.props.watchFetch(this.state.fetchUrl, sampleUrl);
-  }
-
   removeFetch = (fetchUrl: string) => {
     this.props.removeFetch(fetchUrl);
   }
 
-  expandedRowRender = (record: any) => {
-    const columns: any = [
+  expandedRowRender = (record: Models.UserFetch) => {
+    const columns: ColumnProps<Models.UserFetch>[] = [
       {
         title: 'Image',
-        dataIndex: 'image',
+        dataIndex: 'meta',
         key: 'image',
         width: 200,
-        render: (text: any, record: any) => <img src={cat} width={130} height={100} alt="image" />
+        render: (text, record) => <img src={cat} width={130} height={100} alt="image" />
       },
       {
         title: 'Title',
-        dataIndex: 'title',
-        key: 'title'
+        dataIndex: 'meta',
+        key: 'title',
+        render: (text, record) => <span>{record.meta.title}</span>
       },
       {
         title: 'Sample url',
         dataIndex: 'url',
         key: 'url',
-        render: (text: any, record: any) => <a href={text}>{text}</a>
+        render: (text, record) => <a href={text}>{text}</a>
       }
     ]
 
-    if (this.props.sampleUrls.length > 0) {
+    if (Object.keys(this.props.sampleUrls).length > 0) {
       return (
         <Table
           columns={columns}
           pagination={false}
-          dataSource={this.props.sampleUrls}
+          dataSource={this.props.sampleUrls[record.key]}
         />
       )
     }
@@ -132,19 +131,16 @@ export default class UserFetchsTable extends React.Component<any> {
           fetchSamplesReceived={!loading}
           addNewFetchUrlForExplore={this.props.addNewFetchUrlForExplore}
         />
-        <WatchFetchModal
-          onOk={this.onOk}
-          onCancel={this.onCancel}
-          open={this.state.open}
-        />
         <Table
+          className='table-nested'
           columns={this.columns}
           pagination={false}
           loading={loading}
           dataSource={fetches}
-          expandedRowRender={this.props.sampleUrls.length > 0 ? this.expandedRowRender : undefined}
+          expandedRowRender={Object.keys(this.props.sampleUrls).length > 0 ? this.expandedRowRender : undefined}
           size='small'
-          style={{ width: '100%', lineHeight: 1.8 }}
+          style={{ width: '100%', lineHeight: 1.8, marginBottom: 20 }}
+          title={() => <h3 style={{ textAlign: 'center' }}>Available fetches</h3>}
         />
         {
           resultUrls.length > 0 && <FetchResultsTable dataSource={resultUrls} />

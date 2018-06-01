@@ -76,6 +76,7 @@ export class FetchService {
             // send to person
             this.fetchResultsGw.publishFetchExploreResult(
                 {
+                    id: fetchId,
                     person: personCoreDto,
                     fetchUrl: fetchModel.fetchUrl,
                     samples: sample,
@@ -146,6 +147,7 @@ export class FetchService {
 
         return userFetches.map(value => {
             return {
+                id: value._id,
                 clientName: clientName,
                 person: person,
                 fetchUrl: value.fetchUrl,

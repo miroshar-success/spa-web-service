@@ -48,7 +48,7 @@ export class CssPath {
         const parent = node.parent;
         if (parent === null || parent.children.length <= 1)
             return node.name;
-        const filtered = parent.children.filter(x => x.name && x.name.trim().length > 0).map(x => CssPath.nodeStructure(x, 2));
+        const filtered = parent.children.filter(x => x.name && x.name.trim().length > 0).map(x => CssPath.nodeStructure(x, 1));
         let isEqualChildTag;
         if (filtered.length > 1)
             isEqualChildTag = filtered.every(x=> _.isEqual(x,filtered[0]));

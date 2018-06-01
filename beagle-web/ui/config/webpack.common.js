@@ -20,6 +20,7 @@ module.exports = {
     alias: {
       '@redux': path.resolve(__dirname, '../src/redux'),
       '@components': path.resolve(__dirname, '../src/components'),
+      '@containers': path.resolve(__dirname, '../src/containers'),
     }
   },
 

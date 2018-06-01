@@ -1,9 +1,9 @@
-import {ApiModelProperty} from '@nestjs/swagger';
+import { ApiModelProperty } from '@nestjs/swagger';
 
 
 import PersonDto from "../../person/person.dto";
-import {FetchMessage} from "./fetch.message";
-import {Meta, Sample, SampleOut, SelectorOut} from "../../../../../scanner/src/modules/scanner.sample";
+import { FetchMessage } from "./fetch.message";
+import { Meta, Sample, SampleOut, SelectorOut } from "../../../../../scanner/src/modules/scanner.sample";
 
 /** FETCH DTO **/
 
@@ -13,7 +13,7 @@ export class CoreFetchDto {
     readonly person: PersonDto;
 }
 
-export class FetchExploreDto  extends CoreFetchDto{
+export class FetchExploreDto extends CoreFetchDto {
     @ApiModelProperty()
     readonly fetchUrl: string;
     @ApiModelProperty()
@@ -23,6 +23,7 @@ export class FetchExploreDto  extends CoreFetchDto{
 
 //fetch explore result MQ
 export class FetchExploreResultDto extends FetchExploreDto {
+    id?: string;
     readonly samples: SampleOut[];
     readonly meta: Meta;
 }
@@ -39,6 +40,7 @@ export class FetchDto extends FetchExploreDto {
 
 //fetch result MQ
 export class FetchResultDto extends CoreFetchDto {
+    readonly fetchUrl: string
     readonly resultUrls: SampleOut[] = [];
     readonly meta: Meta;
 }

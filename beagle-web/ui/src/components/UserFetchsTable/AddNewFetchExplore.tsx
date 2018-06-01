@@ -1,30 +1,29 @@
 import * as React from 'react';
 import { Input, Button } from 'antd';
+import { Signatures } from '@redux/userFetchs/types';
 
 export interface AddNewFetchExploreState {
-  fetchInput: string;
+  fetchUrl: string;
 }
 
 export interface AddNewFetchExploreProps {
   fetchSamplesReceived: boolean;
-  addNewFetchUrlForExplore: (fetchUrl: string) => any;
+  addNewFetchUrlForExplore: Signatures.AddNewFetchForExplore;
 }
 
 export default class AddNewFetchExplore extends React.Component<AddNewFetchExploreProps, AddNewFetchExploreState> {
 
-  state: AddNewFetchExploreState = {
-    fetchInput: ''
+  readonly state: AddNewFetchExploreState = {
+    fetchUrl: '',
   }
 
   handleAdd = () => {
-    this.props.addNewFetchUrlForExplore(this.state.fetchInput);
-    this.setState({ fetchInput: '' });
+    this.props.addNewFetchUrlForExplore(this.state.fetchUrl);
+    this.setState({ fetchUrl: '' });
   }
 
-  handleChange = (event: any) => {
-    this.setState({
-      fetchInput: event.target.value,
-    })
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ fetchUrl: event.target.value });
   }
 
   render() {
@@ -35,19 +34,19 @@ export default class AddNewFetchExplore extends React.Component<AddNewFetchExplo
     return (
       <div style={{ display: 'flex', marginBottom: 20 }}>
         <Input
-          placeholder='Enter fetch url for explore'
           disabled={!fetchSamplesReceived}
-          value={this.state.fetchInput}
+          placeholder='Enter fetch url for explore'
           style={{ width: 400, borderRadius: 0 }}
+          value={this.state.fetchUrl}
           onChange={this.handleChange}
         />
         <Button
-          type='primary'
           disabled={!fetchSamplesReceived}
           style={{ borderRadius: 0 }}
+          type='primary'
           onClick={this.handleAdd}
         >
-          ADD
+          ADD FETCH
         </Button>
       </div>
     )

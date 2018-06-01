@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Form, Input, Button, Icon, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { Link } from 'react-router-dom';
-import { SignUpUser } from '@redux/auth/types';
+import { Signatures } from '@redux/auth/types';
 import ErrorMessage from '@components/common/ErrorMessage/ErrorMessage';
 
 require('../common/styles/antdForm.css');
@@ -13,15 +13,23 @@ export interface SignUpFormProps {
   form: WrappedFormUtils;
   loading: boolean;
   error: string;
-  signUp: (user: SignUpUser) => any;
+  signUp: Signatures.SignUp;
 }
 
 class SignUpForm extends React.Component<SignUpFormProps> {
 
   handleSubmit = (event: React.SyntheticEvent<EventTarget>) => {
     event.preventDefault();
-    this.props.form.validateFields((errors, values) => {
-      this.props.signUp(values)
+
+    const {
+      form: { validateFields },
+      signUp,
+    } = this.props;
+
+    validateFields((errors, values) => {
+      if (!errors) {
+        signUp(values);
+      }
     })
   }
 
@@ -51,7 +59,11 @@ class SignUpForm extends React.Component<SignUpFormProps> {
                     message: 'Please input your name'
                   }
                 ]
-              })(<Input prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your name' />)
+              })(
+                <Input
+                  placeholder='Input your name'
+                  prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                />)
             }
           </FormItem>
           <FormItem>
@@ -63,7 +75,11 @@ class SignUpForm extends React.Component<SignUpFormProps> {
                     message: 'Please input your email'
                   }
                 ]
-              })(<Input prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your email' />)
+              })(
+                <Input
+                  placeholder='Input your email'
+                  prefix={<Icon type='mail' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                />)
             }
           </FormItem>
           <FormItem>
@@ -75,11 +91,20 @@ class SignUpForm extends React.Component<SignUpFormProps> {
                     message: 'Please input your password'
                   }
                 ]
-              })(<Input type='password' prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='Input your password' />)
+              })(
+                <Input
+                  type='password'
+                  placeholder='Input your password'
+                  prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                />)
             }
           </FormItem>
           <FormItem>
-            <Button type='primary' htmlType='submit' style={{ width: '100%' }}>
+            <Button
+              htmlType='submit'
+              type='primary'
+              style={{ width: '100%' }}
+            >
               Sign up
              </Button>
           </FormItem>

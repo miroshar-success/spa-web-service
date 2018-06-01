@@ -16,7 +16,7 @@ export enum AuthActions {
   GET_CURRENT_USER_FAILURE = 'GET_CURRENT_USER_FAILURE',
 
   REDIRECT_TO_LOGIN_PAGE = 'REDIRECT_TO_LOGIN_PAGE',
-  INIT_WEBSOCKET = 'INIT_WEBSOCKET'
+  INIT_WEBSOCKET = 'INIT_WEBSOCKET',
 }
 
 export enum Roles {
@@ -24,17 +24,54 @@ export enum Roles {
   USER = 'USER',
 }
 
-export interface SignInUser {
-  email: string;
-  password: string;
+// auth state shape
+
+export interface AuthState {
+  readonly userDetails: Models.UserDetails;
+  readonly error: string;
+  readonly loading: boolean;
 }
 
-export interface SignUpUser extends SignInUser {
-  name: string;
+// models
+
+export namespace Models {
+
+  export interface SignInUser {
+    email: string;
+    password: string;
+  }
+
+  export interface SignUpUser extends SignInUser {
+    name: string;
+  }
+
+  export interface UserDetails {
+    name: string;
+    authorized: boolean;
+    role: Roles;
+  }
+
 }
 
-export interface UserDetails {
-  name: string;
-  authorized: boolean;
-  role: Roles;
+
+// action creators return type signature
+
+export namespace Signatures {
+
+  export type SignIn = {
+    (user: Models.SignInUser): object
+  }
+
+  export type SignUp = {
+    (user: Models.SignUpUser): object
+  }
+
+  export type GetCurrentUser = {
+    (): object
+  }
+
+  export type RedirectToLoginPage = {
+    (): object
+  }
+
 }

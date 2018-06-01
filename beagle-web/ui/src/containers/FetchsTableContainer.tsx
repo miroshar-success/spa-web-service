@@ -5,7 +5,7 @@ import {
   getData,
   getPagination,
   getLoadingStatus,
-  getError,
+  getErrorMessage,
 } from '@redux/common/table/reducer';
 import { TableReducerNameSubscribers } from '@redux/common/table/types';
 import FilterableFetchTable from '@components/FetchTable/FilterableFetchTable';
@@ -16,7 +16,7 @@ const mapStateToProps = (state: RootState) => ({
   fetchs: getData(state, prefix),
   pagination: getPagination(state, prefix),
   loading: getLoadingStatus(state, prefix),
-  error: getError(state, prefix),
+  error: getErrorMessage(state, prefix),
 })
 
 export default connect(mapStateToProps, { loadFetchs, searchFetch, removeFetch })(FilterableFetchTable);

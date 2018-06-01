@@ -1,9 +1,9 @@
-import { AuthActions, Roles } from './types';
+import { AuthActions, Roles, AuthState } from './types';
 import { RootState } from '@redux/rootReducer';
 
-const initialState: any = {
+const initialState: AuthState = {
   userDetails: {
-    name: null,
+    name: '',
     role: Roles.USER,
     authorized: false,
   },
@@ -11,7 +11,7 @@ const initialState: any = {
   loading: false,
 }
 
-export function authReducer(state: any = initialState, action: any) {
+export function authReducer(state: AuthState = initialState, action: any) {
   switch (action.type) {
     case AuthActions.SIGN_OUT:
     case AuthActions.SIGN_IN:
@@ -68,8 +68,6 @@ export function authReducer(state: any = initialState, action: any) {
 }
 
 // selectors
-export const getRole = (state: RootState) => state.auth.role;
-export const getAuthorizedStatus = (state: RootState) => state.auth.authorized;
 export const getUserDetails = (state: RootState) => state.auth.userDetails;
-export const getError = (state: RootState) => state.auth.error;
+export const getErrorMessage = (state: RootState) => state.auth.error;
 export const getLoadingStatus = (state: RootState) => state.auth.loading;

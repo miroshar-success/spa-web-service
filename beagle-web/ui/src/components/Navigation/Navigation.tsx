@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Divider } from 'antd';
+import { connect, Dispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { RootState } from '@redux/rootReducer';
 import { getUserDetails } from '@redux/auth/reducer';
-import { Roles } from '@redux/auth/types';
+import { Roles, Models as AuthModels } from '@redux/auth/types';
 
 export interface LinkItemProps {
   path: string;
@@ -33,15 +33,19 @@ const renderAdminNavigation = () => (
   </React.Fragment>
 )
 
+export interface NavigationProps {
+  userDetails: AuthModels.UserDetails;
+  dispatch: Dispatch;
+}
 
-const Navigation = (props: any) => {
+const Navigation = (props: NavigationProps) => {
   const {
     userDetails: {
-      // name,
       role,
       authorized,
-    }
+    },
   } = props;
+
   return (
     <ul style={{ display: 'flex', listStyle: 'none' }}>
       {
@@ -56,7 +60,7 @@ const Navigation = (props: any) => {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  userDetails: getUserDetails(state)
+  userDetails: getUserDetails(state),
 })
 
 export default connect(mapStateToProps)(Navigation);

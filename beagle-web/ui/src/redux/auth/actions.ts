@@ -1,10 +1,10 @@
 import { createAction } from 'typesafe-actions';
-import { AuthActions, SignInUser, SignUpUser, UserDetails } from './types';
+import { Signatures, Models, AuthActions } from './types';
 
 // sign up
 
-export const signUp = createAction(AuthActions.SIGN_UP, resolve => {
-  return (user: SignUpUser) => resolve({ user });
+export const signUp: Signatures.SignUp = createAction(AuthActions.SIGN_UP, resolve => {
+  return (user: Models.SignUpUser) => resolve({ user });
 })
 
 export const signUpSuccess = createAction(AuthActions.SIGN_UP_SUCCESS, resolve => {
@@ -17,12 +17,12 @@ export const signUpFailure = createAction(AuthActions.SIGN_UP_FAILURE, resolve =
 
 // sign in
 
-export const signIn = createAction(AuthActions.SIGN_IN, resolve => {
-  return (user: SignInUser) => resolve({ user });
+export const signIn: Signatures.SignIn = createAction(AuthActions.SIGN_IN, resolve => {
+  return (user: Models.SignInUser) => resolve({ user });
 })
 
 export const signInSuccess = createAction(AuthActions.SIGN_IN_SUCCESS, resolve => {
-  return (userDetails: UserDetails) => resolve({ userDetails })
+  return (userDetails: Models.UserDetails) => resolve({ userDetails })
 })
 
 export const signInFailure = createAction(AuthActions.SIGN_IN_FAILURE, resolve => {
@@ -37,12 +37,12 @@ export const signOut = createAction(AuthActions.SIGN_OUT, resolve => {
 
 // get current user
 
-export const getCurrentUser = createAction(AuthActions.GET_CURRENT_USER, resolve => {
+export const getCurrentUser: Signatures.GetCurrentUser = createAction(AuthActions.GET_CURRENT_USER, resolve => {
   return () => resolve();
 })
 
 export const getCurrentUserSuccess = createAction(AuthActions.GET_CURRENT_USER_SUCCESS, resolve => {
-  return (userDetails: UserDetails) => resolve({ userDetails });
+  return (userDetails: Models.UserDetails) => resolve({ userDetails });
 })
 
 export const getCurrentUserFailure = createAction(AuthActions.GET_CURRENT_USER_FAILURE, resolve => {

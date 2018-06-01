@@ -2,12 +2,11 @@
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { TableActions } from '@redux/common/table/types';
-import { UserFetchsActions, FetchSample } from '@redux/userFetchs/types';
+import { UserFetchsActions, Models } from '@redux/userFetchs/types';
 import { getUserDetails } from '@redux/auth/reducer';
 import * as Api from '@redux/userFetchs/api';
-import { saveExploredFetchSamples, saveFetchResults } from '@redux/userFetchs/actions';
-import { AuthActions, UserDetails } from '@redux/auth/types';
-
+import { saveExploredFetchSamples, saveFetchResults, removeFetchSuccess } from '@redux/userFetchs/actions';
+import { AuthActions, Models as AuthModels } from '@redux/auth/types';
 
 // worker sagas
 function* loadUserFetchs(personKey: string): IterableIterator<any> {
@@ -17,12 +16,11 @@ function* loadUserFetchs(personKey: string): IterableIterator<any> {
     yield put({
       type: TableActions.LOAD_DATA_SUCCESS,
       payload: {
-        data: response.data.map((dataItem: any) => {
-          return {
-            key: '123',
-            fetchUrl: dataItem.fetchUrl,
-          }
-        })
+        data: response.data.map((dataItem: any) => ({
+          key: dataItem.id,
+          url: dataItem.fetchUrl,
+          meta: dataItem.meta,
+        }))
       },
     })
   } catch (error) {
@@ -31,7 +29,7 @@ function* loadUserFetchs(personKey: string): IterableIterator<any> {
 }
 
 function* initWebsocket() {
-  const userDetails: UserDetails = yield select(getUserDetails);
+  const userDetails: AuthModels.UserDetails = yield select(getUserDetails);
 
   return eventChannel(emit => {
     const ws = new WebSocket('ws://localhost:9000');
@@ -49,18 +47,19 @@ function* initWebsocket() {
 
       switch (actionType) {
         case UserFetchsActions.SAVE_EXPLORED_FETCH_SAMPLES: {
-          const { fetchUrl, samples } = payloadObj;
+          const { fetchUrl, samples, meta, id } = payloadObj;
           return emit(saveExploredFetchSamples(
             {
-              key: fetchUrl,
-              fetchUrl,
-            },
-            mapFetchs(samples as FetchSample[]),
+              key: id,
+              url: fetchUrl,
+              meta,
+              sampleUrls: mapFetchs(samples as Models.UserFetch[])
+            }
           ));
         }
         case UserFetchsActions.SAVE_FETCH_RESULTS: {
-          const fetchResults = mapFetchs(payloadObj.resultUrls as FetchSample[]);
-          return emit(saveFetchResults(fetchResults));
+          const { fetchUrl, resultUrls } = payloadObj;
+          return emit(saveFetchResults(mapFetchResults(resultUrls as Models.UserFetch[], fetchUrl)));
         }
       }
     }
@@ -94,8 +93,9 @@ function* watchFetch(fetchUrl: string, sampleUrl: string, personKey: string): It
 function* removeFetch(fetchUrl: string, personKey: string): IterableIterator<any> {
   try {
     yield call(Api.removeFetch, fetchUrl, personKey);
+    yield put(removeFetchSuccess());
     // review this
-    yield fork(loadUserFetchs, personKey)
+    yield fork(loadUserFetchs, personKey);
   } catch (error) {
 
   }
@@ -144,11 +144,19 @@ export function* removeFetchSaga(): IterableIterator<any> {
 
 // helpers
 
-const mapFetchs = (fetchs: FetchSample[]) => {
-  return fetchs.map(({ url, meta: { title, image } }) => ({
+const mapFetchs = (fetchs: Models.UserFetch[]) => {
+  return fetchs.map(({ url, meta }) => ({
     key: url,
     url,
-    title,
-    image,
+    meta,
+  }))
+}
+
+const mapFetchResults = (fetchs: Models.UserFetch[], fetchUrl: string) => {
+  return fetchs.map(({ url, meta }) => ({
+    key: url,
+    fetchUrl,
+    url,
+    meta,
   }))
 }
