@@ -36,7 +36,7 @@ export class FetchService {
     /** FETCH EXPLORE **/
 
     // fetchExplore request
-    public async fetchExplore({ person, fetchUrl }: FetchExploreDto) {
+    async fetchExplore({ person, fetchUrl }: FetchExploreDto) {
 
         this.personService.merge(person);
 
@@ -59,7 +59,7 @@ export class FetchService {
         this.scannerClient.produceFetchExplore({ fetchId, fetchUrl })
     }
 
-    public async fetchExploreResultConsumer({ fetchId, selectors, meta }: FetchExploreScannerResultDto) {
+    async fetchExploreResultConsumer({ fetchId, selectors, meta }: FetchExploreScannerResultDto) {
         let fetchModel: FetchModel = await this.fetchDataService.getById(fetchId);
         if (fetchModel) {
             await this.fetchModel.updateOne(fetchModel, {
@@ -128,7 +128,7 @@ export class FetchService {
             }).exec();
 
             let personCoreDto: PersonCoreDto = this.initPersonCoreDtoFromFetchModel(fetchModel);
-            this.fetchResultsGw.publishFetchResult({ person: personCoreDto, resultUrls: resultUrls, meta: fetchModel.meta });
+            this.fetchResultsGw.publishFetchResult({ person: personCoreDto, fetchUrl, resultUrls: resultUrls, meta: fetchModel.meta });
         }
     }
 

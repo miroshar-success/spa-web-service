@@ -26,7 +26,6 @@ export class FetchResultsGw {
 
     @MqGwProducer({name:'fetchResult', gateway:'person.clientName'})
     async publishFetchResult(fetchResultDto: FetchResultDto) {
-        console.log('PRODUCER_BOT*****************************************************************')
         console.log("publishFetchResult"+ JSON.stringify(fetchResultDto));
         return fetchResultDto;
     }

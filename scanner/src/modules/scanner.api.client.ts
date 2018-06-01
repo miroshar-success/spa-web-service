@@ -16,7 +16,7 @@ export class ApiClient implements OnModuleInit {
     constructor(private readonly moduleRef: ModuleRef){
         this.onModuleInit();
         ApiClient.THIS = this;
-        setTimeout(() => this.produceFetchMessage({clientName:'scanner',payload:"Hello",status:0}), 5000);
+        // setTimeout(() => this.produceFetchMessage({clientName:'scanner',payload:"Hello",status:0}), 5000);
     }
 
     onModuleInit() {
@@ -47,7 +47,7 @@ export class ApiClient implements OnModuleInit {
         this.scannerService.fetchAll(message);
     }
 
-    @MqConsumer({client: 'scanner', name: 'fetch'})
+    @MqConsumer({client: 'scanner', name:'fetch', prefetch:1})
     async consumeFetch(message: any){
         // console.log('consumeFetch', message);
         this.scannerService.fetchOne(message);

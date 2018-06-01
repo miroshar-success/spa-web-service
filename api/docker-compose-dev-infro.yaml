@@ -3,11 +3,13 @@ services:
   mongo:
     image: mongo
     hostname: mongo
+    restart: always
     ports:
     - "27017:27017"
 
   mongoexpress:
       image: mongo-express
+      restart: always
       ports:
           - "8081:8081"
       links:
@@ -15,6 +17,7 @@ services:
 
   rabbit-mq:
     image: "rabbitmq:3-management"
+    restart: always
     environment:
       RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
       RABBITMQ_DEFAULT_USER: "rabbitmq"

@@ -48,19 +48,21 @@ export class ScannerClient implements OnModuleInit {
     }
 
     @MqConsumer({name:'fetchExploreResult', client:'scanner'})
-    consumeFetchExploreResult(message: any) {
+    async consumeFetchExploreResult(message: any) {
         console.log('consumeFetchExploreResult', message);
         const samples: FetchExploreSamplesDto[] = message
             .selectors
             .map(value => ({sample: value.sample, selector: value.selector}));
-        this.fetchService.fetchExploreResultConsumer({...message,selectors:samples} as FetchExploreScannerResultDto);
+        const _ = await this.fetchService.fetchExploreResultConsumer({...message,selectors:samples} as FetchExploreScannerResultDto);
+        return _;
     }
 
     @MqConsumer({name:'fetchResult', client:'scanner'})
-    consumeFetchResult(message: any) {
+    async consumeFetchResult(message: any) {
         console.log('consumeFetchResult', message);
         const {sampleUrl:resultUrls, ...rest} = message;
-        this.fetchService.fetchResultConsumer({...rest,resultUrls} as FetchScannerResultDto);
+        const _ = await this.fetchService.fetchResultConsumer({...rest,resultUrls} as FetchScannerResultDto);
+        return _;
     }
 
 

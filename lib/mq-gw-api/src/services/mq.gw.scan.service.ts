@@ -10,6 +10,7 @@ import MQ_GW_METHOD_CONSUMER_METADATA = MqGwConstants.MQ_GW_METHOD_CONSUMER_META
 import MQ_GW_METHOD_PRODUCER_METADATA = MqGwConstants.MQ_GW_METHOD_PRODUCER_METADATA;
 import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
 import MQ_GW_METHOD_CLIENT_METADATA = MqGwConstants.MQ_GW_METHOD_CLIENT_METADATA;
+import MQ_GW_METHOD_PREFETCH_METADATA = MqGwConstants.MQ_GW_METHOD_PREFETCH_METADATA;
 
 
 
@@ -32,7 +33,8 @@ class MqGwScanService {
                     method: prototype[key],
                     mRoute: `${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_NAME_METADATA)}`,
                     gwKey: MqGwScanService.hasKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)?`${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_GATEWAY_METADATA)}`:void 0,
-                    client: MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)?`${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)}`:void 0,
+                    client: MqGwScanService.hasKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)?`${MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_CLIENT_METADATA)}`:void 0,
+                    prefetch: MqGwScanService.hasKey(prototype[key])(MQ_GW_METHOD_PREFETCH_METADATA)?MqGwScanService.scanKey(prototype[key])(MQ_GW_METHOD_PREFETCH_METADATA):0
                 }
             })
         );

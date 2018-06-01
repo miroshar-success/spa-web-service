@@ -15,6 +15,8 @@ import MQ_GW_METHOD_UUID_METADATA = MqGwConstants.MQ_GW_METHOD_UUID_METADATA;
 import MqGwDecoratorParam = MqGwTypes.MqGwDecoratorParam;
 import MqDecoratorParam = MqGwTypes.MqDecoratorParam;
 import MQ_GW_METHOD_CLIENT_METADATA = MqGwConstants.MQ_GW_METHOD_CLIENT_METADATA;
+import MQ_GW_METHOD_PREFETCH_METADATA = MqGwConstants.MQ_GW_METHOD_PREFETCH_METADATA;
+
 
 export namespace MqGwDecorators {
 
@@ -58,12 +60,13 @@ export namespace MqGwDecorators {
         };
     }
 
-    export function MqConsumer({name, client}: MqDecoratorParam) {
+    export function MqConsumer({name, client, prefetch = 0}: MqDecoratorParam) {
         return function(target: any, methodName: string, descriptor: PropertyDescriptor): void {
-            // console.log(chalk.green(`[mq-gw-api] - [decorator-mq-consumer] method ${methodName} [params] `), {name, client});
+            console.log(chalk.green(`[mq-gw-api] - [decorator-mq-consumer] method ${methodName} [params] `), {name, client, prefetch});
             Reflect.defineMetadata(MQ_GW_METHOD_CONSUMER_METADATA, true, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_NAME_METADATA, name, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_CLIENT_METADATA, client, descriptor.value);
+            Reflect.defineMetadata(MQ_GW_METHOD_PREFETCH_METADATA, prefetch, descriptor.value);
             Reflect.defineMetadata(MQ_GW_METHOD_UUID_METADATA, uuid(), descriptor.value);
         };
     }

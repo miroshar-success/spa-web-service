@@ -187,7 +187,7 @@ class MqGwProxyService {
                 if (result && result.then && typeof result.then === 'function') {
                     result
                         .then(_ => console.log(warn(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [ SUCCESS ] Message consumed.`)) || channel.ack(message))
-                        .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [error] `), err) || channel.nack(message));
+                        .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [error] `), err) || channel.reject(message));
                     return Promise.resolve(content);
                 } else {
                     channel.ack(message);
@@ -196,7 +196,7 @@ class MqGwProxyService {
                 }
             } catch (error){
                 console.log(chalk.red(`[mq-gw-api] - [mq-gw-consumer] ${targetMethodRoute} [error] `), error);
-                channel.nack(message);
+                channel.reject(message);
                 return Promise.reject(error);
             }
         };
@@ -212,6 +212,7 @@ class MqGwProxyService {
         const targetUuid = MqGwScanService.scanKey(target)(MQ_GW_METHOD_UUID_METADATA);
         const targetMethodRoute = this.scanResultsMap[targetUuid].mRoute;
         const targetClient = this.scanResultsMap[targetUuid].client;
+        const targetPrefetch = this.scanResultsMap[targetUuid].prefetch;
         const targetClass: any = this.scanResultsMap[targetUuid].prototype.constructor;
         const proxyFn = function (message){
 
@@ -238,7 +239,7 @@ class MqGwProxyService {
                 if (result && result.then && typeof result.then === 'function') {
                     result
                         .then(_ => console.log(warn(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [ SUCCESS ] Message consumed.`)) || channel.ack(message))
-                        .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [error] `), err) || channel.nack(message));
+                        .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [error] `), err) || channel.reject(message));
                     return Promise.resolve(content);
                 } else {
                     channel.ack(message);
@@ -247,13 +248,16 @@ class MqGwProxyService {
                 }
             } catch (error){
                 console.log(chalk.red(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [error] `), error);
-                channel.nack(message);
+                channel.reject(message);
                 return Promise.reject(error);
             }
         };
         const route = `${root}.${targetClient}.${targetMethodRoute}`;
         console.log(warn(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [SUBSCRIBE] ${route}`));
-        const res = await Promise.resolve(channel.assertQueue(route)).then(_ => channel.consume(route, proxyFn));
+        const res = await Promise.resolve(channel.assertQueue(route))
+            .then(_ => (targetPrefetch>0)&&channel.prefetch(targetPrefetch))
+            .then(_ => channel.consume(route, proxyFn))
+            .catch(err => console.log(chalk.red(`[mq-gw-api] - [mq-consumer] ${targetClient}.${targetMethodRoute} [error] `), err));
         return target;
     }
 }

@@ -20,6 +20,7 @@ export namespace MqGwTypes {
     }
     export interface MqDecoratorParam extends DecoratorParam {
         client: string
+        prefetch?:number
     }
     export interface MqGwDecoratorParam extends DecoratorParam {
         gateway: string
@@ -30,7 +31,8 @@ export namespace MqGwTypes {
         method: MqMethodType,
         mRoute: string,
         gwKey?: string,
-        client?: string
+        client?: string,
+        prefetch?: number
     }
 
     export interface MqMethodType extends Function {
