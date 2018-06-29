@@ -1,0 +1,65 @@
+import { Book } from '@redux/books/types';
+
+export enum TableActions {
+  LOAD_DATA = 'LOAD_DATA',
+  LOAD_DATA_SUCCESS = 'LOAD_DATA_SUCCESS',
+  LOAD_DATA_FAILURE = 'LOAD_DATA_FAILURE',
+  SEARCH_DATA = 'SEARCH_DATA',
+  REMOVE_DATA = 'REMOVE_DATA',
+  ADD_DATA = 'ADD_DATA',
+  EDIT_DATA = 'EDIT_DATA',
+  SORT_DATA = 'SORT_DATA'
+}
+
+export enum TableReducerNameSubscribers {  
+  BOOKS = '@@books'
+}
+
+export interface TableStateShape {
+  data: DataType;
+  pagination: Pagination;
+  searchString: string;
+  loading: boolean;
+  error: string;
+}
+
+// Sagas interfaces
+export interface LoadDataProps {
+  prefix: string;
+  url: string;
+  currentPage: number;
+  needDelay: boolean;
+  payloadFunc: Function;
+}
+
+export interface RemoveDataProps {
+  prefix: string;
+  _id: string;
+  payloadFunc: Function;
+}
+
+export interface AddDataProps {
+  prefix: string;
+  name: string;
+  author: string;
+  cost: number;
+  payloadFunc: Function;
+}
+
+export interface EditDataProps {
+  prefix: string;
+  _id: string;
+  name: string;
+  author: string;
+  cost: number;
+  payloadFunc: Function;
+}
+
+export interface Pagination {
+  pageSize: number;
+  current: number;
+  total?: number;
+}
+
+export type DataType = Array<Book>
+  

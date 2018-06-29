@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import PersonModule from './modules/person/person.module';
-import { FetchModuleModule } from './modules/fetch/fetch.module';
-import {ScannerModule} from "../../scanner/src/modules/scanner.module";
-
+import BookModule from './modules/book/book.module';
 
 @Module({
-    modules: [FetchModuleModule, PersonModule],
+    modules: [BookModule]
 })
 export class ApplicationModule { }

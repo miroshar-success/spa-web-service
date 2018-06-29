@@ -1,16 +1,13 @@
 import * as mongoose from 'mongoose';
-import Person from '../person/person.schema';
-import { generatePersons, generateFetchs, removeData } from './database.helpers';
+import { BookSchema } from '../book/book.schema';
 
 export const databaseProviders = [
   {
     provide: 'DbConnectionToken',
     useFactory: async (): Promise<mongoose.Connection> => {
       (mongoose as any).Promise = global.Promise;
-      return await mongoose.connect('mongodb://beagle-mongo:27017/beagle', () => {
-        // removeData();
-        // generatePersons(25);
-        // generateFetchs(25);
+      return await mongoose.connect('mongodb://beagle-mongo:27017/stock', () => {
+        
       });
     }
   }
