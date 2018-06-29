@@ -24,5 +24,3 @@
 - start project
 
         yarn start
-
- 

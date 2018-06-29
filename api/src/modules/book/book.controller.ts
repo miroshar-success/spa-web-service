@@ -30,7 +30,7 @@ import {
       return await this.bookService.newBook(params.name, params.author, params.cost);
     }
     
-    
+
     @ApiImplicitQuery({ name: "offset", required: true, type: Number })
     @ApiImplicitQuery({ name: "limit", required: true, type: Number })
     @Get()
@@ -65,12 +65,6 @@ import {
     @Put('edit')
     async edit(@Query() params: any): Promise <Book> {
       return await this.bookService.editById(params._id, params.name, params.author, params.cost);
-    }
-
-    @ApiImplicitQuery({ name: "field", required: true, type: String })
-    @Post('sort')
-    async sortName(@Query('field') field): Promise<Book[]> {      
-      return await this.bookService.sort(field);
-    }    
+    }        
     
   }

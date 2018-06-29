@@ -50,10 +50,6 @@ export default class BookService {
 
     async editById(_id: String, _name: String, _author: String, _cost:Number): Promise<Book> {
         return await this.bookModel.findByIdAndUpdate(_id, {name: _name, author: _author, cost:_cost});
-    }
-
-    async sort(field: string): Promise<Book[]> {
-        return await this.bookModel.find().sort(field);
-    }  
+    }      
 
 }
