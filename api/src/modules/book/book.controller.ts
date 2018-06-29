@@ -30,6 +30,7 @@ import {
       return await this.bookService.newBook(params.name, params.author, params.cost);
     }
     
+    
     @ApiImplicitQuery({ name: "offset", required: true, type: Number })
     @ApiImplicitQuery({ name: "limit", required: true, type: Number })
     @Get()
@@ -37,12 +38,14 @@ import {
       return await await this.bookService.find(+params.offset, +params.limit, params.value);
     }
   
+
     @ApiImplicitQuery({ name: "search", required: true, type: String })
     @Get('find')
     async search(@Query('search') search: string): Promise<Book[]> {
       return await this.bookService.search(search);
     }
     
+
     @Get('all')
     async findAll(): Promise<Book[]> {
       return await this.bookService.findAllBooks();
