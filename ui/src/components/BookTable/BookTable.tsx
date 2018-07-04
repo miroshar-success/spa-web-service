@@ -5,6 +5,7 @@ import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { BooksTableProps } from './FilterableBooksTable';
 
+
 const FormItem = Form.Item;
 
 export default class BookTable extends React.PureComponent<BooksTableProps> {
@@ -12,7 +13,13 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
     state = {      
       name: "",
       author: "",
-      cost: ""     
+      cost: "",
+      validateStatusErrorName: undefined,
+      validateStatusErrorAuthor: undefined,
+      validateStatusErrorCost: undefined,
+      nameError: "",    
+      authorError: "",
+      costError: ""
     };
     
     private readonly columns: ColumnProps<Book>[] = [      
@@ -56,8 +63,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                 Удалить
                 <Icon type="warning" /> 
               </Button>              
-          </Popconfirm>
-                              
+          </Popconfirm>                              
         </div>
       },
       { title: 'Редактировать',
@@ -70,7 +76,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
             content={
               <div>
                 <Form className="login-form">
-                  <FormItem>
+                  <FormItem
+                    validateStatus={this.state.validateStatusErrorName}
+                    help={this.state.nameError}>
                     <Input
                       prefix={<Icon type="bars" />} 
                       placeholder="Edit the name"
@@ -79,7 +87,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="name"
                     />
                   </FormItem>
-                  <FormItem>
+                  <FormItem
+                    validateStatus={this.state.validateStatusErrorAuthor}
+                    help={this.state.authorError}>
                     <Input
                       prefix={<Icon type="bars" />}                      
                       placeholder="Edit the author" 
@@ -88,7 +98,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="author"
                     />
                   </FormItem>
-                  <FormItem>
+                  <FormItem
+                    validateStatus={this.state.validateStatusErrorCost}
+                    help={this.state.costError}>
                     <Input
                       prefix={<Icon type="bars" />}
                       placeholder="Edit the cost"  
@@ -109,18 +121,55 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                 </Form>
               </div>               
             }>
-              <Button
-                size="small"                          
+              <Button 
+                size="small"
+                onClick={() => this.startEdit(record)}
               >
                 Редактировать
                 <Icon type="edit" />
               </Button>             
-          </Popover> 
-                                              
+          </Popover>                                              
         </div>
       }
     ]
-        
+   
+    startEdit = (record: Book) => {      
+      this.setState({
+        name: record.name,
+        author: record.author,
+        cost: record.cost,
+      });
+    }
+    
+    validate = () => {      
+      let isError = false;
+      if(this.state.name.length < 3 ) {
+        isError = true;
+        this.setState({
+          nameError: "Name needs to be atleast 3 characters long",
+          validateStatusErrorName: "error"
+        });
+      }
+  
+      if(this.state.author.length < 3) {
+        isError = true;
+        this.setState({
+          authorError: "Author needs to be atleast 3 characters long",
+          validateStatusErrorAuthor: "error"
+        });
+      }
+  
+      if((Number.parseInt(this.state.cost) <= 0) || (this.state.cost.length == 0)) {
+        isError = true;
+        this.setState({
+          costError: "Cost must be more than 0",
+          validateStatusErrorCost: "error"
+        });
+      }
+  
+      return isError;
+    };
+
     change = (e: any) => {
       this.setState({
           [e.target.name]: e.target.value        
@@ -133,14 +182,32 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         editBook
       } = this.props;
 
-      editBook(_id, this.state.name, this.state.author, Number.parseInt(this.state.cost));
-      this.setState({
-        name: "",
-        author: "",
-        cost: ""        
+      this.setState({      
+        validateStatusErrorName: undefined,
+        validateStatusErrorAuthor: undefined,
+        validateStatusErrorCost: undefined,
+        nameError: "",    
+        authorError: "",
+        costError: ""
       });
-      
-      message.success('Edited!');
+
+      const err = this.validate();
+
+      if(!err) {
+        editBook(_id, this.state.name, this.state.author, Number.parseInt(this.state.cost));
+        this.setState({
+          name: "",
+          author: "",
+          cost: "",
+          validateStatusErrorName: undefined,
+          validateStatusErrorAuthor: undefined,
+          validateStatusErrorCost: undefined,
+          nameError: "",    
+          authorError: "",
+          costError: ""        
+        });        
+        message.success('Edited!');
+      } 
     }
 
     removeBook = (_id: string) => {
@@ -168,12 +235,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       loadBooks({ pageSize, current });
     }
   
-    handleTableChange = ({ pageSize, current }: Pagination, sorter: any) => {
-      this.props.loadBooks({ pageSize, current }); 
-      this.setState({
-        sortedInfo: sorter
-      });
-      console.log('Various parameters', sorter);   
+    handleTableChange = ({ pageSize, current }: Pagination) => {
+      this.props.loadBooks({ pageSize, current });      
     }    
   
     render() {

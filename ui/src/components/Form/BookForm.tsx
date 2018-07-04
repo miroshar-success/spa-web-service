@@ -55,9 +55,7 @@ export default class BookForm extends React.Component<BookFormProps> {
     const {
       pagination,
       addBook
-    } = this.props;
-
-    
+    } = this.props;   
     
     addBook(name, author, cost, pagination);
     message.success('Added!');
