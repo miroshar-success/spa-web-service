@@ -1,8 +1,9 @@
-import {Model} from 'mongoose';
+import { Model } from 'mongoose';
 import {Component, Inject} from '@nestjs/common';
 import Book from './book.interface';
-import CreateBooknDto from './book.dto';
 import { ObjectID } from 'bson';
+
+let nameFile;
 
 @Component()
 export default class BookService {
@@ -13,17 +14,28 @@ export default class BookService {
         return await createdBook.save();
     }
 
-    async newBook(_name: String, _author: String, _cost:Number): Promise<Book> {
+    async newBook(_name: String, _author: String, _cost: Number): Promise<Book> {
         const book = new this.bookModel();
         
         book.id = ObjectID;
         book.name = _name;
         book.author =_author;
         book.cost = _cost;
+        book.url = nameFile;
 
         return await book.save();
     }
     
+    async uploadBook(file: Buffer) {
+
+        var fs = require('fs'), randomstring = require('randomstring');
+
+            nameFile = randomstring.generate(8) + '.jpg';
+        var wstream = fs.createWriteStream('../../../images/' + nameFile);
+            
+        wstream.write(file.buffer);        
+        wstream.end();
+    }
     
     async find(offset: number, limit: number, value: string): Promise<Book[]> {
         if (value.length > 0) {

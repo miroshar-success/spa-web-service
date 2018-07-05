@@ -7,5 +7,6 @@ export interface Book {
     _id: string,
     name: string; 
     author: string;
-    cost: number;    
+    cost: number;
+    url: string;    
 }

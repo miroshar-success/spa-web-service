@@ -22,7 +22,17 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       costError: ""
     };
     
-    private readonly columns: ColumnProps<Book>[] = [      
+    private readonly columns: ColumnProps<Book>[] = [ 
+      {
+        title: 'Изображение',
+        dataIndex: 'img',
+        key: 'img',        
+        render: (text, record) =>
+        <div>          
+          <img src={'http://127.0.0.1:8887/' + record.url}  width="100px" height="100px"/>
+        </div>
+                 
+      },
       {
         title: 'Имя',
         dataIndex: 'name',           
@@ -77,6 +87,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
               <div>
                 <Form className="login-form">
                   <FormItem
+                    label="Name"
                     validateStatus={this.state.validateStatusErrorName}
                     help={this.state.nameError}>
                     <Input
@@ -88,6 +99,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                     />
                   </FormItem>
                   <FormItem
+                    label="Author"
                     validateStatus={this.state.validateStatusErrorAuthor}
                     help={this.state.authorError}>
                     <Input
@@ -99,11 +111,13 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                     />
                   </FormItem>
                   <FormItem
+                    label="Cost"
                     validateStatus={this.state.validateStatusErrorCost}
                     help={this.state.costError}>
-                    <Input
+                    <Input 
                       prefix={<Icon type="bars" />}
-                      placeholder="Edit the cost"  
+                      placeholder="Edit the cost"
+                      type="number"  
                       value={this.state.cost}
                       onChange={e => this.change(e)}
                       name="cost"

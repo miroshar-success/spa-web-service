@@ -13,16 +13,4 @@ services:
       ports:
           - "8081:8081"
       links:
-          - mongo
-
-  rabbit-mq:
-    image: "rabbitmq:3-management"
-    restart: always
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      RABBITMQ_DEFAULT_VHOST: "/"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
+          - mongo  

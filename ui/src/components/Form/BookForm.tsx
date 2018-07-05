@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, message } from 'antd';
+import { Input, Icon, Form, Button, message, Upload } from 'antd';
 import { BookFormProps } from '../BookTable/FilterableBooksTable';
 
-
 const FormItem = Form.Item;
+
 
 
 export default class BookForm extends React.Component<BookFormProps> {
@@ -12,6 +12,7 @@ export default class BookForm extends React.Component<BookFormProps> {
     name: "",
     author: "",
     cost: "",
+    url: "",
     validateStatusErrorName: undefined,
     validateStatusErrorAuthor: undefined,
     validateStatusErrorCost: undefined,
@@ -87,13 +88,14 @@ export default class BookForm extends React.Component<BookFormProps> {
         name: "",
         author: "",
         cost: "",
+        url: "",
         validateStatusErrorName: undefined,
         validateStatusErrorAuthor: undefined,
         validateStatusErrorCost: undefined,
         nameError: "",    
         authorError: "",
         costError: ""
-    }); 
+      }); 
     }       
   };
   
@@ -116,25 +118,35 @@ export default class BookForm extends React.Component<BookFormProps> {
             validateStatus={this.state.validateStatusErrorAuthor}
             help={this.state.authorError}>            
               <Input
-              prefix={<Icon type="user" />} 
-              value={this.state.author}
-              type="text"
-              onChange={e => this.change(e)}
-              placeholder="Enter the author" 
-              name="author"
+                prefix={<Icon type="user" />} 
+                value={this.state.author}
+                type="text"
+                onChange={e => this.change(e)}
+                placeholder="Enter the author" 
+                name="author"
               />
           </FormItem>
           <FormItem
             validateStatus={this.state.validateStatusErrorCost}
             help={this.state.costError}>
               <Input
-              prefix={<Icon type="credit-card" />}
-              value={this.state.cost}
-              type="number"
-              onChange={e => this.change(e)} 
-              placeholder="Enter the cost" 
-              name="cost"
+                prefix={<Icon type="credit-card" />}
+                value={this.state.cost}
+                type="number"
+                onChange={e => this.change(e)} 
+                placeholder="Enter the cost" 
+                name="cost"
               />
+          </FormItem>
+          <FormItem>
+          <Upload 
+            name='file'
+            action='data/books/upload'>
+            
+            <Button>
+              <Icon type="upload" /> Click to Upload
+            </Button>
+          </Upload>
           </FormItem>
           <FormItem>
             <Button 

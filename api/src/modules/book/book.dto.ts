@@ -10,4 +10,7 @@ export default class CreateBookDto {
 
     @ApiModelProperty()
     readonly cost: number;
+
+    @ApiModelProperty()
+    readonly url: string;
 }

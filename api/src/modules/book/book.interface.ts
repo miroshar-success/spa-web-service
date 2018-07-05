@@ -5,4 +5,5 @@ Book extends Document {
     readonly name: string;
     readonly author: string;
     readonly cost: number;
+    readonly url: string;
 }

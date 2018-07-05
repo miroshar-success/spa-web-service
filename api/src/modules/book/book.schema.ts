@@ -13,6 +13,9 @@ export const BookSchema = new mongoose.Schema(
     },
     cost: {
       type: Number
+    },
+    url: {
+      type: String
     }
   },
 )

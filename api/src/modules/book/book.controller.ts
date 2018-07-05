@@ -5,7 +5,10 @@ import {
     Post,
     Query,    
     Delete,
-    Put    
+    Put,
+    UseInterceptors,
+    FileInterceptor,
+    UploadedFile    
   } from '@nestjs/common';
   import { ApiImplicitQuery } from '@nestjs/swagger';
 
@@ -26,25 +29,31 @@ import {
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "author", required: true, type: String })
     @ApiImplicitQuery({ name: "cost", required: true, type: Number })
-    async newBook(@Query() params: any): Promise<Book>{
+    
+    //@ApiImplicitQuery({ name: "url", required: true, type: String})
+    async newBook(@Query() params: any ): Promise<Book>{
       return await this.bookService.newBook(params.name, params.author, params.cost);
     }
-    
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadFile(@UploadedFile() file: Buffer) {
+      
+      this.bookService.uploadBook(file);
+    }    
 
     @ApiImplicitQuery({ name: "offset", required: true, type: Number })
     @ApiImplicitQuery({ name: "limit", required: true, type: Number })
     @Get()
     async find(@Query() params: any): Promise<Book[]> {
-      return await await this.bookService.find(+params.offset, +params.limit, params.value);
-    }
-  
+      return await this.bookService.find(+params.offset, +params.limit, params.value);
+    }  
 
     @ApiImplicitQuery({ name: "search", required: true, type: String })
     @Get('find')
     async search(@Query('search') search: string): Promise<Book[]> {
       return await this.bookService.search(search);
-    }
-    
+    }    
 
     @Get('all')
     async findAll(): Promise<Book[]> {
