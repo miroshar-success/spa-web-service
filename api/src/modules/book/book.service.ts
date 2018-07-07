@@ -36,6 +36,11 @@ export default class BookService {
         wstream.write(file.buffer);        
         wstream.end();
     }
+
+    async postloadBook(file: Buffer, _id: String):Promise<Book> {
+        this.uploadBook(file);        
+        return await this.bookModel.findByIdAndUpdate(_id, {url: nameFile});        
+    }
     
     async find(offset: number, limit: number, value: string): Promise<Book[]> {
         if (value.length > 0) {
@@ -56,7 +61,7 @@ export default class BookService {
         return await this.bookModel.find().exec();
     }
 
-    async removeById(_id:String): Promise<Book> {
+    async removeById(_id: String): Promise<Book> {
         return await this.bookModel.findByIdAndRemove(_id);
     }
 

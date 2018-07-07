@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Button, Icon, Popconfirm, message, Popover, Input, Form } from 'antd';
+import { Table, Button, Icon, Popconfirm, message, Popover, Input, Form, Upload } from 'antd';
 import { Book } from '@redux/books/types';
 import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
@@ -122,6 +122,15 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       onChange={e => this.change(e)}
                       name="cost"
                     />
+                  </FormItem>
+                  <FormItem>
+                    <Upload 
+                      name='file'
+                      action={'data/books/postload?_id=' + record.key}>                      
+                      <Button>
+                        <Icon type="upload" /> Click to Upload
+                      </Button>
+                    </Upload>
                   </FormItem>
                   <FormItem>
                   <Button

@@ -28,19 +28,23 @@ import {
     @Post('newbook')
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "author", required: true, type: String })
-    @ApiImplicitQuery({ name: "cost", required: true, type: Number })
-    
-    //@ApiImplicitQuery({ name: "url", required: true, type: String})
+    @ApiImplicitQuery({ name: "cost", required: true, type: Number }) 
     async newBook(@Query() params: any ): Promise<Book>{
       return await this.bookService.newBook(params.name, params.author, params.cost);
     }
 
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadFile(@UploadedFile() file: Buffer) {
-      
+    async uploadFile(@UploadedFile() file: Buffer) {      
       this.bookService.uploadBook(file);
-    }    
+    }
+    
+    @Post('postload')
+    @ApiImplicitQuery({ name: "_id", required: true, type: String })
+    @UseInterceptors(FileInterceptor('file'))
+    async postloadFile(@UploadedFile() file: Buffer, @Query('_id') _id) {      
+      this.bookService.postloadBook(file, _id);
+    }
 
     @ApiImplicitQuery({ name: "offset", required: true, type: Number })
     @ApiImplicitQuery({ name: "limit", required: true, type: Number })
