@@ -43,6 +43,7 @@ export interface AddDataProps {
   name: string;
   author: string;
   cost: number;
+  genre: string;
   payloadFunc: Function;
 }
 

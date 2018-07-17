@@ -29,34 +29,32 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         key: 'img',        
         render: (text, record) =>
         <div>          
-          <img src={'http://127.0.0.1:8887/' + record.url}  width="100px" height="100px"/>
+          <img src={'http://127.0.0.1:8887/' + record.url}  width="100" height="100"/>
         </div>
-                 
       },
       {
         title: 'Имя',
         dataIndex: 'name',           
         key: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name),
-        filters: [
-          { text: 'new', value: 'new' }         
-        ],
-        onFilter: (value, record) => record.name.includes(value),          
         render: (text, record) => <span>{record.name}</span>                
       },
       {
         title: 'Автор',
         dataIndex: 'author',
         key: 'author',
-        sorter: (a, b) => a.author.localeCompare(b.author),
         render: (text, record) => <span>{record.author}</span>
       },
       {
         title: 'Цена',
         dataIndex: 'cost',
         key: 'cost',
-        sorter: (a, b) => a.cost - b.cost,
         render: (text, record) => <span>{record.cost}</span>
+      },
+      {
+        title: 'Жанр',
+        dataIndex: 'genre',
+        key: 'genre',        
+        render: (text, record) => <span>{record.genre}</span>
       },
       { title: "Удалить",                               
         render: (text, record) =>
@@ -279,7 +277,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
             loading={loading}
             pagination={pagination}
             size='small'
-            style={{ width: 800, lineHeight: 1.8 }}
+            style={{ width: 1100 }}
             onChange={this.handleTableChange}
           />
         </div>                

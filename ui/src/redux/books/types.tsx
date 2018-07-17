@@ -8,5 +8,6 @@ export interface Book {
     name: string; 
     author: string;
     cost: number;
+    genre: string;
     url: string;    
 }

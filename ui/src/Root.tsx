@@ -23,11 +23,13 @@ export default () => (
     <Provider store={store}>
       <Router>
         <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column', width: '100%', marginTop: 20 }}>
-          <ul style={{ display: 'flex', listStyle: 'none' }}>          
+          <ul style={{ display: 'flex', listStyle: 'none' }}>
+            <li><Link to='/'>Home</Link></li>
+                     
             <li><Link to='/book'>Book</Link></li>
           </ul>
           <Divider style={{ marginTop: 0 }} />
-          <main style={{ display: 'flex', justifyContent: 'center', margin: '0 50px' }}>
+          <main style={{ display: 'flex', justifyContent: 'center', margin: '0 50px', flexDirection: 'row' }}>
             <Route exact path={Path.root} render={() => <h1>Home Page</h1>} />
             <Route path={Path.book} component={BooksTableContainer}/>            
           </main>

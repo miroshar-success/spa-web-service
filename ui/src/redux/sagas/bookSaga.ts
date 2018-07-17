@@ -27,11 +27,12 @@ export function* editBookSaga(): IterableIterator<any> {
 
 
 const getSuccessPayload = (books: Array<Book>) => {
-  return books.map(( {_id, name, author, cost, url} : Book) => ({
+  return books.map(( {_id, name, author, cost, genre, url} : Book) => ({
     key: _id,
     name,
     author,
     cost,
+    genre,
     url
   }))
 }

@@ -3,26 +3,27 @@ import {Component, Inject} from '@nestjs/common';
 import Book from './book.interface';
 import { ObjectID } from 'bson';
 
-let nameFile;
+let nameFile = "";
 
 @Component()
 export default class BookService {
     constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>) {}
-
-    async create(book: Book): Promise<Book> {        
-        const createdBook = new this.bookModel(book);
-        return await createdBook.save();
-    }
-
-    async newBook(_name: String, _author: String, _cost: Number): Promise<Book> {
+    
+    async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
         const book = new this.bookModel();
         
         book.id = ObjectID;
         book.name = _name;
         book.author =_author;
         book.cost = _cost;
-        book.url = nameFile;
+        book.genre = _genre;
+            
+        if(nameFile.length === 0)
+            book.url = "NO_IMAGE.png";
+        else
+            book.url = nameFile;
 
+        nameFile = "";
         return await book.save();
     }
     
@@ -34,7 +35,7 @@ export default class BookService {
         var wstream = fs.createWriteStream('../../../images/' + nameFile);
             
         wstream.write(file.buffer);        
-        wstream.end();
+        wstream.end();        
     }
 
     async postloadBook(file: Buffer, _id: String):Promise<Book> {
@@ -67,6 +68,18 @@ export default class BookService {
 
     async editById(_id: String, _name: String, _author: String, _cost:Number): Promise<Book> {
         return await this.bookModel.findByIdAndUpdate(_id, {name: _name, author: _author, cost:_cost});
-    }      
+    }
+    
+    async sort(fieldName: String, orderName: String): Promise <Book> {       
+        
+        if(fieldName == "name")         
+            return await this.bookModel.find().sort({name: orderName});
+        
+        if(fieldName == "author")
+            return await this.bookModel.find().sort({author: orderName});
 
+        if(fieldName == "cost")
+            return await this.bookModel.find().sort({cost: orderName});
+        
+    }
 }

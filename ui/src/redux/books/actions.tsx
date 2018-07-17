@@ -5,8 +5,7 @@ import {
     searchData,
     removeData,
     addData,
-    editData
-    
+    editData    
   } from '@redux/common/table/actions';
 
   

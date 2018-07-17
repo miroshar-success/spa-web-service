@@ -15,7 +15,10 @@ export default class SearchBar extends React.PureComponent<SearchBarProps> {
 
   render() {
     return (
-      <div style={{ width: 200, margin: '30px 0' }}>
+      <div style={{ width: 220, 
+                    marginBottom: "20px", 
+                    marginLeft: "20px", 
+                    flexDirection: 'column' }}>
         <Search onChange={this.handleChange} 
         placeholder="Search..."
         />

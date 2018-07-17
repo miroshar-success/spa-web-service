@@ -26,11 +26,11 @@ export const removeData = (prefix: string) => createAction(`${prefix}/${TableAct
 });
 
 export const addData = (prefix: string) => createAction(`${prefix}/${TableActions.ADD_DATA}`, resolve => {
-  return (name:string, author:string, cost: number) => resolve({ name, author, cost })
+  return (name: string, author: string, cost: number, genre: string) => resolve({ name, author, cost, genre })
 });
 
 export const editData = (prefix: string) => createAction(`${prefix}/${TableActions.EDIT_DATA}`, resolve => {
-  return (_id: string, name:string, author:string, cost: number) => resolve({ _id, name, author, cost })
+  return (_id: string, name: string, author: string, cost: number) => resolve({ _id, name, author, cost })
 });
 
 

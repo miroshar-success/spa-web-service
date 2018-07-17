@@ -14,6 +14,9 @@ export const BookSchema = new mongoose.Schema(
     cost: {
       type: Number
     },
+    genre: {
+      type: String
+    },
     url: {
       type: String
     }
@@ -22,8 +25,7 @@ export const BookSchema = new mongoose.Schema(
 
 BookSchema.index({
   name: 'text',
-  author: 'text',
-      
+  author: 'text',      
 })
 
 BookSchema.plugin(mongoosePaginate);

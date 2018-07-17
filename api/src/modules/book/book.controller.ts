@@ -1,5 +1,4 @@
-import {
-    Body,
+import {    
     Controller,
     Get,
     Post,
@@ -11,26 +10,20 @@ import {
     UploadedFile    
   } from '@nestjs/common';
   import { ApiImplicitQuery } from '@nestjs/swagger';
-
   import BookService from './book.service';
-  import CreateBookDto from './book.dto';
   import Book from './book.interface';
 
   @Controller('data/books')  
   export default class BookController {
     constructor(private readonly bookService: BookService) { }
-  
-    @Post('create')
-    async create(@Body() createBookDto: CreateBookDto): Promise<void> {
-      this.bookService.create(createBookDto);
-    }
-
+    
     @Post('newbook')
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "author", required: true, type: String })
     @ApiImplicitQuery({ name: "cost", required: true, type: Number }) 
+    @ApiImplicitQuery({ name: "genre", required: true, type: String})
     async newBook(@Query() params: any ): Promise<Book>{
-      return await this.bookService.newBook(params.name, params.author, params.cost);
+      return await this.bookService.newBook(params.name, params.author, params.cost, params.genre);
     }
 
     @Post('upload')
@@ -66,18 +59,24 @@ import {
    
     @ApiImplicitQuery({ name: "_id", required: true, type: String })
     @Delete('remove')
-    async remove(@Query('_id') _id): Promise<Book> {
-      
+    async remove(@Query('_id') _id): Promise<Book> {      
       return await this.bookService.removeById(_id);
     }
 
     @ApiImplicitQuery({ name: "_id", required: true, type: String })
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "author", required: true, type: String })
-    @ApiImplicitQuery({ name: "cost", required: true, type: Number })
+    @ApiImplicitQuery({ name: "cost", required: true, type: Number })    
     @Put('edit')
-    async edit(@Query() params: any): Promise <Book> {
+    async edit(@Query() params: any): Promise<Book> {
       return await this.bookService.editById(params._id, params.name, params.author, params.cost);
-    }        
+    }
+    
+    @Get('sort')
+    @ApiImplicitQuery({ name: "field", required: true, type: String})
+    @ApiImplicitQuery({ name: "order", required: true, type: String})    
+    async sort(@Query() params: any): Promise<Book> {
+      return await this.bookService.sort(params.field, params.order);      
+    }
     
   }

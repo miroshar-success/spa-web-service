@@ -4,7 +4,7 @@ import SearchBar from '@components/common/SearchBar/SearchBar';
 import { Pagination } from '@redux/common/table/types';
 import { Book } from '@redux/books/types';
 import BookForm from '../Form/BookForm';
-
+import { Row, Col } from 'antd';
 
 export interface BooksTableProps {
     readonly books: Array<Book>;
@@ -22,7 +22,7 @@ export interface BooksTableProps {
 
   export interface BookFormProps {
     readonly pagination: Pagination;     
-    addBook: (name: string, author: string, cost: number, pagination: Pagination) => object;
+    addBook: (name: string, author: string, cost: number, genre: string, pagination: Pagination) => object;
   }
 
   type FilterableBooksTableProps = BooksTableProps & SearchBarProps & BookFormProps;
@@ -43,22 +43,27 @@ export interface BooksTableProps {
       } = this.props
   
       return (        
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <BookForm 
-              addBook={addBook}
-              pagination={pagination}
-              />
-            <SearchBar 
-              onSearch={searchBook} />
-            <BookTable              
-              books={books}
-              pagination={pagination}
-              loading={loading}
-              error={error}
-              loadBooks={loadBooks}            
-              removeBook={removeBook}
-              editBook={editBook}              
-            />
+          <div>
+              <Row>
+                <Col span={8}>
+                  <SearchBar               
+                    onSearch={searchBook} />
+                  <BookForm 
+                    addBook={addBook}
+                    pagination={pagination} />
+                </Col>
+                <Col span={16}>
+                  <BookTable              
+                    books={books}
+                    pagination={pagination}
+                    loading={loading}
+                    error={error}
+                    loadBooks={loadBooks}            
+                    removeBook={removeBook}
+                    editBook={editBook}              
+                  />
+                </Col>                
+              </Row>
           </div>        
       )
     }
