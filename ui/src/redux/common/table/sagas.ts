@@ -179,7 +179,7 @@ const buildUrlForLoadData = (params: Pagination | string, prefix: string): strin
   } else {
     const { pageSize, current } = params;
     return `${fullPrefix}?value=&offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`
-  }
+  } 
 }
 
 // watcher sagas

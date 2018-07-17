@@ -8,18 +8,22 @@ import { BooksTableProps } from './FilterableBooksTable';
 
 const FormItem = Form.Item;
 
+
 export default class BookTable extends React.PureComponent<BooksTableProps> {
 
+
+ 
     state = {      
       name: "",
       author: "",
       cost: "",
+      genre: "",
       validateStatusErrorName: undefined,
       validateStatusErrorAuthor: undefined,
       validateStatusErrorCost: undefined,
       nameError: "",    
       authorError: "",
-      costError: ""
+      costError: "",
     };
     
     private readonly columns: ColumnProps<Book>[] = [ 
@@ -37,7 +41,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Имя',
         dataIndex: 'name',           
         key: 'name',
-        render: (text, record) => <span>{record.name}</span>,
+       // sorter: {},                                            insert sorting for name
+        render: (text, record) => <span>{record.name}
+        </span>,
         
       },
       {
@@ -51,13 +57,34 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Цена',
         dataIndex: 'cost',
         key: 'cost',
+        // filterIcon:  <Icon type="search"/>,
+        onFilter: (value, record) => record.cost === value,
         render: (text, record) => <span>{record.cost}</span>
 
       },
       {
         title: 'Жанр',
         dataIndex: 'genre',
-        key: 'genre',        
+        key: 'genre', 
+        filters: [{
+          text: 'Fantasy',
+          value: 'Fantasy',
+        }, {
+          text: 'Drama',
+          value: 'Drama',
+        },
+        {
+          text: 'Humor',
+          value: 'Humor',
+        },
+        {
+          text: 'Folklore',
+          value: 'Folklore',
+        },{
+          text: 'Horror',
+          value: 'Horror',
+        }], 
+        onFilter: (value, record) => record.genre === value,     // insert sorting method from back    
         render: (text, record) => <span>{record.genre}</span>
       },
       { width: 100,
