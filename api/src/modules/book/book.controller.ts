@@ -79,4 +79,16 @@ import {
       return await this.bookService.sort(params.field, params.order);      
     }
     
+    @Get('filter-genre')
+    @ApiImplicitQuery({ name: "genre", required: true, type: String })
+    async filterGenre(@Query() params: any): Promise<Book> {
+      return await this.bookService.filterGenre(params.genre);
+    }
+
+    @Get('filter-cost')
+    @ApiImplicitQuery({ name: "endCost", required: true, type: Number })
+    @ApiImplicitQuery({ name: "startCost", required: true, type: Number })    
+    async filterCost(@Query() params: any): Promise<Book> {
+      return await this.bookService.filterCost(params.startCost, params.endCost);
+    }
   }

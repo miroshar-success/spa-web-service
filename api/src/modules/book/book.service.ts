@@ -70,7 +70,7 @@ export default class BookService {
         return await this.bookModel.findByIdAndUpdate(_id, {name: _name, author: _author, cost:_cost});
     }
     
-    async sort(fieldName: String, orderName: String): Promise <Book> {       
+    async sort(fieldName: String, orderName: String): Promise<Book> {       
         
         if(fieldName == "name")         
             return await this.bookModel.find().sort({name: orderName});
@@ -79,7 +79,14 @@ export default class BookService {
             return await this.bookModel.find().sort({author: orderName});
 
         if(fieldName == "cost")
-            return await this.bookModel.find().sort({cost: orderName});
-        
+            return await this.bookModel.find().sort({cost: orderName});        
+    }
+
+    async filterGenre(genreName: String): Promise<Book> {
+        return await this.bookModel.find({genre: genreName});
+    }
+
+    async filterCost(startCost: Number, endCost: Number): Promise<Book> {
+        return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost} }).sort({cost: 1});
     }
 }
