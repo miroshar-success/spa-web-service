@@ -25,8 +25,9 @@ export default () => (
         <div style={{ display: 'flex', minHeight: '100vh', flexDirection: 'column', width: '100%', marginTop: 20 }}>
           <ul style={{ display: 'flex', listStyle: 'none' }}>
             <li><Link to='/'>Home</Link></li>
-                     
+            <Divider type="vertical" />       
             <li><Link to='/book'>Book</Link></li>
+            <Divider type="vertical"/>
           </ul>
           <Divider style={{ marginTop: 0 }} />
           <main style={{ display: 'flex', justifyContent: 'center', margin: '0 50px', flexDirection: 'row' }}>
