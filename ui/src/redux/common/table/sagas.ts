@@ -6,7 +6,8 @@ import {
   LoadDataProps, 
   RemoveDataProps, 
   AddDataProps, 
-  EditDataProps
+  EditDataProps,
+  SortDataProps
   } from './types';
 import { getSearchString, getPagination } from './reducer';
 import * as Api from './api';
@@ -37,6 +38,36 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
           total,
         }
       },
+    })
+  } catch (error) {
+    yield put({
+      type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
+      payload: {
+        error: error.message,
+      }
+    })
+  }
+}
+
+function* sortData(params: SortDataProps): IterableIterator<any> {
+  const {
+    prefix,    
+    field,
+    order,
+    payloadFunc
+  } = params;
+
+  try {
+    
+    const { data } = yield call(Api.sortData, field, order);
+    const pagination = yield select(getPagination, prefix);
+    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
+    yield fork(loadData, {
+      prefix,
+      //url: buildUrlForLoadData(newPagination, prefix),
+      currentPage: newPagination.current,
+      needDelay: false,
+      payloadFunc,
     })
   } catch (error) {
     yield put({
@@ -194,6 +225,18 @@ export function* removeDataSaga(prefix: string, getSuccessPayload: Function): It
   }
 }
 
+export function* sortDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
+  while (true) {
+    const { payload: { field, order } } = yield take(`${prefix}/${TableActions.SORT_DATA}`);
+    yield fork(sortData, {
+      prefix,
+      field,
+      order, 
+      payloadFunc: getSuccessPayload,
+    });
+  }
+}
+
 export function* addDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
     const { payload: { name, author, cost, genre } } = yield take(`${prefix}/${TableActions.ADD_DATA}`);
@@ -221,7 +264,6 @@ export function* editDataSaga(prefix: string, getSuccessPayload: Function): Iter
     });
   }
 }
-
 
 const updatePaginationIfNeeded = (pagination: Pagination, total: number): Pagination => {
   const {

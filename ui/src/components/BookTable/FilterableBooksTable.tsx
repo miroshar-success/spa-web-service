@@ -11,6 +11,7 @@ export interface BooksTableProps {
     readonly pagination: Pagination;
     readonly loading: boolean;
     readonly error: string;
+    
     loadBooks: (pagination: Pagination) => object; 
     removeBook: (_id: string, pagination: Pagination) => object; 
     editBook: (_id: string, name: string, author: string, cost: number) => object;        
@@ -21,7 +22,8 @@ export interface BooksTableProps {
   }
 
   export interface BookFormProps {
-    readonly pagination: Pagination;     
+    readonly pagination: Pagination;
+    sortBook: (field: string, order: string, pagination: Pagination) => object;
     addBook: (name: string, author: string, cost: number, genre: string, pagination: Pagination) => object;
   }
 
@@ -39,7 +41,8 @@ export interface BooksTableProps {
         searchBook,
         removeBook,
         addBook,
-        editBook                     
+        editBook,
+        sortBook                          
       } = this.props
   
       return (        
@@ -48,7 +51,8 @@ export interface BooksTableProps {
                 <Col span={8}>
                   <SearchBar               
                     onSearch={searchBook} />
-                  <BookForm 
+                  <BookForm
+                    sortBook={sortBook}                    
                     addBook={addBook}
                     pagination={pagination} />
                 </Col>

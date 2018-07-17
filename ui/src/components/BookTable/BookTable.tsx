@@ -24,31 +24,35 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
     
     private readonly columns: ColumnProps<Book>[] = [ 
       {
+        width: 100,
         title: 'Изображение',
         dataIndex: 'img',
         key: 'img',        
         render: (text, record) =>
         <div>          
           <img src={'http://127.0.0.1:8887/' + record.url}  width="100" height="100"/>
-        </div>
+        </div>                
       },
       {
         title: 'Имя',
         dataIndex: 'name',           
         key: 'name',
-        render: (text, record) => <span>{record.name}</span>                
+        render: (text, record) => <span>{record.name}</span>,
+        
       },
       {
         title: 'Автор',
         dataIndex: 'author',
         key: 'author',
         render: (text, record) => <span>{record.author}</span>
+
       },
       {
         title: 'Цена',
         dataIndex: 'cost',
         key: 'cost',
         render: (text, record) => <span>{record.cost}</span>
+
       },
       {
         title: 'Жанр',
@@ -56,7 +60,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         key: 'genre',        
         render: (text, record) => <span>{record.genre}</span>
       },
-      { title: "Удалить",                               
+      { width: 100,
+        title: "Удалить",                               
         render: (text, record) =>
         <div> 
           <Popconfirm title="Are u sure delete this item?" 
@@ -74,7 +79,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           </Popconfirm>                              
         </div>
       },
-      { title: 'Редактировать',
+      { width: 150,
+        title: 'Редактировать',
         render: (text, record) => 
         <div>
           <Popover                        
@@ -153,14 +159,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         </div>
       }
     ]
-   
-    startEdit = (record: Book) => {      
-      this.setState({
-        name: record.name,
-        author: record.author,
-        cost: record.cost,
-      });
-    }
+       
     
     validate = () => {      
       let isError = false;
@@ -197,6 +196,14 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     };
    
+    startEdit = (record: Book) => {      
+      this.setState({
+        name: record.name,
+        author: record.author,
+        cost: record.cost,
+      });
+    };
+
     editBook = (_id: string, ) => {      
 
       const {        
@@ -229,7 +236,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         });        
         message.success('Edited!');
       } 
-    }
+    };
 
     removeBook = (_id: string) => {
       const {        
@@ -238,11 +245,11 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       } = this.props;  
       removeBook(_id, pagination);
       message.success('Deleted!');      
-    }
+    };
 
     cancelDelete() {
       message.error('Cancel!');
-    }
+    };
     
     componentDidMount() {
      
@@ -254,11 +261,11 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         loadBooks,                
       } = this.props;  
       loadBooks({ pageSize, current });
-    }
+    };
   
     handleTableChange = ({ pageSize, current }: Pagination) => {
       this.props.loadBooks({ pageSize, current });      
-    }    
+    };   
   
     render() {
       const {

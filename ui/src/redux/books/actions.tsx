@@ -5,7 +5,8 @@ import {
     searchData,
     removeData,
     addData,
-    editData    
+    editData,
+    sortData    
   } from '@redux/common/table/actions';
 
   
@@ -19,4 +20,5 @@ import {
   export const removeBook = removeData(prefix);
   export const addBook = addData(prefix);
   export const editBook = editData(prefix);
+  export const sortBook = sortData(prefix);
   

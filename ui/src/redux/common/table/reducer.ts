@@ -24,6 +24,7 @@ export function createNamedTableReducer(reducerFunction: any, reducerName: strin
 export function tableReducer(state: TableStateShape = initialState, action: any, reducerName: string) {
   switch (action.type) {
     
+    case `${reducerName}/${TableActions.SORT_DATA}`:
 
     case `${reducerName}/${TableActions.REMOVE_DATA}`:
 

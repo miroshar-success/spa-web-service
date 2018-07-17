@@ -23,12 +23,18 @@ export interface TableStateShape {
   error: string;
 }
 
-// Sagas interfaces
 export interface LoadDataProps {
   prefix: string;
   url: string;
   currentPage: number;
   needDelay: boolean;
+  payloadFunc: Function;
+}
+
+export interface SortDataProps {
+  prefix: string;  
+  field: string;
+  order: string;  
   payloadFunc: Function;
 }
 

@@ -71,7 +71,7 @@ export default class BookForm extends React.Component<BookFormProps> {
         
     addBook(name, author, cost, genre, pagination);
     message.success('Added!');
-  }
+  }  
 
   change = (e: any) => {            
     this.setState({
@@ -121,7 +121,17 @@ export default class BookForm extends React.Component<BookFormProps> {
       }); 
     }       
   };
-  
+
+  sort = (field: string, order: string) => {
+    const {
+      pagination,
+      sortBook
+    } = this.props;
+
+    sortBook(field, order, pagination);
+    //message.success('Sorted!');
+  };
+    
   render() {
     return(
         <Form 
@@ -131,7 +141,8 @@ export default class BookForm extends React.Component<BookFormProps> {
             border: "1px solid",
             borderRadius: "5px",
             borderColor: "#ebedf0",
-            width: "260px"}}>
+            width: "260px"
+            }}>
             <FormItem
               validateStatus={this.state.validateStatusErrorName}
               help={this.state.nameError}>
@@ -199,6 +210,16 @@ export default class BookForm extends React.Component<BookFormProps> {
                 className="login-form-button"
                 onClick={(e: any) => this.onSubmit(e)}>
                 Добавить
+              </Button>
+            </FormItem>
+            <FormItem>
+              <Button                
+                onClick={() => this.sort("name", "asc")}>
+                Sort Asc
+              </Button>
+              <Button                
+                onClick={() => this.sort("name", "desc")}>
+                Sort Desc
               </Button>
             </FormItem>
         </Form> 
