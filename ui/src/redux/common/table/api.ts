@@ -14,8 +14,8 @@ export const addData = (name: string, author: string, cost: number, genre: strin
   return axios.post(`data/books/newbook?genre=${genre}&cost=${cost}&author=${author}&name=${name}`);  
 }
 
-export const editData = (_id: string, name: string, author: string, cost: number) => {
-  return axios.put(`data/books/edit?cost=${cost}&author=${author}&name=${name}&_id=${_id}`);
+export const editData = (_id: string, name: string, author: string, cost: number, genre: string) => {
+  return axios.put(`data/books/edit?cost=${cost}&author=${author}&name=${name}&_id=${_id}&genre=${genre}`);
 }
 
 export const sortData = (field: string, order: string) => {

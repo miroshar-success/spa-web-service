@@ -14,7 +14,7 @@ export interface BooksTableProps {
     
     loadBooks: (pagination: Pagination) => object; 
     removeBook: (_id: string, pagination: Pagination) => object; 
-    editBook: (_id: string, name: string, author: string, cost: number) => object;        
+    editBook: (_id: string, name: string, author: string, cost: number, genre: string) => object;        
   }
 
   export interface SearchBarProps {

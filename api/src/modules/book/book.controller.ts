@@ -66,10 +66,11 @@ import {
     @ApiImplicitQuery({ name: "_id", required: true, type: String })
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "author", required: true, type: String })
-    @ApiImplicitQuery({ name: "cost", required: true, type: Number })    
+    @ApiImplicitQuery({ name: "cost", required: true, type: Number })  
+    @ApiImplicitQuery({ name: "genre", required: true, type: Number })   
     @Put('edit')
     async edit(@Query() params: any): Promise<Book> {
-      return await this.bookService.editById(params._id, params.name, params.author, params.cost);
+      return await this.bookService.editById(params._id, params.name, params.author, params.cost, params.genre);
     }
     
     @Get('sort')

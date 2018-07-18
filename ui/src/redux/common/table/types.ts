@@ -59,6 +59,7 @@ export interface EditDataProps {
   name: string;
   author: string;
   cost: number;
+  genre: string;
   payloadFunc: Function;
 }
 

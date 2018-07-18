@@ -30,7 +30,7 @@ export const addData = (prefix: string) => createAction(`${prefix}/${TableAction
 });
 
 export const editData = (prefix: string) => createAction(`${prefix}/${TableActions.EDIT_DATA}`, resolve => {
-  return (_id: string, name: string, author: string, cost: number) => resolve({ _id, name, author, cost })
+  return (_id: string, name: string, author: string, cost: number, genre: string) => resolve({ _id, name, author, cost, genre })
 });
 
 export const sortData = (prefix: string) => createAction(`${prefix}/${TableActions.SORT_DATA}`, resolve => {

@@ -147,11 +147,12 @@ function* editData(params: EditDataProps): IterableIterator<any> {
     name,
     author,
     cost,
+    genre,
     payloadFunc,
   } = params;
 
   try {    
-    const { data } = yield call(Api.editData, _id, name, author, cost);
+    const { data } = yield call(Api.editData, _id, name, author, cost, genre);
     const pagination = yield select(getPagination, prefix);
     const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
     yield fork(loadData, {
@@ -254,13 +255,14 @@ export function* addDataSaga(prefix: string, getSuccessPayload: Function): Itera
 
 export function* editDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
-    const { payload: { _id, name, author, cost } } = yield take(`${prefix}/${TableActions.EDIT_DATA}`);
+    const { payload: { _id, name, author, cost, genre } } = yield take(`${prefix}/${TableActions.EDIT_DATA}`);
     yield fork(editData, {
       prefix,
       _id,
       name,
       author,
       cost,
+      genre,
       payloadFunc: getSuccessPayload,
     });
   }

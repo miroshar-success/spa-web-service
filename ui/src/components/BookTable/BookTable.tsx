@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, Button, Icon, Popconfirm, message, Popover, Input, Form, Upload } from 'antd';
+import { Table, Button, Icon, Popconfirm, message, Popover, Input, Form, Upload} from 'antd';
 import { Book } from '@redux/books/types';
 import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
@@ -7,7 +7,6 @@ import { BooksTableProps } from './FilterableBooksTable';
 
 
 const FormItem = Form.Item;
-
 
 export default class BookTable extends React.PureComponent<BooksTableProps> {
 
@@ -21,9 +20,11 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       validateStatusErrorName: undefined,
       validateStatusErrorAuthor: undefined,
       validateStatusErrorCost: undefined,
+      validateStatusErrorGenre: undefined,
       nameError: "",    
       authorError: "",
       costError: "",
+      genreError: ""
     };
     
     private readonly columns: ColumnProps<Book>[] = [ 
@@ -129,6 +130,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="name"
                     />
                   </FormItem>
+
                   <FormItem
                     label="Author"
                     validateStatus={this.state.validateStatusErrorAuthor}
@@ -141,6 +143,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="author"
                     />
                   </FormItem>
+
                   <FormItem
                     label="Cost"
                     validateStatus={this.state.validateStatusErrorCost}
@@ -152,8 +155,22 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       value={this.state.cost}
                       onChange={e => this.change(e)}
                       name="cost"
+                    /> 
+                  </FormItem>
+
+                  <FormItem
+                    label="Genre"
+                    validateStatus={this.state.validateStatusErrorGenre}
+                    help={this.state.genreError}>
+                    <Input 
+                      prefix={<Icon type="bars" />}
+                      placeholder="Edit genre" 
+                      value={this.state.genre}
+                      onChange={e => this.change(e)}
+                      name="genre"
                     />
                   </FormItem>
+                  
                   <FormItem>
                     <Upload 
                       name='file'
@@ -163,6 +180,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       </Button>
                     </Upload>
                   </FormItem>
+
                   <FormItem>
                   <Button
                     size="small"         
@@ -241,25 +259,29 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         validateStatusErrorName: undefined,
         validateStatusErrorAuthor: undefined,
         validateStatusErrorCost: undefined,
+        validateStatusErrorGenre: undefined,
         nameError: "",    
         authorError: "",
-        costError: ""
+        costError: "",
+        genreError: ""
       });
 
       const err = this.validate();
 
       if(!err) {
-        editBook(_id, this.state.name, this.state.author, Number.parseInt(this.state.cost));
+        editBook(_id, this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
         this.setState({
           name: "",
           author: "",
           cost: "",
+          genre: "",
           validateStatusErrorName: undefined,
           validateStatusErrorAuthor: undefined,
           validateStatusErrorCost: undefined,
+          validateStatusErrorGenre: undefined,
           nameError: "",    
           authorError: "",
-          costError: ""        
+          costError: "" ,       
         });        
         message.success('Edited!');
       } 

@@ -182,8 +182,7 @@ export default class BookForm extends React.Component<BookFormProps> {
             <FormItem 
               validateStatus={this.state.validateStatusErrorGenre}
               help={this.state.genreError}>
-                <Select
-                  defaultValue=""                                    
+                <Select                                  
                   placeholder="Select the genre"                  
                   style={{ width: 218 }} 
                   onChange={(value: any) => this.changeGenre(value)}>
