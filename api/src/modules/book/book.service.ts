@@ -66,8 +66,9 @@ export default class BookService {
         return await this.bookModel.findByIdAndRemove(_id);
     }
 
-    async editById(_id: String, _name: String, _author: String, _cost:Number, _genre: String): Promise<Book> {
-        return await this.bookModel.findByIdAndUpdate(_id, {name: _name, author: _author, cost:_cost, genre:_genre});
+    async editById(_id: String, _name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
+
+        return await this.bookModel.findByIdAndUpdate(_id, {name: _name, author: _author, cost: _cost, genre: _genre});
     }
     
     async sort(field: String, order: String): Promise<Book> {       

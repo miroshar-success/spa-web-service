@@ -1,22 +1,31 @@
 import * as React from 'react';
-import { Table, Button, Icon, Popconfirm, message, Popover, Input, Form, Upload} from 'antd';
+import { Table, 
+        Button, 
+        Icon, 
+        Popconfirm, 
+        message, 
+        Modal, 
+        Input, 
+        Form, 
+        Upload,
+        Select} from 'antd';
 import { Book } from '@redux/books/types';
 import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { BooksTableProps } from './FilterableBooksTable';
 
-
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 export default class BookTable extends React.PureComponent<BooksTableProps> {
-
-
  
-    state = {      
+    state = {
+      _id: "",      
       name: "",
       author: "",
       cost: "",
       genre: "",
+      visible: false,
       validateStatusErrorName: undefined,
       validateStatusErrorAuthor: undefined,
       validateStatusErrorCost: undefined,
@@ -43,49 +52,26 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         dataIndex: 'name',           
         key: 'name',
         //sorter: {},                                            insert sorting for name
-        render: (text, record) => <span>{record.name}
-        </span>,
-        
+        render: (text, record) => <span>{record.name}</span>        
       },
       {
         title: 'Автор',
         dataIndex: 'author',
         key: 'author',
         render: (text, record) => <span>{record.author}</span>
-
       },
       {
         title: 'Цена',
         dataIndex: 'cost',
         key: 'cost',
-        // filterIcon:  <Icon type="search"/>,
-        onFilter: (value, record) => record.cost === value,
+        // filterIcon:  <Icon type="search"/>,       
         render: (text, record) => <span>{record.cost}</span>
-
       },
       {
         title: 'Жанр',
         dataIndex: 'genre',
-        key: 'genre', 
-        filters: [{
-          text: 'Fantasy',
-          value: 'Fantasy',
-        }, {
-          text: 'Drama',
-          value: 'Drama',
-        },
-        {
-          text: 'Humor',
-          value: 'Humor',
-        },
-        {
-          text: 'Folklore',
-          value: 'Folklore',
-        },{
-          text: 'Horror',
-          value: 'Horror',
-        }], 
-        onFilter: (value, record) => record.genre === value,     // insert sorting method from back    
+        key: 'genre',          
+        // insert sorting method from back    
         render: (text, record) => <span>{record.genre}</span>
       },
       { width: 100,
@@ -111,13 +97,12 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Редактировать',
         render: (text, record) => 
         <div>
-          <Popover                        
-            placement="top" 
-            title="Редактирование"
-            trigger="click" 
-            content={
-              <div>
-                <Form className="login-form">
+          <Modal
+            onOk={() => this.editBook(record.key)}
+            onCancel={this.handleCancel}
+            visible={this.state.visible}  
+            title="Редактирование">             
+                
                   <FormItem
                     label="Name"
                     validateStatus={this.state.validateStatusErrorName}
@@ -130,7 +115,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="name"
                     />
                   </FormItem>
-
                   <FormItem
                     label="Author"
                     validateStatus={this.state.validateStatusErrorAuthor}
@@ -143,7 +127,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="author"
                     />
                   </FormItem>
-
                   <FormItem
                     label="Cost"
                     validateStatus={this.state.validateStatusErrorCost}
@@ -157,55 +140,55 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                       name="cost"
                     /> 
                   </FormItem>
-
-                  <FormItem
+                  <FormItem                    
                     label="Genre"
                     validateStatus={this.state.validateStatusErrorGenre}
                     help={this.state.genreError}>
-                    <Input 
-                      prefix={<Icon type="bars" />}
-                      placeholder="Edit genre" 
-                      value={this.state.genre}
-                      onChange={e => this.change(e)}
-                      name="genre"
-                    />
-                  </FormItem>
-                  
+                    <Select
+                      placeholder="Select the genre"                       
+                      style={{ width: 218 }}
+                      defaultValue={this.state.genre} 
+                      onChange={(value: any) => this.changeGenre(value)}>
+                      <Option value="Fantasy">Fantasy</Option>
+                      <Option value="Drama">Drama</Option>
+                      <Option value="Humor">Humor</Option>
+                      <Option value="Folklore">Folklore</Option>
+                      <Option value="Horror">Horror</Option>
+                    </Select>
+                  </FormItem>                  
                   <FormItem>
                     <Upload 
                       name='file'
-                      action={'data/books/postload?_id=' + record.key}>                      
+                      action={'data/books/postload?_id=' + this.state._id}>                      
                       <Button>
                         <Icon type="upload" /> Click to Upload
                       </Button>
                     </Upload>
-                  </FormItem>
-
-                  <FormItem>
-                  <Button
-                    size="small"         
-                    onClick={() => this.editBook(record.key)}                           
-                    >
-                    Сохранить
-                    <Icon type="save" />
-                  </Button>
-                  </FormItem>
-                </Form>
-              </div>               
-            }>
-              <Button 
-                size="small"
-                onClick={() => this.startEdit(record)}
-              >
-                Редактировать
-                <Icon type="edit" />
-              </Button>             
-          </Popover>                                              
-        </div>
+                  </FormItem>                                
+          </Modal>
+          <Button 
+            size="small"
+            onClick={() => this.startEdit(record)}
+          >
+            Редактировать
+            <Icon type="edit" />
+          </Button>                                              
+        </div>  
       }
     ]
        
-    
+    handleCancel = () => {      
+      this.setState({
+        visible: false,
+      });
+    }
+
+    changeGenre = (value: any) => { 
+      this.setState({
+        genre: value
+      });    
+    };
+
     validate = () => {      
       let isError = false;
       if(this.state.name.length < 3 ) {
@@ -241,16 +224,20 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     };
    
-    startEdit = (record: Book) => {      
+    startEdit = (record: Book) => {
+      console.log(record);
+
       this.setState({
+        _id: record.key,        
         name: record.name,
         author: record.author,
         cost: record.cost,
+        genre: record.genre,
+        visible: true,
       });
     };
 
-    editBook = (_id: string, ) => {      
-
+    editBook = (_id: string) => {
       const {        
         editBook
       } = this.props;
@@ -269,7 +256,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       const err = this.validate();
 
       if(!err) {
-        editBook(_id, this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
+        console.log(this.state);
+        editBook(this.state._id, this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
         this.setState({
           name: "",
           author: "",
@@ -281,7 +269,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           validateStatusErrorGenre: undefined,
           nameError: "",    
           authorError: "",
-          costError: "" ,       
+          costError: "" ,
+          genreError: "",
+          visible: false       
         });        
         message.success('Edited!');
       } 
