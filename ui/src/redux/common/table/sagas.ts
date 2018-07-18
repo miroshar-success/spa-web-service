@@ -64,7 +64,7 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
     const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
     yield fork(loadData, {
       prefix,
-      //url: buildUrlForLoadData(newPagination, prefix),
+      url: buildUrlForLoadData(newPagination, prefix),
       currentPage: newPagination.current,
       needDelay: false,
       payloadFunc,
@@ -174,6 +174,7 @@ function* editData(params: EditDataProps): IterableIterator<any> {
 // helpers
 const buildUrlForLoadData = (params: Pagination | string, prefix: string): string => {
   const fullPrefix = `data/${prefix.slice(2)}`;
+  
   if (typeof params === 'string') {
     return `${fullPrefix}/find?search=${encodeURIComponent(params)}`
   } else {
