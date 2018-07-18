@@ -42,7 +42,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Имя',
         dataIndex: 'name',           
         key: 'name',
-       // sorter: {},                                            insert sorting for name
+        //sorter: {},                                            insert sorting for name
         render: (text, record) => <span>{record.name}
         </span>,
         

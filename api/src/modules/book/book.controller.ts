@@ -74,10 +74,10 @@ import {
     }
     
     @Get('sort')
-    @ApiImplicitQuery({ name: "field", required: true, type: String})
-    @ApiImplicitQuery({ name: "order", required: true, type: String})    
-    async sort(@Query() field: string, order: string): Promise<Book> {
-      return await this.bookService.sort(field, order);      
+    @ApiImplicitQuery({ name: "order", required: true, type: String})
+    @ApiImplicitQuery({ name: "field", required: true, type: String})        
+    async sort(@Query() params: any): Promise<Book> {
+      return await this.bookService.sort(params.field, params.order);      
     }
     
     @Get('filter-genre')
