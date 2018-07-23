@@ -37,6 +37,10 @@ export const sortData = (prefix: string) => createAction(`${prefix}/${TableActio
   return (field: string, order: string, pagination: Pagination) => resolve({field, order, pagination })
 });
 
+export const sortData2 = (prefix: string) => createAction(`${prefix}/${TableActions.GENRE_SORT}`, resolve => {
+  return (genre: string, pagination: Pagination) => resolve({genre, pagination })
+});
+
 
 
 

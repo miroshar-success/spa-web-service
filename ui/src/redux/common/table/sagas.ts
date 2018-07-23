@@ -79,6 +79,39 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
   }
 }
 
+function* genreSort(params: SortDataProps): IterableIterator<any> {
+  const {
+    prefix,
+    genre,
+    payloadFunc,
+  } = params;
+
+  try {    
+    const { data } = yield call(Api.sortData2, genre);
+    const pagination = yield select(getPagination, prefix);
+    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
+
+    yield put({
+      type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
+      prefix,
+      payload: {
+        data: payloadFunc(data),
+        currentPage: newPagination.current,
+        needDelay: false,
+        payloadFunc,
+      },
+    })
+  } catch (error) {
+    yield put({
+      type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
+      payload: {
+        error: error.message,
+      }
+    })
+  }
+}
+
+
 function* removeData(params: RemoveDataProps): IterableIterator<any> {
   const {
     prefix,
@@ -247,6 +280,17 @@ export function* addDataSaga(prefix: string, getSuccessPayload: Function): Itera
       name,
       author,
       cost,
+      genre,
+      payloadFunc: getSuccessPayload,
+    });
+  }
+}
+
+export function* genreSortSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
+  while (true) {
+    const { payload: { genre } } = yield take(`${prefix}/${TableActions.GENRE_SORT}`);
+    yield fork(genreSort, {
+      prefix,
       genre,
       payloadFunc: getSuccessPayload,
     });

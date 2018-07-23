@@ -22,4 +22,9 @@ export const sortData = (field: string, order: string) => {
   return axios.get(`data/books/sort?order=${order}&field=${field}`); 
 }
 
+export const sortData2 = (genre: string) => {
+  return axios.get(`data/books/filter-genre?&genre=${genre}`); 
+}
+
+
 

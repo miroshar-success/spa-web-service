@@ -26,6 +26,8 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
     
     case `${reducerName}/${TableActions.SORT_DATA}`:
 
+    case `${reducerName}/${TableActions.GENRE_SORT}`:
+
     case `${reducerName}/${TableActions.REMOVE_DATA}`:
 
     case `${reducerName}/${TableActions.EDIT_DATA}`:

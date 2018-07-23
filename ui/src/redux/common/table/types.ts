@@ -8,7 +8,8 @@ export enum TableActions {
   REMOVE_DATA = 'REMOVE_DATA',
   ADD_DATA = 'ADD_DATA',
   EDIT_DATA = 'EDIT_DATA',
-  SORT_DATA = 'SORT_DATA'
+  SORT_DATA = 'SORT_DATA',
+  GENRE_SORT = 'GENRE_SORT'
 }
 
 export enum TableReducerNameSubscribers {  
@@ -34,9 +35,12 @@ export interface LoadDataProps {
 export interface SortDataProps {
   prefix: string;  
   field: string;
-  order: string;  
+  order: string; 
+  genre: string; 
+  url: string;
   payloadFunc: Function;
 }
+
 
 export interface RemoveDataProps {
   prefix: string;
