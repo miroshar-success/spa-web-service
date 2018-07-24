@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, message, Upload, Select } from 'antd';
+import { Input, Icon, Form, Button, message, Upload, Select, Col, Row } from 'antd';
 import { BookFormProps } from '../BookTable/FilterableBooksTable';
 
 const FormItem = Form.Item;
@@ -134,95 +134,111 @@ export default class BookForm extends React.Component<BookFormProps> {
     
   render() {
     return(
+      <Row>
+      <Col span={12}> Registration Form
         <Form 
-          className="login-form"
-          style={{
-            padding: "20px",           
-            border: "1px solid",
-            borderRadius: "5px",
-            borderColor: "#ebedf0",
-            width: "260px"
-            }}>
-            <FormItem
-              validateStatus={this.state.validateStatusErrorName}
-              help={this.state.nameError}>
-                <Input                           
-                  prefix={<Icon type="book" />}
-                  value={this.state.name}
-                  type="text"
-                  onChange={e => this.change(e)} 
-                  placeholder="Enter the name" 
-                  name="name"
-                />            
-            </FormItem>
-            <FormItem 
-              validateStatus={this.state.validateStatusErrorAuthor}
-              help={this.state.authorError}>            
-                <Input
-                  prefix={<Icon type="user" />} 
-                  value={this.state.author}
-                  type="text"
-                  onChange={e => this.change(e)}
-                  placeholder="Enter the author" 
-                  name="author"
-                />
-            </FormItem>
-            <FormItem
-              validateStatus={this.state.validateStatusErrorCost}
-              help={this.state.costError}>
-                <Input
-                  prefix={<Icon type="credit-card" />}
-                  value={this.state.cost}
-                  type="number"
-                  onChange={e => this.change(e)} 
-                  placeholder="Enter the cost" 
-                  name="cost"
-                />
-            </FormItem>
-            <FormItem 
-              validateStatus={this.state.validateStatusErrorGenre}
-              help={this.state.genreError}>
-                <Select                                  
-                  placeholder="Select the genre"                  
-                  style={{ width: 218 }} 
-                  onChange={(value: any) => this.changeGenre(value)}>
-                  <Option value="Fantasy">Fantasy</Option>
-                  <Option value="Drama">Drama</Option>
-                  <Option value="Humor">Humor</Option>
-                  <Option value="Folklore">Folklore</Option>
-                  <Option value="Horror">Horror</Option>
-                </Select>
-            </FormItem>            
-            <FormItem>
-            <Upload 
-              name='file'
-              action='data/books/upload'>              
-              <Button>
-                <Icon type="upload" /> Click to Upload
-              </Button>
-            </Upload>
-            </FormItem>
-            <FormItem>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
-                className="login-form-button"
-                onClick={(e: any) => this.onSubmit(e)}>
-                Добавить
-              </Button>
-            </FormItem>
-            <FormItem>
-              <Button                
-                onClick={() => this.sort("name", "asc")}>
-                Sort Asc
-              </Button>
-              <Button                
-                onClick={() => this.sort("name", "desc")}>
-                Sort Desc
-              </Button>
-              
-            </FormItem>
+        className="login-form"
+        style={{
+          padding: "20px",           
+          border: "1px solid",
+          borderRadius: "5px",
+          borderColor: "#ebedf0",
+          width: "260px"
+          }}>
+          <FormItem
+            validateStatus={this.state.validateStatusErrorName}
+            help={this.state.nameError}>
+              <Input                           
+                prefix={<Icon type="book" />}
+                value={this.state.name}
+                type="text"
+                onChange={e => this.change(e)} 
+                placeholder="Enter the name" 
+                name="name"
+              />            
+          </FormItem>
+          <FormItem 
+            validateStatus={this.state.validateStatusErrorAuthor}
+            help={this.state.authorError}>            
+              <Input
+                prefix={<Icon type="user" />} 
+                value={this.state.author}
+                type="text"
+                onChange={e => this.change(e)}
+                placeholder="Enter the author" 
+                name="author"
+              />
+          </FormItem>
+          <FormItem
+            validateStatus={this.state.validateStatusErrorCost}
+            help={this.state.costError}>
+              <Input
+                prefix={<Icon type="credit-card" />}
+                value={this.state.cost}
+                type="number"
+                onChange={e => this.change(e)} 
+                placeholder="Enter the cost" 
+                name="cost"
+              />
+          </FormItem>
+          <FormItem 
+            validateStatus={this.state.validateStatusErrorGenre}
+            help={this.state.genreError}>
+              <Select                                  
+                placeholder="Select the genre"                  
+                style={{ width: 218 }} 
+                onChange={(value: any) => this.changeGenre(value)}>
+                <Option value="Fantasy">Fantasy</Option>
+                <Option value="Drama">Drama</Option>
+                <Option value="Humor">Humor</Option>
+                <Option value="Folklore">Folklore</Option>
+                <Option value="Horror">Horror</Option>
+              </Select>
+          </FormItem>            
+          <FormItem>
+          <Upload 
+            name='file'
+            action='data/books/upload'>              
+            <Button>
+              <Icon type="upload" /> Click to Upload
+            </Button>
+          </Upload>
+          </FormItem>
+          <FormItem>
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              className="login-form-button"
+              onClick={(e: any) => this.onSubmit(e)}>
+              Добавить
+            </Button>
+          </FormItem>
         </Form> 
+      </Col>
+      <Col span={6} style={{marginLeft:140}}>User Sort
+        <Form>
+          <FormItem>
+                <Button   style={{width: 150}}                
+                  onClick={() => this.sort("name", "asc")}>
+                  Sort By Name Asc
+                </Button>
+                <Button   style={{width: 150}}                
+                  onClick={() => this.sort("name", "desc")}>
+                  Sort By Name Desc
+                </Button>
+                <Button    style={{width: 150}}               
+                  onClick={() => this.sort("author", "asc")}>
+                  Sort By Author Asc
+                </Button>
+                <Button  style={{width: 150}}              
+                  onClick={() => this.sort("author", "desc")}>
+                  Sort By Author Desc
+                </Button>
+                
+              </FormItem>
+        </Form> 
+      </Col>
+    </Row>
     );
   }
 }

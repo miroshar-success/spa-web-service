@@ -37,10 +37,22 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       costError: "",
       genreError: "",
 
+      minValue: "",
+      maxValue: ""
+
+    };
+
+
+    handleCostSort = (minValue: number, maxValue: number) => {
+      const {        
+        pagination,
+        sortAllBooksByCost,
+      } = this.props;  
+      sortAllBooksByCost(minValue, maxValue, pagination);
+      message.success('sorted!');      
     };
     
     handleReset() {
-     
       const {
         pagination: {
           pageSize,
@@ -49,6 +61,14 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         loadBooks,                
       } = this.props;  
       loadBooks({ pageSize, current });
+    };
+
+    sort = (field: string, order: string) => {
+      const {
+        pagination,
+        sortBook
+      } = this.props;
+      sortBook(field, order, pagination);  
     };
 
     private readonly columns: ColumnProps<Book>[] = [ 
@@ -67,12 +87,10 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         dataIndex: 'name',           
         key: 'name',
         defaultSortOrder: 'descend',
-        //sorter: (a, b) => { return a.name.localeCompare(b.name)},
-        //sorter: { },   
-        //sorter: (a, b) => a.name.length - b.name.length,         
-        render: (text, record) => <span>{record.name}
-                
-        </span>,
+        
+        sorter: () => {return  1
+         } ,            
+        render: (text, record) => <span>{record.name}</span>
       },
       
       {
@@ -86,9 +104,29 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Цена',
         dataIndex: 'cost',
         key: 'cost',
-        sorter: (a, b) => a.cost - b.cost,
+        filterDropdown: (clearFilters) => (
+          <div className="custom-filter-dropdown">     
+            <Input
+            prefix={<Icon type="wallet" />}
+            value={this.state.minValue}
+            style= {{width: 155, position: "fixed", marginTop: 10}}
+            placeholder="min"
+            name="minValue"
+            onChange={e => this.change(e)} 
+          />
+          <Input 
+            placeholder="max"
+            prefix={<Icon type="wallet" />}
+            value={this.state.maxValue}
+            style={{width: 155, marginTop: 50,  position: "fixed"}}
+            name="maxValue"
+            onChange={e => this.change(e)}   
+          />
+          <Button type="primary"  style={{marginLeft: 10, marginTop: 90}} onClick={() => this.handleCostSort(Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}>Filter</Button>
+          <Button type="primary"  style={{marginLeft: 10}} onClick={() => this.handleReset()} >Reset</Button>    
+          </div>
+        ),
         render: (text, record) => <span>{record.cost}</span>
-
       },
       {
         title: 'Жанр',
@@ -98,8 +136,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           <div className="custom-filter-dropdown">
             
             <CheckboxGroup options={options} style={{ width: 90, height: 120 }}  onChange={this.changeGenre}/>
-            <Button type="primary"  style={{marginLeft: 10, marginTop: 20}} onClick={() => this.handleGenreSort(this.state.genre)}>Filter</Button>
-            <Button type="primary"  style={{marginLeft: 10}} onClick={() => this.handleReset()} >Reset</Button>    
+            <Button type="primary"  style={{marginLeft: 57}} onClick={() => this.handleGenreSort(this.state.genre)}>Filter</Button>
+            <Button type="primary"  style={{marginLeft: 5, marginTop: 10}} onClick={() => this.handleReset()} >Reset</Button>    
           </div>
         ),
         render: (text, record) => <span>{record.genre}</span>

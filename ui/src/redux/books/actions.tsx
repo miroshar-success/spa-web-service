@@ -7,7 +7,8 @@ import {
     addData,
     editData,
     sortData,
-    sortData2
+    sortData2,
+    sortBookByCost
   } from '@redux/common/table/actions';
 
   
@@ -21,7 +22,9 @@ import {
   export const removeBook = removeData(prefix);
   export const addBook = addData(prefix);
   export const editBook = editData(prefix);
-  export const sortBook = sortData(prefix);
-  export const sortBook2 = sortData2(prefix);
+  export const sortBook = sortData(prefix);  // name, author
+  export const sortBook2 = sortData2(prefix);   // genre     move from common actions
+  export const sortAllBooksByCost = sortBookByCost(prefix);   // cost
 
+ 
   

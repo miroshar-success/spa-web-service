@@ -62,12 +62,48 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
     const { data } = yield call(Api.sortData, field, order);
     const pagination = yield select(getPagination, prefix);
     const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
-    yield fork(loadData, {
+    yield put({
+      type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
       prefix,
-      url: buildUrlForLoadData(newPagination, prefix),
-      currentPage: newPagination.current,
-      needDelay: false,
-      payloadFunc,
+      payload: {
+        data: payloadFunc(data),
+        currentPage: newPagination.current,
+        needDelay: false,
+        payloadFunc,
+      },
+    })
+  } catch (error) {
+    yield put({
+      type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
+      payload: {
+        error: error.message,
+      }
+    })
+  }
+}
+
+function* sortBookByCost(params: SortDataProps): IterableIterator<any> {
+  const {
+    prefix,    
+    minValue,
+    maxValue,
+    payloadFunc
+  } = params;
+
+  try {
+    
+    const { data } = yield call(Api.sortCost, minValue, maxValue);
+    const pagination = yield select(getPagination, prefix);
+    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
+    yield put({
+      type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
+      prefix,
+      payload: {
+        data: payloadFunc(data),
+        currentPage: newPagination.current,
+        needDelay: false,
+        payloadFunc,
+      },
     })
   } catch (error) {
     yield put({
@@ -267,6 +303,18 @@ export function* sortDataSaga(prefix: string, getSuccessPayload: Function): Iter
       prefix,
       field,
       order, 
+      payloadFunc: getSuccessPayload,
+    });
+  }
+}
+
+export function* sortBookByCostSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
+  while (true) {
+    const { payload: { minValue, maxValue } } = yield take(`${prefix}/${TableActions.COST_SORT}`);
+    yield fork(sortBookByCost, {
+      prefix,
+      minValue,
+      maxValue,
       payloadFunc: getSuccessPayload,
     });
   }

@@ -32,6 +32,8 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
 
     case `${reducerName}/${TableActions.EDIT_DATA}`:
 
+    case `${reducerName}/${TableActions.COST_SORT}`:
+
     case `${reducerName}/${TableActions.LOAD_DATA}`: {
       return {
         ...state,

@@ -9,7 +9,8 @@ export enum TableActions {
   ADD_DATA = 'ADD_DATA',
   EDIT_DATA = 'EDIT_DATA',
   SORT_DATA = 'SORT_DATA',
-  GENRE_SORT = 'GENRE_SORT'
+  GENRE_SORT = 'GENRE_SORT',
+  COST_SORT = 'COST_SORT'
 }
 
 export enum TableReducerNameSubscribers {  
@@ -39,6 +40,8 @@ export interface SortDataProps {
   genre: string; 
   url: string;
   payloadFunc: Function;
+  minValue: number;
+  maxValue: number;
 }
 
 

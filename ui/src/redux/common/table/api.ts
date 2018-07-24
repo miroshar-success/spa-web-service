@@ -26,5 +26,10 @@ export const sortData2 = (genre: string) => {
   return axios.get(`data/books/filter-genre?&genre=${genre}`); 
 }
 
+export const sortCost = (startCost: number, endCost: number) => {
+  return axios.get(`data/books/filter-cost?startCost=${startCost}&endCost=${endCost}`)
+}
+
+
 
 
