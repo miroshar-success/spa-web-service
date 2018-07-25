@@ -19,7 +19,7 @@ export const editData = (_id: string, name: string, author: string, cost: number
 }
 
 export const sortData = (field: string, order: string) => {
-  return axios.get(`data/books/sort?order=${order}&field=${field}`); 
+  return axios.get(`data/books/sort?field=${field}&order=${order}`); 
 }
 
 export const sortData2 = (genre: string) => {

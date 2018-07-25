@@ -84,7 +84,9 @@ import {
     @Get('filter-genre')
     @ApiImplicitQuery({ name: "genre", required: true, type: String })
     async filterGenre(@Query() params: any): Promise<Book> {
-      return await this.bookService.filterGenre(params.genre);
+      var input = params.genre;
+      var fields = input.split(',');
+      return await this.bookService.filterGenre(fields);
     }
 
     @Get('filter-cost')

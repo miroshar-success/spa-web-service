@@ -1,7 +1,8 @@
-import { Model } from 'mongoose';
+import { Model, mongoose } from 'mongoose';
 import {Component, Inject} from '@nestjs/common';
 import Book from './book.interface';
 import { ObjectID } from 'bson';
+import { BookSchema } from './book.schema';
 
 let nameFile = "";
 
@@ -25,6 +26,12 @@ export default class BookService {
 
         nameFile = "";
         return await book.save();
+    }
+
+    
+
+    async filterGenre(genreName: String): Promise<Book> {
+        return await this.bookModel.find({genre:genreName });    
     }
     
     async uploadBook(file: Buffer) {
@@ -83,9 +90,6 @@ export default class BookService {
             return await this.bookModel.find().sort({cost: order});        
     }
 
-    async filterGenre(genreName: String): Promise<Book> {
-        return await this.bookModel.find({genre: genreName});
-    }
 
     async filterCost(startCost: Number, endCost: Number): Promise<Book> {
         return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost} }).sort({cost: 1});
