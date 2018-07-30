@@ -7,6 +7,7 @@ export const initialState: TableStateShape = {
     pageSize: 10,
     current: 1,
   },
+  
   searchString: '',
   loading: false,
   error: '',
@@ -24,24 +25,42 @@ export function createNamedTableReducer(reducerFunction: any, reducerName: strin
 export function tableReducer(state: TableStateShape = initialState, action: any, reducerName: string) {
   switch (action.type) {
     
-    case `${reducerName}/${TableActions.SORT_DATA}`:
+    case `${reducerName}/${TableActions.SORT_DATA}`: {
+      const { 
+        data, 
+        pagination,
+         } = action.payload;
+        
 
-    case `${reducerName}/${TableActions.GENRE_SORT}`:
-
-    case `${reducerName}/${TableActions.REMOVE_DATA}`:
-
-    case `${reducerName}/${TableActions.EDIT_DATA}`:
-
-    case `${reducerName}/${TableActions.COST_SORT}`:
-
-    case `${reducerName}/${TableActions.LOAD_DATA}`: {
       return {
         ...state,
+        data,
+        pagination,
+        
+      }
+    }
+
+
+    case `${reducerName}/${TableActions.GENRE_SORT}`:
+        
+    case `${reducerName}/${TableActions.COST_SORT}`:
+
+    
+    
+    case `${reducerName}/${TableActions.REMOVE_DATA}`:
+
+    case `${reducerName}/${TableActions.EDIT_DATA}`:    
+
+    case `${reducerName}/${TableActions.LOAD_DATA}`: {           
+
+      return {
+        ...state,        
         loading: true,
       }
     }
+
     case `${reducerName}/${TableActions.LOAD_DATA_SUCCESS}`: {
-      const { data, pagination } = action.payload;
+      const { data, pagination} = action.payload;
       return {
         ...state,
         data,
@@ -50,7 +69,7 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
           ...pagination,
         },
         loading: false,
-        error: '',
+        error: '',        
       }
     }
     case `${reducerName}/${TableActions.LOAD_DATA_FAILURE}`: {

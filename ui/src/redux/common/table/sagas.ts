@@ -60,14 +60,16 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
   try {
     
     const { data } = yield call(Api.sortData, field, order);
-    const pagination = yield select(getPagination, prefix);
-    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
+    
     yield put({
-      type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
+      type: `${prefix}/${TableActions.SORT_DATA}`,
       prefix,
+      field,
+      order,
       payload: {
         data: payloadFunc(data),
-        currentPage: newPagination.current,
+        
+        url: `/data/books/sort?field=${field}&order=${order}`,
         needDelay: false,
         payloadFunc,
       },
@@ -245,6 +247,9 @@ function* editData(params: EditDataProps): IterableIterator<any> {
 const buildUrlForLoadData = (params: Pagination | string, prefix: string): string => {
   const fullPrefix = `data/${prefix.slice(2)}`;
   
+  /*if(params === 'sort') {
+    return `data/books/sort?field=${field}&order=${order}`
+  }*/
   if (typeof params === 'string') {
     return `${fullPrefix}/find?search=${encodeURIComponent(params)}`
   } else {
@@ -302,7 +307,7 @@ export function* sortDataSaga(prefix: string, getSuccessPayload: Function): Iter
     yield fork(sortData, {
       prefix,
       field,
-      order, 
+      order,      
       payloadFunc: getSuccessPayload,
     });
   }
