@@ -7,7 +7,8 @@ export const initialState: TableStateShape = {
     pageSize: 10,
     current: 1,
   },
-  
+  field: '',
+  order: '',
   searchString: '',
   loading: false,
   error: '',
@@ -29,13 +30,21 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
       const { 
         data, 
         pagination,
+        field,
+        order
          } = action.payload;
         
 
       return {
         ...state,
         data,
-        pagination,
+        field,
+        order,
+        pagination: {
+          ...state.pagination,
+          ...pagination,
+        },
+        loading: true
         
       }
     }
@@ -48,22 +57,31 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
     
     
     case `${reducerName}/${TableActions.REMOVE_DATA}`:
-
-    case `${reducerName}/${TableActions.EDIT_DATA}`:    
-
+    case `${reducerName}/${TableActions.EDIT_DATA}`: 
     case `${reducerName}/${TableActions.LOAD_DATA}`: {           
 
+      const {        
+        field,
+        order
+         } = action.payload;
+
       return {
+        field,
+        order,
         ...state,        
         loading: true,
       }
     }
 
     case `${reducerName}/${TableActions.LOAD_DATA_SUCCESS}`: {
-      const { data, pagination} = action.payload;
+      const { data, pagination, field, order} = action.payload;
+      
+      
       return {
         ...state,
         data,
+        field,
+        order, 
         pagination: {
           ...state.pagination,
           ...pagination,

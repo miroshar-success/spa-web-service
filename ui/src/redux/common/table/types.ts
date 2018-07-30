@@ -23,7 +23,8 @@ export interface TableStateShape {
   searchString: string;
   loading: boolean;
   error: string;
-  
+  field: string,
+  order: string
 }
 
 export interface LoadDataProps {

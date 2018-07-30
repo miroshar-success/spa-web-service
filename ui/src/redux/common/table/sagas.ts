@@ -75,6 +75,7 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
       },
     })
   } catch (error) {
+    console.log(error)
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
       payload: {
@@ -247,9 +248,6 @@ function* editData(params: EditDataProps): IterableIterator<any> {
 const buildUrlForLoadData = (params: Pagination | string, prefix: string): string => {
   const fullPrefix = `data/${prefix.slice(2)}`;
   
-  /*if(params === 'sort') {
-    return `data/books/sort?field=${field}&order=${order}`
-  }*/
   if (typeof params === 'string') {
     return `${fullPrefix}/find?search=${encodeURIComponent(params)}`
   } else {
@@ -262,7 +260,7 @@ const buildUrlForLoadData = (params: Pagination | string, prefix: string): strin
 export function* loadDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
     const { payload: { pagination } } = yield take(`${prefix}/${TableActions.LOAD_DATA}`);
-    //const searchString = yield select(getSearchString, prefix);
+    
     yield fork(loadData, {
       prefix,
       url: buildUrlForLoadData(pagination, prefix),

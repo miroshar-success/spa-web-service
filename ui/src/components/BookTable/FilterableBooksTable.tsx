@@ -60,7 +60,8 @@ export interface BooksTableProps {
                   <BookForm
                     sortBook={sortBook}                    
                     addBook={addBook}
-                    pagination={pagination} />
+                    pagination={pagination} 
+                    />
                 </Col>
                 <Col span={16}>
                   <BookTable 
