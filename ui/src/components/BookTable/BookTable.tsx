@@ -88,13 +88,49 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Name',
         dataIndex: 'name',           
         key: 'name', 
+        filterDropdown: () => (
+          <div className="custom-filter-dropdown">            
+            <Button 
+              type="primary"  
+              style={{marginTop: 27}} 
+              onClick={() => this.sort("name", "asc")}>
+              Sort asc
+            </Button>
+            <Button 
+              type="primary"  
+              style={{marginLeft: 5, marginTop: 27}} 
+              onClick={() => this.sort("name", "desc")}>
+              Sort desc
+            </Button>    
+          </div>
+        ),
+        filterIcon: () => <Icon type="down-square-o"/>,
+        
         render: (text, record) => <span>{record.name}</span>
+
       },
       
       {
         title: 'Автор',
         dataIndex: 'author',
         key: 'author',
+        filterDropdown: () => (
+          <div className="custom-filter-dropdown">            
+            <Button 
+              type="primary"  
+              style={{marginTop: 27}} 
+              onClick={() => this.sort("author", "asc")}>
+              Sort asc
+            </Button>
+            <Button 
+              type="primary"  
+              style={{marginLeft: 5, marginTop: 27}} 
+              onClick={() => this.sort("author", "desc")}>
+              Sort desc
+            </Button>    
+          </div>
+        ),
+        filterIcon: () => <Icon type="down-square-o"/>,
         render: (text, record) => <span>{record.author}</span>
       },
       {

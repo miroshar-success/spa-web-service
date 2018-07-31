@@ -122,15 +122,15 @@ export default class BookForm extends React.Component<BookFormProps> {
     }       
   };
 
-  sort = (field: string, order: string) => {
-    const {
-      pagination,
-      sortBook
-    } = this.props;
-    //debugger
-    sortBook(field, order, pagination);
-    //message.success('Sorted!');
-  };
+  // sort = (field: string, order: string) => {
+  //   const {
+  //     pagination,
+  //     sortBook
+  //   } = this.props;
+  //   //debugger
+  //   sortBook(field, order, pagination);
+  //   //message.success('Sorted!');
+  // };
     
   render() {
     return(
@@ -215,7 +215,7 @@ export default class BookForm extends React.Component<BookFormProps> {
           </FormItem>
         </Form> 
       </Col>
-      <Col span={6} style={{marginLeft:140}}>User Sort
+      {/* <Col span={6} style={{marginLeft:140}}>User Sort
         <Form>
           <FormItem>
                 <Button   style={{width: 150}}                
@@ -237,7 +237,7 @@ export default class BookForm extends React.Component<BookFormProps> {
                 
               </FormItem>
         </Form> 
-      </Col>
+      </Col> */}
     </Row>
     );
   }

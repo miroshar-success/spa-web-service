@@ -27,7 +27,7 @@ export interface BooksTableProps {
 
   export interface BookFormProps {
     readonly pagination: Pagination;
-    sortBook: (field: string, order: string, pagination: Pagination) => object;
+    //sortBook: (field: string, order: string, pagination: Pagination) => object;
     addBook: (name: string, author: string, cost: number, genre: string, pagination: Pagination) => object;
   }
 
@@ -58,7 +58,7 @@ export interface BooksTableProps {
                   <SearchBar               
                     onSearch={searchBook} />
                   <BookForm
-                    sortBook={sortBook}                    
+                    //sortBook={sortBook}                    
                     addBook={addBook}
                     pagination={pagination} 
                     />
