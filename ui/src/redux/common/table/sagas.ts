@@ -63,7 +63,7 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
     const pagination = yield select(getPagination, prefix);
     const newPagination = updatePaginationIfNeeded(pagination, data)
       
-    //debugger
+    debugger
     yield put({
       type: `${prefix}/${TableActions.SORT_DATA_SUCCESS}`,            
       payload: {
@@ -262,7 +262,7 @@ const buildUrlForLoadData = (params: Pagination | string, prefix: string): strin
 export function* loadDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
     const { payload: { pagination } } = yield take(`${prefix}/${TableActions.LOAD_DATA}`);
-    //debugger
+    debugger
     yield fork(loadData, {
       prefix,
       url: buildUrlForLoadData(pagination, prefix),
@@ -303,7 +303,7 @@ export function* removeDataSaga(prefix: string, getSuccessPayload: Function): It
 
 export function* sortDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
-    //debugger
+    debugger
     const { payload: { field, order } } = yield take(`${prefix}/${TableActions.SORT_DATA}`);
     yield fork(sortData, {
       prefix,
@@ -371,7 +371,7 @@ const updatePaginationIfNeeded = (pagination: Pagination, total: number): Pagina
     pageSize,
     current
   } = pagination;
-
+  debugger
   if (total <= pageSize * (current - 1)) {
     return {
       pageSize,
