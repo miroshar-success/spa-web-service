@@ -127,7 +127,7 @@ export default class BookForm extends React.Component<BookFormProps> {
       pagination,
       sortBook
     } = this.props;
-
+    //debugger
     sortBook(field, order, pagination);
     //message.success('Sorted!');
   };

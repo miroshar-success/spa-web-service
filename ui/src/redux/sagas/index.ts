@@ -10,6 +10,6 @@ export default function* rootSaga() {
     fork(editBookSaga),
     fork(sortBookSaga),
     fork(sortBookSaga2),
-    fork(sortBookByCost),
+    fork(sortBookByCost)
   ])
 }

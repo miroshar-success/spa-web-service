@@ -26,62 +26,45 @@ export function createNamedTableReducer(reducerFunction: any, reducerName: strin
 export function tableReducer(state: TableStateShape = initialState, action: any, reducerName: string) {
   switch (action.type) {
     
-    case `${reducerName}/${TableActions.SORT_DATA}`: {
-      const { 
-        data, 
-        pagination,
-        field,
-        order
-         } = action.payload;
-        
-
+    case `${reducerName}/${TableActions.SORT_DATA_SUCCESS}`: {
+      const { data } = action.payload;
+      //debugger           
+      
       return {
         ...state,
-        data,
-        field,
-        order,
-        pagination: {
-          ...state.pagination,
-          ...pagination,
-        },
-        loading: true
-        
+        data
+                       
       }
     }
 
 
     case `${reducerName}/${TableActions.GENRE_SORT}`:
         
-    case `${reducerName}/${TableActions.COST_SORT}`:
-
-    
+    case `${reducerName}/${TableActions.COST_SORT}`:    
     
     case `${reducerName}/${TableActions.REMOVE_DATA}`:
-    case `${reducerName}/${TableActions.EDIT_DATA}`: 
+
+    case `${reducerName}/${TableActions.EDIT_DATA}`:
+
     case `${reducerName}/${TableActions.LOAD_DATA}`: {           
 
-      const {        
-        field,
-        order
-         } = action.payload;
+      
 
       return {
-        field,
-        order,
+        
         ...state,        
         loading: true,
       }
     }
 
     case `${reducerName}/${TableActions.LOAD_DATA_SUCCESS}`: {
-      const { data, pagination, field, order} = action.payload;
+      const { data, pagination} = action.payload;
       
       
       return {
         ...state,
         data,
-        field,
-        order, 
+         
         pagination: {
           ...state.pagination,
           ...pagination,

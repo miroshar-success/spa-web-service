@@ -69,6 +69,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         pagination,
         sortBook
       } = this.props;
+      //debugger
       sortBook(field, order, pagination);  
     };
 

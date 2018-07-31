@@ -9,8 +9,10 @@ export enum TableActions {
   ADD_DATA = 'ADD_DATA',
   EDIT_DATA = 'EDIT_DATA',
   SORT_DATA = 'SORT_DATA',
+  SORT_DATA_SUCCESS = 'SORT_DATA_SUCCESS',
   GENRE_SORT = 'GENRE_SORT',
-  COST_SORT = 'COST_SORT'
+  COST_SORT = 'COST_SORT',
+
 }
 
 export enum TableReducerNameSubscribers {  

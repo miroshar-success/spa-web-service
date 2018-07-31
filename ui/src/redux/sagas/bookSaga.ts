@@ -39,6 +39,7 @@ export function* sortBookByCost(): IterableIterator<any> {
 
 
 const getSuccessPayload = (books: Array<Book>) => {
+  //debugger
   return books.map(( {_id, name, author, cost, genre, url} : Book) => ({
     key: _id,
     name,

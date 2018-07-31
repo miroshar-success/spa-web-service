@@ -31,7 +31,7 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
 
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
-      payload: {
+      payload: {        
         data: payloadFunc(docs),
         pagination: {
           current: currentPage,
@@ -40,6 +40,7 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
       },
     })
   } catch (error) {
+    console.log(error)
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
       payload: {
@@ -57,21 +58,19 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
     payloadFunc
   } = params;
 
-  try {
-    
+  try {    
     const { data } = yield call(Api.sortData, field, order);
-    
+    const pagination = yield select(getPagination, prefix);
+    const newPagination = updatePaginationIfNeeded(pagination, data)
+      
+    //debugger
     yield put({
-      type: `${prefix}/${TableActions.SORT_DATA}`,
-      prefix,
-      field,
-      order,
+      type: `${prefix}/${TableActions.SORT_DATA_SUCCESS}`,            
       payload: {
         data: payloadFunc(data),
+        currentPage: newPagination.current,       
         
-        url: `/data/books/sort?field=${field}&order=${order}`,
-        needDelay: false,
-        payloadFunc,
+        needDelay: false,        
       },
     })
   } catch (error) {
@@ -171,6 +170,7 @@ function* removeData(params: RemoveDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
+    console.log(error)
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
       payload: {
@@ -203,6 +203,7 @@ function* addData(params: AddDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
+    console.log(error)
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
       payload: {
@@ -235,6 +236,7 @@ function* editData(params: EditDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
+    console.log(error)
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
       payload: {
@@ -260,7 +262,7 @@ const buildUrlForLoadData = (params: Pagination | string, prefix: string): strin
 export function* loadDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
     const { payload: { pagination } } = yield take(`${prefix}/${TableActions.LOAD_DATA}`);
-    
+    //debugger
     yield fork(loadData, {
       prefix,
       url: buildUrlForLoadData(pagination, prefix),
@@ -301,6 +303,7 @@ export function* removeDataSaga(prefix: string, getSuccessPayload: Function): It
 
 export function* sortDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
+    //debugger
     const { payload: { field, order } } = yield take(`${prefix}/${TableActions.SORT_DATA}`);
     yield fork(sortData, {
       prefix,
