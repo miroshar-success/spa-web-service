@@ -5,7 +5,6 @@ import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { BooksTableProps } from './FilterableBooksTable';
 
-
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -18,10 +17,7 @@ const options = [
   { label: 'Horror',  value: 'Horror' },
 ];
 
-
-
 export default class BookTable extends React.PureComponent<BooksTableProps> {
-
 
     state = { 
       _id: "",     
@@ -40,9 +36,248 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       visible: false,
       minValue: "",
       maxValue: ""
+    };    
 
-    };
-
+    private readonly columns: ColumnProps<Book>[] = [ 
+      {
+        width: 120,
+        title: 'Изображение',
+        dataIndex: 'img',
+        key: 'img',        
+        render: (text, record) =>
+        <div>          
+          <img src={'http://127.0.0.1:8887/' + record.url} width="100%" height="100%" />
+        </div>                
+      },
+      {
+        title: 'Name',
+        dataIndex: 'name',           
+        key: 'name', 
+        filterDropdown: () => (
+          <div className="form">            
+            <Button 
+              type="primary"  
+              style={{marginTop: 27}} 
+              onClick={() => this.sort("name", "asc")}>
+              Sort asc
+            </Button>
+            <Button 
+              type="primary"  
+              style={{marginLeft: 5, marginTop: 27}} 
+              onClick={() => this.sort("name", "desc")}>
+              Sort desc
+            </Button>    
+          </div>
+        ),
+        filterIcon: () => <Icon type="down-square-o"/>,        
+        render: (text, record) => <span>{record.name}</span>
+      },
+      
+      {
+        title: 'Автор',
+        dataIndex: 'author',
+        key: 'author',
+        filterDropdown: () => (
+          <div className="form">            
+            <Button 
+              type="primary"  
+              style={{marginTop: 27}} 
+              onClick={() => this.sort("author", "asc")}>
+              Sort asc
+            </Button>
+            <Button 
+              type="primary"  
+              style={{marginLeft: 5, marginTop: 27}} 
+              onClick={() => this.sort("author", "desc")}>
+              Sort desc
+            </Button>    
+          </div>
+        ),
+        filterIcon: () => <Icon type="down-square-o"/>,
+        render: (text, record) => <span>{record.author}</span>
+      },
+      {
+        title: 'Цена',
+        dataIndex: 'cost',
+        key: 'cost',
+        filterDropdown: () => (
+          <div style={{
+            width: "170px",
+            height: "135px",
+            backgroundColor: "#FDF9F9",
+            border: "1px solid",
+            borderRadius: "5px",
+            borderColor: "#ebedf0",
+            paddingLeft: "11px",            
+          }}>
+            <div style={{}}>     
+              <Input
+                prefix={<Icon type="wallet" />}
+                value={this.state.minValue}
+                style= {{width: 146, position: "fixed", marginTop: 10}}
+                placeholder="min"
+                name="minValue"
+                onChange={e => this.change(e)} 
+              />
+              <Input 
+                placeholder="max"
+                prefix={<Icon type="wallet" />}
+                value={this.state.maxValue}
+                style={{width: 146, marginTop: 50,  position: "fixed"}}
+                name="maxValue"
+                onChange={e => this.change(e)}   
+              />
+              <Button 
+                type="primary"  
+                style={{marginLeft: 5, marginTop: 90}} 
+                onClick={() => this.handleCostSort(Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}>
+                Filter
+              </Button>
+              <Button 
+                type="primary"  
+                style={{marginLeft: 10}} 
+                onClick={() => this.handleReset()}>
+                Reset
+              </Button>
+              </div>    
+          </div>
+        ),
+        render: (text, record) => <span>{record.cost}</span>
+      },
+      {
+        title: 'Жанр',
+        dataIndex: 'genre',
+        key: 'genre', 
+        filterDropdown: () => (
+          <div style={{
+            width: "170px",
+            height: "165px",
+            backgroundColor: "#FDF9F9",
+            border: "1px solid",
+            borderRadius: "5px",
+            borderColor: "#ebedf0",
+            paddingLeft: "11px",
+            marginLeft: "7px"                        
+          }}>            
+            <CheckboxGroup 
+              options={options} 
+              style={{ width: 90, height: 120 }}  
+              onChange={(value: any) => this.setState({ genre: value })}/> <br />
+            <Button 
+              type="primary"
+              onClick={() => this.handleGenreSort(this.state.genre)}>
+              Filter
+            </Button>
+            <Button 
+              type="primary"
+              style={{marginLeft: "9px"}}  
+              onClick={() => this.handleReset()}>
+              Reset
+            </Button>    
+          </div>
+        ),
+        render: (text, record) => <span>{record.genre}</span>
+      },
+      { width: 100,
+        title: "Удалить",                               
+        render: (text, record) =>
+        <div> 
+          <Popconfirm title="Are u sure delete this item?" 
+            onConfirm={() => this.removeBook(record.key)}            
+            onCancel={() => message.error('Cancel!')}
+            okText="Yes"
+            cancelText="No">
+              <Button
+                size="small"
+                type="danger">                
+                Удалить
+                <Icon type="warning" /> 
+              </Button>              
+          </Popconfirm>                              
+        </div>
+      },
+      { width: 150,
+        title: 'Редактировать',
+        render: (text, record) => 
+        <div>
+            <Modal
+                onOk={() => this.editBook(record.key)}
+                onCancel={() =>  this.setState({ visible: false })}
+                visible={this.state.visible}  
+                title="Редактирование">
+              <Form className="login-form">
+                <FormItem
+                  label="Name"
+                  validateStatus={this.state.validateStatusErrorName}
+                  help={this.state.nameError}>
+                  <Input
+                    prefix={<Icon type="bars" />} 
+                    placeholder="Edit the name"
+                    value={this.state.name}
+                    onChange={e => this.change(e)}
+                    name="name"
+                  />
+                </FormItem>
+                <FormItem
+                  label="Author"
+                  validateStatus={this.state.validateStatusErrorAuthor}
+                  help={this.state.authorError}>                    
+                  <Input
+                    prefix={<Icon type="bars" />}                      
+                    placeholder="Edit the author" 
+                    value={this.state.author}
+                    onChange={e => this.change(e)}
+                    name="author"
+                  />
+                </FormItem>
+                <FormItem
+                  label="Cost"
+                  validateStatus={this.state.validateStatusErrorCost}
+                  help={this.state.costError}>
+                  <Input 
+                    prefix={<Icon type="bars" />}
+                    placeholder="Edit the cost"
+                    type="number"  
+                    value={this.state.cost}
+                    onChange={e => this.change(e)}
+                    name="cost"
+                  /> 
+                </FormItem>
+                <FormItem 
+                  validateStatus={this.state.validateStatusErrorGenre}
+                  help={this.state.genreError}>
+                    <Select
+                      defaultValue={this.state.genre}                                
+                      style={{ width: 218 }} 
+                      onChange={(value: any) => this.setState({ genre: value })}>
+                      <Option value="Fantasy">Fantasy</Option>
+                      <Option value="Drama">Drama</Option>
+                      <Option value="Humor">Humor</Option>
+                      <Option value="Folklore">Folklore</Option>
+                      <Option value="Horror">Horror</Option>
+                    </Select>
+                </FormItem>                  
+                <FormItem>
+                  <Upload 
+                    name='file'
+                    action={'data/books/postload?_id=' + this.state._id}>                      
+                    <Button>
+                      <Icon type="upload" /> Click to Upload
+                    </Button>
+                  </Upload>
+                </FormItem>                                    
+              </Form>
+            </Modal>         
+              <Button 
+                size="small"
+                onClick={() => this.startEdit(record)}>
+                Редактировать
+                <Icon type="edit" />
+              </Button>          
+        </div>
+      }
+    ]
+    
 
     handleCostSort = (minValue: number, maxValue: number) => {
       const {        
@@ -69,247 +304,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         pagination,
         sortBook
       } = this.props;
-      debugger
+      //debugger
       sortBook(field, order, pagination);  
     };
-
-    private readonly columns: ColumnProps<Book>[] = [ 
-      {
-        width: 120,
-        title: 'Изображение',
-        dataIndex: 'img',
-        key: 'img',        
-        render: (text, record) =>
-        <div>          
-          <img src={'http://127.0.0.1:8887/' + record.url} width="100%" height="100%" />
-        </div>                
-      },
-      {
-        title: 'Name',
-        dataIndex: 'name',           
-        key: 'name', 
-        filterDropdown: () => (
-          <div className="custom-filter-dropdown">            
-            <Button 
-              type="primary"  
-              style={{marginTop: 27}} 
-              onClick={() => this.sort("name", "asc")}>
-              Sort asc
-            </Button>
-            <Button 
-              type="primary"  
-              style={{marginLeft: 5, marginTop: 27}} 
-              onClick={() => this.sort("name", "desc")}>
-              Sort desc
-            </Button>    
-          </div>
-        ),
-        filterIcon: () => <Icon type="down-square-o"/>,
-        
-        render: (text, record) => <span>{record.name}</span>
-
-      },
-      
-      {
-        title: 'Автор',
-        dataIndex: 'author',
-        key: 'author',
-        filterDropdown: () => (
-          <div className="custom-filter-dropdown">            
-            <Button 
-              type="primary"  
-              style={{marginTop: 27}} 
-              onClick={() => this.sort("author", "asc")}>
-              Sort asc
-            </Button>
-            <Button 
-              type="primary"  
-              style={{marginLeft: 5, marginTop: 27}} 
-              onClick={() => this.sort("author", "desc")}>
-              Sort desc
-            </Button>    
-          </div>
-        ),
-        filterIcon: () => <Icon type="down-square-o"/>,
-        render: (text, record) => <span>{record.author}</span>
-      },
-      {
-        title: 'Цена',
-        dataIndex: 'cost',
-        key: 'cost',
-        filterDropdown: () => (
-          <div className="custom-filter-dropdown">     
-            <Input
-              prefix={<Icon type="wallet" />}
-              value={this.state.minValue}
-              style= {{width: 155, position: "fixed", marginTop: 10}}
-              placeholder="min"
-              name="minValue"
-              onChange={e => this.change(e)} 
-            />
-            <Input 
-              placeholder="max"
-              prefix={<Icon type="wallet" />}
-              value={this.state.maxValue}
-              style={{width: 155, marginTop: 50,  position: "fixed"}}
-              name="maxValue"
-              onChange={e => this.change(e)}   
-            />
-            <Button 
-              type="primary"  
-              style={{marginLeft: 10, marginTop: 90}} 
-              onClick={() => this.handleCostSort(Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}>
-              Filter
-            </Button>
-            <Button 
-              type="primary"  
-              style={{marginLeft: 10}} 
-              onClick={() => this.handleReset()}>
-              Reset
-            </Button>    
-          </div>
-        ),
-        render: (text, record) => <span>{record.cost}</span>
-      },
-      {
-        title: 'Жанр',
-        dataIndex: 'genre',
-        key: 'genre', 
-        filterDropdown: () => (
-          <div className="custom-filter-dropdown">            
-            <CheckboxGroup 
-              options={options} 
-              style={{ width: 90, height: 120 }}  
-              onChange={this.changeGenre}/>
-            <Button 
-              type="primary"  
-              style={{marginLeft: 57}} 
-              onClick={() => this.handleGenreSort(this.state.genre)}>
-              Filter
-            </Button>
-            <Button 
-              type="primary"  
-              style={{marginLeft: 5, marginTop: 10}} 
-              onClick={() => this.handleReset()}>
-              Reset
-            </Button>    
-          </div>
-        ),
-        render: (text, record) => <span>{record.genre}</span>
-      },
-      { width: 100,
-        title: "Удалить",                               
-        render: (text, record) =>
-        <div> 
-          <Popconfirm title="Are u sure delete this item?" 
-            onConfirm={() => this.removeBook(record.key)}
-            onCancel={this.cancelDelete}
-            okText="Yes"
-            cancelText="No">
-              <Button
-                size="small"
-                type='danger'                
-                >
-                Удалить
-                <Icon type="warning" /> 
-              </Button>              
-          </Popconfirm>                              
-        </div>
-      },
-      { width: 150,
-        title: 'Редактировать',
-        render: (text, record) => 
-        <div>
-            <Modal
-                  onOk={() => this.editBook(record.key)}
-                  onCancel={this.handleCancel}
-                  visible={this.state.visible}  
-                  title="Редактирование">
-                  <Form className="login-form">
-                  <FormItem
-                    label="Name"
-                    validateStatus={this.state.validateStatusErrorName}
-                    help={this.state.nameError}>
-                    <Input
-                      prefix={<Icon type="bars" />} 
-                      placeholder="Edit the name"
-                      value={this.state.name}
-                      onChange={e => this.change(e)}
-                      name="name"
-                    />
-                  </FormItem>
-                  <FormItem
-                    label="Author"
-                    validateStatus={this.state.validateStatusErrorAuthor}
-                    help={this.state.authorError}>                    
-                    <Input
-                      prefix={<Icon type="bars" />}                      
-                      placeholder="Edit the author" 
-                      value={this.state.author}
-                      onChange={e => this.change(e)}
-                      name="author"
-                    />
-                  </FormItem>
-                  <FormItem
-                    label="Cost"
-                    validateStatus={this.state.validateStatusErrorCost}
-                    help={this.state.costError}>
-                    <Input 
-                      prefix={<Icon type="bars" />}
-                      placeholder="Edit the cost"
-                      type="number"  
-                      value={this.state.cost}
-                      onChange={e => this.change(e)}
-                      name="cost"
-                    /> 
-                  </FormItem>
-
-                  <FormItem 
-                    validateStatus={this.state.validateStatusErrorGenre}
-                    help={this.state.genreError}>
-                      <Select
-                        defaultValue={this.state.genre}                                
-                        style={{ width: 218 }} 
-                        onChange={(value: any) => this.changeGenre(value)}>
-                        <Option value="Fantasy">Fantasy</Option>
-                        <Option value="Drama">Drama</Option>
-                        <Option value="Humor">Humor</Option>
-                        <Option value="Folklore">Folklore</Option>
-                        <Option value="Horror">Horror</Option>
-                      </Select>
-                  </FormItem>
-                  
-                  <FormItem>
-                    <Upload 
-                      name='file'
-                      action={'data/books/postload?_id=' + this.state._id}>                      
-                      <Button>
-                        <Icon type="upload" /> Click to Upload
-                      </Button>
-                    </Upload>
-                  </FormItem>
-                                    
-                  </Form>
-                </Modal>             
-            
-              <Button 
-                size="small"
-                onClick={() => this.startEdit(record)}
-              >
-                Редактировать
-                <Icon type="edit" />
-              </Button>             
-                                                        
-        </div>
-      }
-    ]
-       
-    handleCancel = () => {      
-      this.setState({
-        visible: false,
-      });
-    }
-
 
     validate = () => {      
       let isError = false;
@@ -335,8 +332,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           costError: "Cost must be more than 0",
           validateStatusErrorCost: "error"
         });
-      }
-  
+      }  
       return isError;
     };
 
@@ -344,13 +340,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       this.setState({
           [e.target.name]: e.target.value        
       });
-    };
-
-    changeGenre = (value: any) => {
-      this.setState({
-          genre: value        
-      });
-    };
+    };   
    
     startEdit = (record: Book) => {      
       this.setState({
@@ -363,14 +353,13 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     };
 
-
-    editBook = (_id: string, ) => {      
-
-      const {        
-        editBook
-      } = this.props;
-
-      this.setState({      
+    defaultState = () => {
+      this.setState({
+        _id: "",
+        name: "",
+        author: "",
+        cost: "",
+        genre: "",        
         validateStatusErrorName: undefined,
         validateStatusErrorAuthor: undefined,
         validateStatusErrorCost: undefined,
@@ -380,27 +369,19 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         costError: "",
         genreError: ""
       });
+    };  
 
-      const err = this.validate();
+    editBook = (_id: string, ) => {  
 
-      if(!err) {
+      const {        
+        editBook
+      } = this.props;
+
+      this.defaultState;
+      if(!this.validate()) {
         editBook(this.state._id, this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
-        this.setState({
-          _id: "",
-          name: "",
-          author: "",
-          cost: "",
-          genre: "",
-          validateStatusErrorName: undefined,
-          validateStatusErrorAuthor: undefined,
-          validateStatusErrorCost: undefined,
-          validateStatusErrorGenre: undefined,
-          nameError: "",    
-          authorError: "",
-          costError: "" ,
-          genreError: "",
-          visible: false       
-        });        
+        this.defaultState;
+        this.state.visible = false;     
         message.success('Edited!');
       } 
     };
@@ -421,14 +402,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       } = this.props;  
       sortBook2(genre, pagination);
       message.success('sorted!');      
-    };
-
-    cancelDelete() {
-      message.error('Cancel!');
-    };
+    };  
     
-    componentDidMount() {
-     
+    componentDidMount() {     
       const {
         pagination: {
           pageSize,
@@ -447,8 +423,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       const {
         loading,
         pagination,
-        books,
-                
+        books,                
       } = this.props;
   
       return (

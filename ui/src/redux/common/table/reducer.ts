@@ -28,7 +28,7 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
     
     case `${reducerName}/${TableActions.SORT_DATA_SUCCESS}`: {
       const { data } = action.payload;
-      debugger           
+      //debugger           
       
       return {
         ...state,
@@ -47,7 +47,7 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
 
     case `${reducerName}/${TableActions.LOAD_DATA}`: {           
       
-      debugger
+      //debugger
       return {        
         ...state,        
         loading: true,
@@ -57,7 +57,7 @@ export function tableReducer(state: TableStateShape = initialState, action: any,
     case `${reducerName}/${TableActions.LOAD_DATA_SUCCESS}`: {
       const { data, pagination} = action.payload;
       
-      debugger
+      //debugger
       return {
         ...state,
         data,
