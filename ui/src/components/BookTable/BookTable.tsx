@@ -54,16 +54,24 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         dataIndex: 'name',           
         key: 'name', 
         filterDropdown: () => (
-          <div className="form">            
+          <div style={{
+            width: "210px",
+            height: "50px",
+            backgroundColor: "#FDF9F9",
+            border: "1px solid",
+            borderRadius: "5px",
+            borderColor: "#ebedf0",
+            paddingLeft: "14px",
+            paddingTop: "8px"            
+          }}>            
             <Button 
               type="primary"  
-              style={{marginTop: 27}} 
               onClick={() => this.sort("name", "asc")}>
               Sort asc
             </Button>
             <Button 
               type="primary"  
-              style={{marginLeft: 5, marginTop: 27}} 
+              style={{marginLeft: 10}}  
               onClick={() => this.sort("name", "desc")}>
               Sort desc
             </Button>    
@@ -71,23 +79,30 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         ),
         filterIcon: () => <Icon type="down-square-o"/>,        
         render: (text, record) => <span>{record.name}</span>
-      },
-      
+      },      
       {
         title: 'Автор',
         dataIndex: 'author',
         key: 'author',
         filterDropdown: () => (
-          <div className="form">            
+          <div style={{
+            width: "210px",
+            height: "50px",
+            backgroundColor: "#FDF9F9",
+            border: "1px solid",
+            borderRadius: "5px",
+            borderColor: "#ebedf0",
+            paddingLeft: "14px",
+            paddingTop: "8px"            
+          }}>            
             <Button 
-              type="primary"  
-              style={{marginTop: 27}} 
+              type="primary"              
               onClick={() => this.sort("author", "asc")}>
               Sort asc
             </Button>
             <Button 
-              type="primary"  
-              style={{marginLeft: 5, marginTop: 27}} 
+              type="primary"
+              style={{marginLeft: 10}} 
               onClick={() => this.sort("author", "desc")}>
               Sort desc
             </Button>    
