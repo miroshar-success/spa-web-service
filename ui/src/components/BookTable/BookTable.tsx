@@ -35,8 +35,22 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       genreError: "",
       visible: false,
       minValue: "",
-      maxValue: ""
+      maxValue: "",
+
+      previewImage: '',
+      previewVisible: false,
+
+      //checkAll: false,
+      checkedList: [''],
     };    
+    
+    handleCancel = () => this.setState({ previewVisible: false })
+    
+    handlePreview = () => {
+      this.setState({
+        previewVisible: true, 
+      });
+    }
 
     private readonly columns: ColumnProps<Book>[] = [ 
       {
@@ -45,9 +59,14 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         dataIndex: 'img',
         key: 'img',        
         render: (text, record) =>
-        <div>          
-          <img src={'http://127.0.0.1:8887/' + record.url} width="100%" height="100%" />
-        </div>                
+        <div>
+          <img src={'http://127.0.0.1:8887/' + record.url} onClick={this.handlePreview} width="100%" height="100%" />
+         
+          <Modal visible={this.state.previewVisible} footer={null}  onCancel={this.handleCancel}>
+              <img src={'http://127.0.0.1:8887/ZmrLMKlc.jpg' } style={{ width: '100%' }} />
+              <img src={'http://127.0.0.1:8887/' + record.url} style={{ width: '100%' }} />
+          </Modal>
+        </div>              
       },
       {
         title: 'Name',
@@ -151,7 +170,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
               <Button 
                 type="primary"  
                 style={{marginLeft: 10}} 
-                onClick={() => this.handleReset()}>
+                onClick={(e: any) => this.handleReset(e)}>
                 Reset
               </Button>
               </div>    
@@ -176,8 +195,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           }}>            
             <CheckboxGroup 
               options={options} 
-              style={{ width: 90, height: 120 }}  
-              onChange={(value: any) => this.setState({ genre: value })}/> <br />
+              style={{ width: 90, height: 120 }}
+              value={this.state.checkedList}
+              onChange={this.onChange}/>  <br />
             <Button 
               type="primary"
               onClick={() => this.handleGenreSort(this.state.genre)}>
@@ -186,7 +206,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
             <Button 
               type="primary"
               style={{marginLeft: "9px"}}  
-              onClick={() => this.handleReset()}>
+              onClick={(value: any) => this.handleReset(value)}>
               Reset
             </Button>    
           </div>
@@ -293,6 +313,12 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       }
     ]
     
+    onChange = (checkedList: any) => { 
+      this.setState({
+        genre: checkedList,
+        checkedList,
+      });
+    }
 
     handleCostSort = (minValue: number, maxValue: number) => {
       const {        
@@ -303,7 +329,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       message.success('sorted!');      
     };
     
-    handleReset() {
+    handleReset(e: any) {
       const {
         pagination: {
           pageSize,
@@ -312,6 +338,9 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         loadBooks,                
       } = this.props;  
       loadBooks({ pageSize, current });
+      this.setState({
+        checkedList: e.target.checked ? options : [],
+      });  
     };
 
     sort = (field: string, order: string) => {
@@ -319,7 +348,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         pagination,
         sortBook
       } = this.props;
-      //debugger
       sortBook(field, order, pagination);  
     };
 
@@ -410,11 +438,11 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       message.success('Deleted!');      
     };
 
-    handleGenreSort = (genre: string) => {
+    handleGenreSort = ( genre: string) => {
       const {        
         pagination,
         sortBook2,
-      } = this.props;  
+      } = this.props;
       sortBook2(genre, pagination);
       message.success('sorted!');      
     };  
