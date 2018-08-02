@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { BookSchema } from '../book/book.schema';
 
 export const databaseProviders = [
   {

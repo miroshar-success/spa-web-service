@@ -22,21 +22,18 @@ export var sortData = (field: string, order: string, genre: string, startCost: n
 
   var sortRequest: string = "data/books/common-sort?";
   
-  if( field != "" && order != "" ) 
+  if( field != "" && order != "") {
     sortRequest = sortRequest + "field=" + field + "&order=" + order;
-    
-  if( genre.length > 0 )
+  }  
+  if( genre.length > 0 ) {
     sortRequest = sortRequest + "&genre=" + genre;
-
-  if( startCost >= 0)
+  }  
+  if( startCost >= 0) {
     sortRequest = sortRequest + "&startCost=" + startCost;
-
-  if( endCost <= Number.MAX_VALUE)
+  }
+  if( endCost <= Number.MAX_VALUE) {
     sortRequest = sortRequest + "&endCost=" + endCost;
-
-  debugger
-  console.log(genre, startCost, endCost);
-  console.log(sortRequest)
+  }
   return axios.get(sortRequest);
 
 }
