@@ -5,6 +5,7 @@ import { Pagination } from '@redux/common/table/types';
 import { Book } from '@redux/books/types';
 import BookForm from '../Form/BookForm';
 import { Row, Col } from 'antd';
+import FilterPanel from '@components/FilterPanel/FilterPanel';
 
 export interface BooksTableProps {
     readonly books: Array<Book>;
@@ -15,9 +16,6 @@ export interface BooksTableProps {
     loadBooks: (pagination: Pagination) => object; 
     removeBook: (_id: string, pagination: Pagination) => object; 
     editBook: (_id: string, name: string, author: string, cost: number, genre: string) => object;        
-    //sortBook2: (genre: string, pagination: Pagination) => object;    // genre
-    sortBook: (field: string, order: string, genre: string, minValue: number, maxValue: number, pagination: Pagination) => object;
-    //sortAllBooksByCost: (minValue: number, maxValue: number, pagination: Pagination) => object;
   }
 
   export interface SearchBarProps {
@@ -27,6 +25,11 @@ export interface BooksTableProps {
   export interface BookFormProps {
     readonly pagination: Pagination;
     addBook: (name: string, author: string, cost: number, genre: string, pagination: Pagination) => object;
+  }
+
+  export interface FilterPanelProps {
+    readonly pagination: Pagination;
+    sortBook: (field: string, order: string, genre: string, minValue: number, maxValue: number, pagination: Pagination) => object;
   }
 
   type FilterableBooksTableProps = BooksTableProps & SearchBarProps & BookFormProps;
@@ -44,15 +47,13 @@ export interface BooksTableProps {
         removeBook,
         addBook,
         editBook,
-        sortBook,
-        // sortBook2,  
-        // sortAllBooksByCost                  
+        sortBook,                  
       } = this.props
   
       return (        
           <div>
               <Row>
-                <Col span={8}>
+                <Col span={4}>
                   <SearchBar               
                     onSearch={searchBook} />
                   <BookForm
@@ -60,10 +61,14 @@ export interface BooksTableProps {
                     pagination={pagination} 
                     />
                 </Col>
+                <Col span={4}>
+                  <FilterPanel
+                    pagination={pagination} 
+                    sortBook={sortBook}
+                    />
+                </Col>
                 <Col span={16}>
-                  <BookTable 
-                    //sortAllBooksByCost={sortAllBooksByCost}   
-                    sortBook={sortBook}           
+                  <BookTable        
                     books={books}
                     pagination={pagination}
                     loading={loading}
@@ -71,7 +76,7 @@ export interface BooksTableProps {
                     loadBooks={loadBooks}            
                     removeBook={removeBook}
                     editBook={editBook}  
-                    //sortBook2={sortBook2}            
+                               
                   />
                 </Col>                
               </Row>

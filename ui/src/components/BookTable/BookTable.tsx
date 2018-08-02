@@ -85,13 +85,15 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           }}>            
             <Button 
               type="primary"  
-              onClick={() => this.sort("name", "asc")}>
+              //onClick={() => this.sort("name", "asc")}
+              >
               Sort asc
             </Button>
             <Button 
               type="primary"  
               style={{marginLeft: 10}}  
-              onClick={() => this.sort("name", "desc")}>
+              //onClick={() => this.sort("name", "desc")}
+              >
               Sort desc
             </Button>    
           </div>
@@ -116,13 +118,15 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           }}>            
             <Button 
               type="primary"              
-              onClick={() => this.sort("author", "asc")}>
+              //onClick={() => this.sort("author", "asc")}
+            >
               Sort asc
             </Button>
             <Button 
               type="primary"
               style={{marginLeft: 10}} 
-              onClick={() => this.sort("author", "desc")}>
+              //onClick={() => this.sort("author", "desc")}
+              >
               Sort desc
             </Button>    
           </div>
@@ -164,7 +168,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
               <Button 
                 type="primary"  
                 style={{marginLeft: 5, marginTop: 90}} 
-                onClick={() => this.handleCostSort(Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}>
+                //onClick={() => this.handleCostSort(Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}
+              >
                 Filter
               </Button>
               <Button 
@@ -197,10 +202,12 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
               options={options} 
               style={{ width: 90, height: 120 }}
               value={this.state.checkedList}
-              onChange={this.onChange}/>  <br />
+             // onChange={this.onChange}
+              />  <br />
             <Button 
               type="primary"
-              onClick={() => this.handleGenreSort(this.state.genre)}>
+              //onClick={() => this.handleGenreSort(this.state.genre)}
+              >
               Filter
             </Button>
             <Button 
@@ -320,14 +327,14 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     }
 
-    handleCostSort = (minValue: number, maxValue: number) => {
-      const {        
-        pagination,
-        sortAllBooksByCost,
-      } = this.props;  
-      sortAllBooksByCost(minValue, maxValue, pagination);
-      message.success('sorted!');      
-    };
+    // handleCostSort = (minValue: number, maxValue: number) => {
+    //   const {        
+    //     pagination,
+    //     sortAllBooksByCost,
+    //   } = this.props;  
+    //   sortAllBooksByCost(minValue, maxValue, pagination);
+    //   message.success('sorted!');      
+    // };
     
     handleReset(e: any) {
       const {
@@ -343,13 +350,13 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });  
     };
 
-    sort = (field: string, order: string) => {
-      const {
-        pagination,
-        sortBook
-      } = this.props;
-      sortBook(field, order, pagination);  
-    };
+    // sort = (field: string, order: string) => {
+    //   const {
+    //     pagination,
+    //     sortBook
+    //   } = this.props;
+    //   sortBook(field, order, pagination);  
+    // };
 
     validate = () => {      
       let isError = false;
@@ -438,14 +445,14 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       message.success('Deleted!');      
     };
 
-    handleGenreSort = ( genre: string) => {
-      const {        
-        pagination,
-        sortBook2,
-      } = this.props;
-      sortBook2(genre, pagination);
-      message.success('sorted!');      
-    };  
+    // handleGenreSort = ( genre: string) => {
+    //   const {        
+    //     pagination,
+    //     sortBook2,
+    //   } = this.props;
+    //   sortBook2(genre, pagination);
+    //   message.success('sorted!');      
+    // };  
     
     componentDidMount() {     
       const {
