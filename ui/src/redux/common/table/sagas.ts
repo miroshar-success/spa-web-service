@@ -55,11 +55,14 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
     prefix,    
     field,
     order,
+    genre,
+    minValue,
+    maxValue,
     payloadFunc
   } = params;
 
   try {    
-    const { data } = yield call(Api.sortData, field, order);
+    const { data } = yield call(Api.sortData, field, order, genre, minValue, maxValue);
     const pagination = yield select(getPagination, prefix);
     const newPagination = updatePaginationIfNeeded(pagination, data)
       
@@ -84,70 +87,70 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
   }
 }
 
-function* sortBookByCost(params: SortDataProps): IterableIterator<any> {
-  const {
-    prefix,    
-    minValue,
-    maxValue,
-    payloadFunc
-  } = params;
+// function* sortBookByCost(params: SortDataProps): IterableIterator<any> {
+//   const {
+//     prefix,    
+//     minValue,
+//     maxValue,
+//     payloadFunc
+//   } = params;
 
-  try {
+//   try {
     
-    const { data } = yield call(Api.sortCost, minValue, maxValue);
-    const pagination = yield select(getPagination, prefix);
-    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
-    yield put({
-      type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
-      prefix,
-      payload: {
-        data: payloadFunc(data),
-        currentPage: newPagination.current,
-        needDelay: false,
-        payloadFunc,
-      },
-    })
-  } catch (error) {
-    yield put({
-      type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
-      payload: {
-        error: error.message,
-      }
-    })
-  }
-}
+//     const { data } = yield call(Api.sortCost, minValue, maxValue);
+//     const pagination = yield select(getPagination, prefix);
+//     const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
+//     yield put({
+//       type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
+//       prefix,
+//       payload: {
+//         data: payloadFunc(data),
+//         currentPage: newPagination.current,
+//         needDelay: false,
+//         payloadFunc,
+//       },
+//     })
+//   } catch (error) {
+//     yield put({
+//       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
+//       payload: {
+//         error: error.message,
+//       }
+//     })
+//   }
+// }
 
-function* genreSort(params: SortDataProps): IterableIterator<any> {
-  const {
-    prefix,
-    genre,
-    payloadFunc,
-  } = params;
+// function* genreSort(params: SortDataProps): IterableIterator<any> {
+//   const {
+//     prefix,
+//     genre,
+//     payloadFunc,
+//   } = params;
 
-  try {    
-    const { data } = yield call(Api.sortData2, genre);
-    const pagination = yield select(getPagination, prefix);
-    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
+//   try {    
+//     const { data } = yield call(Api.sortData2, genre);
+//     const pagination = yield select(getPagination, prefix);
+//     const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
 
-    yield put({
-      type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
-      prefix,
-      payload: {
-        data: payloadFunc(data),
-        currentPage: newPagination.current,
-        needDelay: false,
-        payloadFunc,
-      },
-    })
-  } catch (error) {
-    yield put({
-      type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
-      payload: {
-        error: error.message,
-      }
-    })
-  }
-}
+//     yield put({
+//       type: `${prefix}/${TableActions.LOAD_DATA_SUCCESS}`,
+//       prefix,
+//       payload: {
+//         data: payloadFunc(data),
+//         currentPage: newPagination.current,
+//         needDelay: false,
+//         payloadFunc,
+//       },
+//     })
+//   } catch (error) {
+//     yield put({
+//       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
+//       payload: {
+//         error: error.message,
+//       }
+//     })
+//   }
+// }
 
 
 function* removeData(params: RemoveDataProps): IterableIterator<any> {
@@ -304,27 +307,30 @@ export function* removeDataSaga(prefix: string, getSuccessPayload: Function): It
 export function* sortDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
     //debugger
-    const { payload: { field, order } } = yield take(`${prefix}/${TableActions.SORT_DATA}`);
+    const { payload: { field, order, genre, minValue, maxValue } } = yield take(`${prefix}/${TableActions.SORT_DATA}`);
     yield fork(sortData, {
       prefix,
       field,
-      order,      
+      order,
+      genre,
+      minValue,
+      maxValue,      
       payloadFunc: getSuccessPayload,
     });
   }
 }
 
-export function* sortBookByCostSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
-  while (true) {
-    const { payload: { minValue, maxValue } } = yield take(`${prefix}/${TableActions.COST_SORT}`);
-    yield fork(sortBookByCost, {
-      prefix,
-      minValue,
-      maxValue,
-      payloadFunc: getSuccessPayload,
-    });
-  }
-}
+// export function* sortBookByCostSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
+//   while (true) {
+//     const { payload: { minValue, maxValue } } = yield take(`${prefix}/${TableActions.COST_SORT}`);
+//     yield fork(sortBookByCost, {
+//       prefix,
+//       minValue,
+//       maxValue,
+//       payloadFunc: getSuccessPayload,
+//     });
+//   }
+// }
 
 export function* addDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
@@ -340,16 +346,16 @@ export function* addDataSaga(prefix: string, getSuccessPayload: Function): Itera
   }
 }
 
-export function* genreSortSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
-  while (true) {
-    const { payload: { genre } } = yield take(`${prefix}/${TableActions.GENRE_SORT}`);
-    yield fork(genreSort, {
-      prefix,
-      genre,
-      payloadFunc: getSuccessPayload,
-    });
-  }
-}
+// export function* genreSortSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
+//   while (true) {
+//     const { payload: { genre } } = yield take(`${prefix}/${TableActions.GENRE_SORT}`);
+//     yield fork(genreSort, {
+//       prefix,
+//       genre,
+//       payloadFunc: getSuccessPayload,
+//     });
+//   }
+// }
 
 export function* editDataSaga(prefix: string, getSuccessPayload: Function): IterableIterator<any> {
   while (true) {

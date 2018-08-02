@@ -10,15 +10,14 @@ export interface BooksTableProps {
     readonly books: Array<Book>;
     readonly pagination: Pagination;
     readonly loading: boolean;
-    readonly error: string;
-   
+    readonly error: string;   
     
     loadBooks: (pagination: Pagination) => object; 
     removeBook: (_id: string, pagination: Pagination) => object; 
     editBook: (_id: string, name: string, author: string, cost: number, genre: string) => object;        
-    sortBook2: (genre: string, pagination: Pagination) => object;    // genre
+    //sortBook2: (genre: string, pagination: Pagination) => object;    // genre
     sortBook: (field: string, order: string, pagination: Pagination) => object;
-    sortAllBooksByCost: (minValue: number, maxValue: number, pagination: Pagination) => object;
+    //sortAllBooksByCost: (minValue: number, maxValue: number, pagination: Pagination) => object;
   }
 
   export interface SearchBarProps {
@@ -46,8 +45,8 @@ export interface BooksTableProps {
         addBook,
         editBook,
         sortBook,
-        sortBook2,  
-        sortAllBooksByCost                  
+        // sortBook2,  
+        // sortAllBooksByCost                  
       } = this.props
   
       return (        
@@ -63,7 +62,7 @@ export interface BooksTableProps {
                 </Col>
                 <Col span={16}>
                   <BookTable 
-                    sortAllBooksByCost={sortAllBooksByCost}   
+                    //sortAllBooksByCost={sortAllBooksByCost}   
                     sortBook={sortBook}           
                     books={books}
                     pagination={pagination}
@@ -72,7 +71,7 @@ export interface BooksTableProps {
                     loadBooks={loadBooks}            
                     removeBook={removeBook}
                     editBook={editBook}  
-                    sortBook2={sortBook2}            
+                    //sortBook2={sortBook2}            
                   />
                 </Col>                
               </Row>

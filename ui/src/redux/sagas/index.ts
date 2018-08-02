@@ -1,4 +1,6 @@
-import { loadBooksSaga, searchBookSaga, removeBookSaga, addBookSaga, editBookSaga, sortBookSaga, sortBookSaga2, sortBookByCost } from './bookSaga';
+import { loadBooksSaga, searchBookSaga, removeBookSaga, addBookSaga, editBookSaga, sortBookSaga, 
+  //sortBookSaga2, sortBookByCost 
+} from './bookSaga';
 import { fork, all } from 'redux-saga/effects';
 
 export default function* rootSaga() {
@@ -9,7 +11,7 @@ export default function* rootSaga() {
     fork(addBookSaga),
     fork(editBookSaga),
     fork(sortBookSaga),
-    fork(sortBookSaga2),
-    fork(sortBookByCost)
+    // fork(sortBookSaga2),
+    // fork(sortBookByCost)
   ])
 }

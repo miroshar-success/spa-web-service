@@ -1,6 +1,9 @@
 import { fork } from 'redux-saga/effects';
 import { Book } from '@redux/books/types';
-import { loadDataSaga, searchDataSaga, removeDataSaga, addDataSaga, editDataSaga, sortDataSaga, genreSortSaga, sortBookByCostSaga } from '@redux/common/table/sagas';
+import { loadDataSaga, searchDataSaga, removeDataSaga, addDataSaga, editDataSaga, sortDataSaga, 
+  // genreSortSaga, 
+  // sortBookByCostSaga 
+} from '@redux/common/table/sagas';
 import { TableReducerNameSubscribers } from '@redux/common/table/types';
 
 const prefix = TableReducerNameSubscribers.BOOKS;
@@ -29,13 +32,13 @@ export function* sortBookSaga(): IterableIterator<any> {
   yield fork(sortDataSaga, prefix, getSuccessPayload)
 }
 
-export function* sortBookSaga2(): IterableIterator<any> {
-  yield fork(genreSortSaga, prefix, getSuccessPayload)
-}
+// export function* sortBookSaga2(): IterableIterator<any> {
+//   yield fork(genreSortSaga, prefix, getSuccessPayload)
+// }
 
-export function* sortBookByCost(): IterableIterator<any> {
-  yield fork(sortBookByCostSaga, prefix, getSuccessPayload)
-}
+// export function* sortBookByCost(): IterableIterator<any> {
+//   yield fork(sortBookByCostSaga, prefix, getSuccessPayload)
+// }
 
 
 const getSuccessPayload = (books: Array<Book>) => {
