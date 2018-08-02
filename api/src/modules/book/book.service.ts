@@ -2,7 +2,7 @@ import { Model, mongoose } from 'mongoose';
 import {Component, Inject} from '@nestjs/common';
 import Book from './book.interface';
 import { ObjectID } from 'bson';
-import { BookSchema } from './book.schema';
+//import { BookSchema } from './book.schema';
 
 let nameFile = "";
 
@@ -26,13 +26,7 @@ export default class BookService {
 
         nameFile = "";
         return await book.save();
-    }
-
-    
-
-    async filterGenre(genreName: String): Promise<Book> {
-        return await this.bookModel.find({genre:genreName });    
-    }
+    }   
     
     async uploadBook(file: Buffer) {
 
@@ -89,9 +83,32 @@ export default class BookService {
         if(field == "cost")
             return await this.bookModel.find().sort({cost: order});        
     }
+    
+    async commonSort(field: String, order: string, genre: String, startCost: Number, endCost: Number): Promise<Book> {
+                
+        var sort, genreNames;
+      
+        if (typeof(genre) != "undefined")      
+            genreNames = genre.split(',');
+        else
+            genreNames = ["Folklore", "Horror", "Humor", "Drama", "Fantasy"];
+            
+        if (typeof(startCost) == "undefined") 
+            startCost = 0;        
+         
+        if (typeof(endCost) == "undefined") 
+            endCost = Number.MAX_VALUE;
+         
+        if (field == "name")         
+            sort = {name: order};
 
+        if (field == "author")
+            sort = {author: order};
 
-    async filterCost(startCost: Number, endCost: Number): Promise<Book> {
-        return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost} }).sort({cost: 1});
+        if (field == "cost")
+            sort = {cost: order};  
+        
+        return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost}, genre:genreNames }).sort(sort);
+        
     }
 }

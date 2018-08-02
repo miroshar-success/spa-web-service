@@ -69,30 +69,17 @@ import {
     @ApiImplicitQuery({ name: "cost", required: true, type: Number })  
     @ApiImplicitQuery({ name: "genre", required: true, type: String })   
     @Put('edit')
-    async edit(@Query() params: any): Promise<Book> {
-      
+    async edit(@Query() params: any): Promise<Book> {      
       return await this.bookService.editById(params._id, params.name, params.author, params.cost, params.genre);
     }
-    
-    @Get('sort')
-    @ApiImplicitQuery({ name: "order", required: true, type: String})
-    @ApiImplicitQuery({ name: "field", required: true, type: String})        
-    async sort(@Query() params: any): Promise<Book> {
-      return await this.bookService.sort(params.field, params.order);      
-    }
-    
-    @Get('filter-genre')
-    @ApiImplicitQuery({ name: "genre", required: true, type: String })
-    async filterGenre(@Query() params: any): Promise<Book> {
-      var input = params.genre;
-      var fields = input.split(',');
-      return await this.bookService.filterGenre(fields);
-    }
-
-    @Get('filter-cost')
-    @ApiImplicitQuery({ name: "endCost", required: true, type: Number })
-    @ApiImplicitQuery({ name: "startCost", required: true, type: Number })    
-    async filterCost(@Query() params: any): Promise<Book> {
-      return await this.bookService.filterCost(params.startCost, params.endCost);
-    }
+   
+    @Get('common-sort')
+    @ApiImplicitQuery({ name: "order", required: false, type: String })
+    @ApiImplicitQuery({ name: "field", required: false, type: String })
+    @ApiImplicitQuery({ name: "genre", required: false, type: String })
+    @ApiImplicitQuery({ name: "endCost", required: false, type: Number })
+    @ApiImplicitQuery({ name: "startCost", required: false, type: Number })
+    async commonSort(@Query() params: any): Promise<Book> {      
+      return await this.bookService.commonSort(params.field, params.order, params.genre, params.startCost, params.endCost);
+    } 
   }
