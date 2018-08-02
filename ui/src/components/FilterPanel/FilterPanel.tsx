@@ -16,19 +16,19 @@ const options = [
     { label: 'Horror',  value: 'Horror' },
   ];
   const radio1 = [
-    { label: 'Name', value: 'Name' },
-    { label: 'Author', value: 'Author' }  
+    { label: 'Name', value: 'name' },
+    { label: 'Author', value: 'author' }  
   ];
   const radio2 = [
-    { label: 'Asc', value: 'Asc' },
-    { label: 'Desc', value: 'Desc' },
+    { label: 'Asc', value: 'asc' },
+    { label: 'Desc', value: 'desc' },
   ];
 
 export default class FilterPanel extends React.Component<FilterPanelProps> {
 
   state = {
-    minValue: 0,
-    maxValue: 0,
+    minValue: "",
+    maxValue: "",
     genre: "",
     field: "",
     order: "",
@@ -55,6 +55,9 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
         pagination,
         sortBook
       } = this.props;
+      
+      console.log(this.state);
+
       sortBook(field, order, genre, minValue, maxValue, pagination);  
     };
 
@@ -73,12 +76,14 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
           }}>
             <FormItem> Sort by
               
-            <RadioGroup 
+            <RadioGroup
+                name="field" 
                 style={{ marginTop: 50 }}
                 options={radio1}
                 onChange={e => this.change(e)}
             /> 
-            <RadioGroup 
+            <RadioGroup
+                name="order" 
                 options={radio2}
                 onChange={e => this.change(e)}
             />         
@@ -90,6 +95,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
               <Input                           
                 prefix={<Icon type="wallet" />}
                 value={this.state.minValue}
+                type="number"
                 onChange={e => this.change(e)} 
                 placeholder="Min" 
                 name="minValue"
@@ -97,6 +103,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
               <Input
                 prefix={<Icon type="wallet" />} 
                 value={this.state.maxValue}
+                type="number"
                 onChange={e => this.change(e)}
                 placeholder="Max" 
                 name="maxValue"
@@ -117,7 +124,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
               type="primary" 
               htmlType="submit" 
               className="login-form-button"
-              onClick={() => this.onSubmit(this.state.field, this.state.order, this.state.genre, this.state.minValue, this.state.maxValue)}
+              onClick={() => this.onSubmit(this.state.field, this.state.order, this.state.genre, Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}
               >
               Submit
             </Button>

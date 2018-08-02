@@ -19,8 +19,20 @@ export const editData = (_id: string, name: string, author: string, cost: number
 }
 
 export const sortData = (field: string, order: string, genre: string, startCost: number, endCost: number) => {
-  return axios.get(`data/books/sort?field=${field}&order=${order}&genre=${genre}&startCost=${startCost}&endCost=${endCost}`);
+  return axios.get(`data/books/common-sort`, {
+    params: {
+      field: field,
+      order: order,
+      genre: genre,
+      startCost: startCost,
+      endCost: endCost
+    }
+  });
 } 
+
+/*export const sortData = (field: string, order: string, genre: string, startCost: number, endCost: number) => {
+  return axios.get(`data/books/common-sort?field=${field}&order=${order}&genre=${genre}&startCost=${startCost}&endCost=${endCost}`);
+}*/
 
 /*export const sortData = (field: string, order: string) => {
   return axios.get(`data/books/sort?field=${field}&order=${order}`); 

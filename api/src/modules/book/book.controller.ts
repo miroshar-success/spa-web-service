@@ -79,7 +79,8 @@ import {
     @ApiImplicitQuery({ name: "genre", required: false, type: String })
     @ApiImplicitQuery({ name: "endCost", required: false, type: Number })
     @ApiImplicitQuery({ name: "startCost", required: false, type: Number })
-    async commonSort(@Query() params: any): Promise<Book> {      
+    async commonSort(@Query() params: any): Promise<Book> {
+      console.log(params);      
       return await this.bookService.commonSort(params.field, params.order, params.genre, params.startCost, params.endCost);
     } 
   }

@@ -72,7 +72,7 @@ export default class BookService {
         return await this.bookModel.findByIdAndUpdate(_id, {name: _name, author: _author, cost: _cost, genre: _genre});
     }
     
-    async sort(field: String, order: String): Promise<Book> {       
+    /*async sort(field: String, order: String): Promise<Book> {       
         
         if(field == "name")         
             return await this.bookModel.find().sort({name: order});
@@ -82,7 +82,7 @@ export default class BookService {
 
         if(field == "cost")
             return await this.bookModel.find().sort({cost: order});        
-    }
+    }*/
     
     async commonSort(field: string, order: string, genre: string, startCost: number, endCost: number): Promise<Book> {
                 
@@ -93,10 +93,10 @@ export default class BookService {
         else
             genreNames = ["Folklore", "Horror", "Humor", "Drama", "Fantasy"];
             
-        if (startCost == NaN) 
+        if (typeof(startCost) == "undefined") 
             startCost = 0;        
          
-        if (endCost == NaN) 
+        if (typeof(endCost) == "undefined") 
             endCost = Number.MAX_VALUE;
          
         if (field == "name")         
