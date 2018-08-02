@@ -32,7 +32,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
     genre: "",
     field: "",
     order: "",
-    checkedList: [''],
+    checkedList: [],
   };
 
   change = (e: any) => {            

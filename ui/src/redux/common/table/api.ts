@@ -18,30 +18,40 @@ export const editData = (_id: string, name: string, author: string, cost: number
   return axios.put(`data/books/edit?cost=${cost}&author=${author}&name=${name}&_id=${_id}&genre=${genre}`);
 }
 
-export const sortData = (field: string, order: string, genre: string, startCost: number, endCost: number) => {
-  return axios.get(`data/books/common-sort`, {
-    params: {
-      field: field,
-      order: order,
-      genre: genre,
-      startCost: startCost,
-      endCost: endCost
-    }
-  });
-} 
+export var sortData = (field: string, order: string, genre: string, startCost: number, endCost: number) => {
 
-/*export const sortData = (field: string, order: string, genre: string, startCost: number, endCost: number) => {
-  return axios.get(`data/books/common-sort?field=${field}&order=${order}&genre=${genre}&startCost=${startCost}&endCost=${endCost}`);
-}*/
+  var sortRequest: string = "data/books/common-sort?";
+  
+  if( field != "" && order != "" ) 
+    sortRequest = sortRequest + "field=" + field + "&order=" + order;
+    
+  if( genre.length > 0 )
+    sortRequest = sortRequest + "&genre=" + genre;
 
-/*export const sortData = (field: string, order: string) => {
+  if( startCost >= 0)
+    sortRequest = sortRequest + "&startCost=" + startCost;
+
+  if( endCost <= Number.MAX_VALUE)
+    sortRequest = sortRequest + "&endCost=" + endCost;
+
+  debugger
+  console.log(genre, startCost, endCost);
+  console.log(sortRequest)
+  return axios.get(sortRequest);
+
+}
+
+
+
+/*
+sortData = (field: string, order: string) => {
   return axios.get(`data/books/sort?field=${field}&order=${order}`); 
 }
 
-export const sortData2 = (genre: string) => {
-  return axios.get(`data/books/filter-genre?&genre=${genre}`); 
+sortData = (genre: string) => {
+  return axios.get(`data/books/sort?&genre=${genre}`); 
 }
 
-export const sortCost = (startCost: number, endCost: number) => {
-  return axios.get(`data/books/filter-cost?startCost=${startCost}&endCost=${endCost}`)
+sortData = (startCost: number, endCost: number) => {
+  return axios.get(`data/books/sort?startCost=${startCost}&endCost=${endCost}`);
 }*/
