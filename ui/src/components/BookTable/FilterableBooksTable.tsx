@@ -16,7 +16,7 @@ export interface BooksTableProps {
     removeBook: (_id: string, pagination: Pagination) => object; 
     editBook: (_id: string, name: string, author: string, cost: number, genre: string) => object;        
     //sortBook2: (genre: string, pagination: Pagination) => object;    // genre
-    sortBook: (field: string, order: string, pagination: Pagination) => object;
+    sortBook: (field: string, order: string, genre: string, minValue: number, maxValue: number, pagination: Pagination) => object;
     //sortAllBooksByCost: (minValue: number, maxValue: number, pagination: Pagination) => object;
   }
 
