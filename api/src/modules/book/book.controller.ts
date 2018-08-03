@@ -23,6 +23,7 @@ import {
     @ApiImplicitQuery({ name: "cost", required: true, type: Number }) 
     @ApiImplicitQuery({ name: "genre", required: true, type: String})
     async newBook(@Query() params: any ): Promise<Book>{
+      console.log(await this.bookService.newBook(params.name, params.author, params.cost, params.genre));
       return await this.bookService.newBook(params.name, params.author, params.cost, params.genre);
     }
 
@@ -82,5 +83,12 @@ import {
     async commonSort(@Query() params: any): Promise<Book> {
       console.log(params);      
       return await this.bookService.commonSort(params.field, params.order, params.genre, params.startCost, params.endCost);
-    } 
+    }
+    
+    @ApiImplicitQuery({ name: "name", required: true, type: String })
+    @ApiImplicitQuery({ name: "author", required: true, type: String })
+    @Get('findbook')
+    async findBook(@Query() params: any): Promise <Book[]> {
+      return await this.bookService.findBookByNameAndAuthor(params.name, params.author);
+    }
   }
