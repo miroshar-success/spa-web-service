@@ -49,6 +49,5 @@ module.exports = merge(common, {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    // new FontFaceRemoverPlugin(),
   ],
 })
