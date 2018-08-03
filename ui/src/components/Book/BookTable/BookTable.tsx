@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Table, Button, Icon, Popconfirm, message, Checkbox, Input, Form, Upload, Select, Modal} from 'antd';
+import { Table, Button, Icon, Popconfirm, message, Input, Form, Upload, Select, Modal} from 'antd';
 import { Book } from '@redux/books/types';
 import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { BooksTableProps } from '@components/Book/BookTable/FilterableBooksTable';
 
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
 
 const options = [
@@ -18,7 +17,6 @@ const options = [
 ];
 
 export default class BookTable extends React.PureComponent<BooksTableProps> {
-
     state = { 
       _id: "",     
       name: "",
@@ -36,7 +34,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       visible: false,
       minValue: "",
       maxValue: "",
-
       previewImage: '',
       previewVisible: false,
 
@@ -71,153 +68,25 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       {
         title: 'Name',
         dataIndex: 'name',           
-        key: 'name', 
-        filterDropdown: () => (
-          <div style={{
-            width: "210px",
-            height: "50px",
-            backgroundColor: "#FDF9F9",
-            border: "1px solid",
-            borderRadius: "5px",
-            borderColor: "#ebedf0",
-            paddingLeft: "14px",
-            paddingTop: "8px"            
-          }}>            
-            <Button 
-              type="primary"  
-              //onClick={() => this.sort("name", "asc")}
-              >
-              Sort asc
-            </Button>
-            <Button 
-              type="primary"  
-              style={{marginLeft: 10}}  
-              //onClick={() => this.sort("name", "desc")}
-              >
-              Sort desc
-            </Button>    
-          </div>
-        ),
-        filterIcon: () => <Icon type="down-square-o"/>,        
+        key: 'name',                 
         render: (text, record) => <span>{record.name}</span>
       },      
       {
         title: 'Автор',
         dataIndex: 'author',
-        key: 'author',
-        filterDropdown: () => (
-          <div style={{
-            width: "210px",
-            height: "50px",
-            backgroundColor: "#FDF9F9",
-            border: "1px solid",
-            borderRadius: "5px",
-            borderColor: "#ebedf0",
-            paddingLeft: "14px",
-            paddingTop: "8px"            
-          }}>            
-            <Button 
-              type="primary"              
-              //onClick={() => this.sort("author", "asc")}
-            >
-              Sort asc
-            </Button>
-            <Button 
-              type="primary"
-              style={{marginLeft: 10}} 
-              //onClick={() => this.sort("author", "desc")}
-              >
-              Sort desc
-            </Button>    
-          </div>
-        ),
-        filterIcon: () => <Icon type="down-square-o"/>,
+        key: 'author',        
         render: (text, record) => <span>{record.author}</span>
       },
       {
         title: 'Цена',
         dataIndex: 'cost',
-        key: 'cost',
-        filterDropdown: () => (
-          <div style={{
-            width: "170px",
-            height: "135px",
-            backgroundColor: "#FDF9F9",
-            border: "1px solid",
-            borderRadius: "5px",
-            borderColor: "#ebedf0",
-            paddingLeft: "11px",            
-          }}>
-            <div style={{}}>     
-              <Input
-                prefix={<Icon type="wallet" />}
-                value={this.state.minValue}
-                style= {{width: 146, position: "fixed", marginTop: 10}}
-                placeholder="min"
-                name="minValue"
-                onChange={e => this.change(e)} 
-              />
-              <Input 
-                placeholder="max"
-                prefix={<Icon type="wallet" />}
-                value={this.state.maxValue}
-                style={{width: 146, marginTop: 50,  position: "fixed"}}
-                name="maxValue"
-                onChange={e => this.change(e)}   
-              />
-              <Button 
-                type="primary"  
-                style={{marginLeft: 5, marginTop: 90}} 
-                //onClick={() => this.handleCostSort(Number.parseInt(this.state.minValue), Number.parseInt(this.state.maxValue))}
-              >
-                Filter
-              </Button>
-              <Button 
-                type="primary"  
-                style={{marginLeft: 10}} 
-                onClick={(e: any) => this.handleReset(e)}>
-                Reset
-              </Button>
-              </div>    
-          </div>
-        ),
+        key: 'cost',        
         render: (text, record) => <span>{record.cost}</span>
       },
       {
         title: 'Жанр',
         dataIndex: 'genre',
-        key: 'genre', 
-        filterDropdown: () => (
-          <div style={{
-            width: "170px",
-            height: "165px",
-            backgroundColor: "#FDF9F9",
-            border: "1px solid",
-            borderRadius: "5px",
-            borderColor: "#ebedf0",
-            paddingLeft: "11px",
-            marginLeft: "7px"                        
-          }}>            
-            <CheckboxGroup 
-              options={options} 
-              style={{ width: 90, height: 120 }}
-              value={this.state.checkedList}
-             // onChange={this.onChange}
-              />  <br />
-            <Button 
-              type="primary"
-              //onClick={() => this.handleGenreSort(this.state.genre)}
-              >
-              Filter
-            </Button>
-            <Button 
-              type="primary"
-              style={{marginLeft: "9px"}}  
-              onClick={(value: any) => this.handleReset(value)}>
-              Reset
-            </Button>    
-          </div>
-        ),
+        key: 'genre',        
         render: (text, record) => <span>{record.genre}</span>
       },
       { width: 100,
@@ -326,16 +195,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         checkedList,
       });
     }
-
-    // handleCostSort = (minValue: number, maxValue: number) => {
-    //   const {        
-    //     pagination,
-    //     sortAllBooksByCost,
-    //   } = this.props;  
-    //   sortAllBooksByCost(minValue, maxValue, pagination);
-    //   message.success('sorted!');      
-    // };
-    
+        
     handleReset(e: any) {
       const {
         pagination: {
@@ -350,14 +210,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });  
     };
 
-    // sort = (field: string, order: string) => {
-    //   const {
-    //     pagination,
-    //     sortBook
-    //   } = this.props;
-    //   sortBook(field, order, pagination);  
-    // };
-
+    
     validate = () => {      
       let isError = false;
       if(this.state.name.length < 3 ) {
@@ -444,15 +297,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       removeBook(_id, pagination);
       message.success('Deleted!');      
     };
-
-    // handleGenreSort = ( genre: string) => {
-    //   const {        
-    //     pagination,
-    //     sortBook2,
-    //   } = this.props;
-    //   sortBook2(genre, pagination);
-    //   message.success('sorted!');      
-    // };  
+    
     
     componentDidMount() {     
       const {
