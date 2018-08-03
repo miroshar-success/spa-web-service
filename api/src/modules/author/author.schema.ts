@@ -12,7 +12,7 @@ export const authorSchema = new mongoose.Schema(
       required: true,
     },
     lifetime: {
-      type: String
+      type: Date
     }
   }
 )
@@ -20,7 +20,7 @@ export const authorSchema = new mongoose.Schema(
 authorSchema.index({
   name: 'text',
   surname: 'text',   
-  lifetime: 'text'   
+  //lifetime: 'date'   
 })
 
 authorSchema.plugin(mongoosePaginate);

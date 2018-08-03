@@ -17,9 +17,11 @@ import {
     @Post('newAuthor')
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "surname", required: true, type: String })
-    @ApiImplicitQuery({ name: "lifetime", required: true, type: String }) 
+    @ApiImplicitQuery({ name: "lifetime", required: false, type: Date }) 
     async newBook(@Query() params: any ): Promise<Author>{
+      
       return await this.authorService.newAuthor(params.name, params.surname, params.lifetime);
+      
     } 
 
     @Get('all')
@@ -36,7 +38,7 @@ import {
     @ApiImplicitQuery({ name: "_id", required: true, type: String })
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "surname", required: true, type: String })
-    @ApiImplicitQuery({ name: "lifetime", required: true, type: String })    
+    @ApiImplicitQuery({ name: "lifetime", required: true, type: Date})    
     @Put('edit')
     async edit(@Query() params: any): Promise<Author> {      
       return await this.authorService.editById(params._id, params.name, params.surname, params.lifetime);

@@ -10,9 +10,9 @@ export interface AuthorsTableProps {
     readonly loading: boolean;
     readonly error: string;   
     
-    loadBooks: () => object; 
-    removeBook: (_id: string) => object; 
-    editBook: (_id: string, name: string, author: string, cost: number, genre: string) => object;        
+    loadAuthors: () => object; 
+    removeAuthor: (_id: string) => object; 
+    editAuthor: (_id: string, name: string, surname: string, lifetime: Date) => object;        
   }
 
   export interface SearchBarProps {
@@ -23,7 +23,6 @@ export interface AuthorsTableProps {
     addAuthor: (name: string, surname: string, lifetime: Date) => object;
   }
 
-
   type FilterableBooksTableProps = AuthorsTableProps & SearchBarProps & AuthorFormProps;
 
   export default class FilterableBooksTable extends React.Component<FilterableBooksTableProps> {
@@ -33,11 +32,11 @@ export interface AuthorsTableProps {
         authors, 
         loading,
         error,
-        loadBooks,
-        searchBook,
-        removeBook,
+        loadAuthors,
+        searchAuthors,
+        removeAuthor,
         addAuthor,
-        editBook,                 
+        editAuthor,                 
       } = this.props
   
       return (        
@@ -45,7 +44,7 @@ export interface AuthorsTableProps {
               <Row>
                 <Col span={8}>
                   <SearchBar               
-                    onSearch={searchBook} />
+                    onSearch={searchAuthors}/>
                   <AuthorForm
                     addAuthor={addAuthor}
                     />
@@ -55,9 +54,9 @@ export interface AuthorsTableProps {
                     authors={authors}
                     loading={loading}
                     error={error}
-                    loadBooks={loadBooks}            
-                    removeBook={removeBook}
-                    editBook={editBook}               
+                    loadAuthors={loadAuthors}            
+                    removeAuthor={removeAuthor}
+                    editAuthor={editAuthor}               
                   />
                 </Col>                
               </Row>

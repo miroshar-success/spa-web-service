@@ -80,14 +80,12 @@ export default class BookForm extends React.Component<BookFormProps> {
   };
 
   changeGenre = (value: any) => {          
-    
     this.setState({
       genre: value
     });    
   };
 
   onSubmit = (e: any) => {
-
     this.setState({      
       validateStatusErrorName: undefined,
       validateStatusErrorAuthor: undefined,

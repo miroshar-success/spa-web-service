@@ -29,6 +29,15 @@ export interface TableStateShape {
   order: string
 }
 
+export interface Pagination {
+  pageSize: number;
+  current: number;
+  total?: number;
+}
+
+export type DataType = Array<Book>
+
+
 export interface LoadDataProps {
   prefix: string;
   url: string;
@@ -74,11 +83,7 @@ export interface EditDataProps {
   payloadFunc: Function;
 }
 
-export interface Pagination {
-  pageSize: number;
-  current: number;
-  total?: number;
-}
 
-export type DataType = Array<Book>
+
+
   

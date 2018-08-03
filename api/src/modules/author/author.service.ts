@@ -7,14 +7,21 @@ import { ObjectID } from 'bson';
 export default class AuthorService {
     constructor(@Inject('AuthorModelToken') private readonly authorModel: Model<Author>) {}
     
-    async newAuthor(_name: String, _surname: String, _lifetime: String): Promise<Author> {
+    async newAuthor(_name: String, _surname: String, _lifetime: Date): Promise<Author> {
         const author = new this.authorModel();
         
         author.id = ObjectID;
         author.name = _name;
         author.surname = _surname;
         author.lifetime = _lifetime;
-            
+         
+        
+        // var Xmas95 = new Date(_lifetime);
+        // var day = Xmas95.getDate();
+        // var month = Xmas95.getUTCMonth();
+        // var year = Xmas95.getUTCFullYear();
+        // //var month = _lifetime.getMonth()
+        // console.log(year + "-" + month + "-" + day)
         return await author.save();
     }   
 
