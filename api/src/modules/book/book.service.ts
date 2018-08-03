@@ -1,33 +1,59 @@
-import { Model, mongoose } from 'mongoose';
-import {Component, Inject} from '@nestjs/common';
+import { Model } from 'mongoose';
+import { Component, Inject } from '@nestjs/common';
 import Book from './book.interface';
+//import Author from '../author/author.interface';
+
 import { ObjectID } from 'bson';
-//import { BookSchema } from './book.schema';
+import { isNull } from 'util';
+
 
 let nameFile = "";
 
 @Component()
 export default class BookService {
-    constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>) {}
     
-    async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
-        const book = new this.bookModel();
+    constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>,
+                //@Inject('AuthorModelToken') private readonly authorModel: Model<Author>
+            ) {}
         
-        book.id = ObjectID;
-        book.name = _name;
-        book.author =_author;
-        book.cost = _cost;
-        book.genre = _genre;
-            
-        if(nameFile.length === 0)
-            book.url = "NO_IMAGE.png";
-        else
-            book.url = nameFile;
+    async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
+                        
+        var checkBooks = await this.findBookByNameAndAuthor(_name, _author);
+        
+        if(checkBooks.length == 0) {
+            const   book = new this.bookModel();        
+            book.id = ObjectID;
+            book.name = _name;
+            book.author =_author;
+            book.cost = _cost;
+            book.genre = _genre;                
+                
+            if(nameFile.length === 0)
+                book.url = "NO_IMAGE.png";
+            else
+                book.url = nameFile;
 
-        nameFile = "";
-        return await book.save();
+            nameFile = "";
+            return await book.save();
+        } else {
+
+            var emptyBook: Book = {
+                name: "",
+                author: "",
+                cost: 0,
+                genre: "",
+                url: ""
+            };
+            return await emptyBook;
+        }
     }   
     
+    async findBookByNameAndAuthor(_name: String, _author: String): Promise<Book[]> {
+         
+        return await this.bookModel.find({ name: _name, author: _author });
+        
+    }
+
     async uploadBook(file: Buffer) {
 
         var fs = require('fs'), randomstring = require('randomstring');
@@ -111,4 +137,16 @@ export default class BookService {
         return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost}, genre:genreNames }).sort(sort);
         
     }
+    
 }
+
+// export class Author {
+//     constructor(@Inject('AuthorModelToken') private readonly authorModel: Model<Author>) {}
+
+//     async findByNameAndSurname (_name: String, _surname: String): Promise<Author> {
+//         return await this.authorModel.find({ name: _name, surname: _surname });
+//     }    
+
+// }
+
+

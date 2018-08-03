@@ -4,7 +4,7 @@ import {
     Post,
     Query,    
     Delete,
-    Put,   
+    Put   
   } from '@nestjs/common';
   import { ApiImplicitQuery } from '@nestjs/swagger';
   import AuthorService from './author.service';
@@ -40,7 +40,15 @@ import {
     @ApiImplicitQuery({ name: "surname", required: true, type: String })
     @ApiImplicitQuery({ name: "lifetime", required: true, type: Date})    
     @Put('edit')
-    async edit(@Query() params: any): Promise<Author> {      
+    async edit(@Query() params: any): Promise <Author> {      
       return await this.authorService.editById(params._id, params.name, params.surname, params.lifetime);
     }
+
+    @ApiImplicitQuery({ name: "name", required: true, type: String })
+    @ApiImplicitQuery({ name: "surname", required: true, type: String })
+    @Get('find')
+    async find(@Query() params: any): Promise <Author> {
+      return await this.authorService.findByNameAndSurname(params.name, params.surname);
+    }
+
 }

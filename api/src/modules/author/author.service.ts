@@ -1,5 +1,5 @@
 import { Model, mongoose } from 'mongoose';
-import {Component, Inject} from '@nestjs/common';
+import { Component, Inject } from '@nestjs/common';
 import Author from './author.interface';
 import { ObjectID } from 'bson';
 
@@ -36,6 +36,10 @@ export default class AuthorService {
 
     async editById(_id: String, _name: String, _surname: String, _lifetime: String): Promise<Author> {
         return await this.authorModel.findByIdAndUpdate(_id, {name: _name, surname: _surname, lifetime: _lifetime});
+    }
+
+    async findByNameAndSurname (_name: String, _surname: String): Promise<Author> {
+        return await this.authorModel.find({ name: _name, surname: _surname });
     }
     
 }
