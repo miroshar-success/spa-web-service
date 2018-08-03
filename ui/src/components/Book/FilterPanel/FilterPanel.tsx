@@ -78,12 +78,13 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
               
             <RadioGroup
                 name="field" 
-                style={{ marginTop: 50 }}
+                style={{ marginLeft: 20 }}
                 options={radio1}
                 onChange={e => this.change(e)}
             /> 
             <RadioGroup
                 name="order" 
+                style={{ marginLeft: 20 }}
                 options={radio2}
                 onChange={e => this.change(e)}
             />         

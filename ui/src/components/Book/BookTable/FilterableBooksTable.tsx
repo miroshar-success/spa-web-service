@@ -1,11 +1,11 @@
 import * as React from 'react';
 import BookTable from './BookTable';
-import SearchBar from '@components/common/SearchBar/SearchBar';
+import SearchBar from '@components/Book/common/SearchBar/SearchBar';
 import { Pagination } from '@redux/common/table/types';
 import { Book } from '@redux/books/types';
 import BookForm from '../Form/BookForm';
 import { Row, Col } from 'antd';
-import FilterPanel from '@components/FilterPanel/FilterPanel';
+import FilterPanel from '@components/Book/FilterPanel/FilterPanel';
 
 export interface BooksTableProps {
     readonly books: Array<Book>;
