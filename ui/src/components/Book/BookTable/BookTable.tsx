@@ -3,7 +3,7 @@ import { Table, Button, Icon, Popconfirm, message, Checkbox, Input, Form, Upload
 import { Book } from '@redux/books/types';
 import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
-import { BooksTableProps } from './FilterableBooksTable';
+import { BooksTableProps } from '@components/Book/BookTable/FilterableBooksTable';
 
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;

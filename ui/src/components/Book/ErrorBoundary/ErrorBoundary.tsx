@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dropdown from './Dropdown';
+import Dropdown from '@components/Book/ErrorBoundary/Dropdown';
 import './errorBoundary.css';
 // import errorImg from '../../../assets/images/error.png';
 
