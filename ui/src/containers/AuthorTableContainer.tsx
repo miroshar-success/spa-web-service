@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
 import { loadBooks, searchBook, removeBook, addBook, editBook, sortBook, 
-  //sortBook2, sortAllBooksByCost 
 } from '@redux/books/actions';
 import {
   getData,
@@ -10,7 +9,7 @@ import {
   getError,
 } from '@redux/common/table/reducer';
 import { TableReducerNameSubscribers } from '@redux/common/table/types';
-import FilterableBooksTable from '../components/Book/BookTable/FilterableBooksTable';
+import FilterableAuthorsTable from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 
 const prefix = TableReducerNameSubscribers.BOOKS;
@@ -23,5 +22,4 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default connect(mapStateToProps, { loadBooks, searchBook, removeBook, addBook, editBook, sortBook, 
-  //sortBook2, sortAllBooksByCost 
-})(FilterableBooksTable);
+})(FilterableAuthorsTable);

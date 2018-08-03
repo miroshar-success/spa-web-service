@@ -1,4 +1,4 @@
-import { TableStateShape, TableActions, TableReducerNameSubscribers } from './types';
+import { TableStateShape, TableActions, TableReducerNameSubscribers } from '@redux/common/table/types';
 import { RootState } from '@redux/rootReducer';
 
 export const initialState: TableStateShape = {

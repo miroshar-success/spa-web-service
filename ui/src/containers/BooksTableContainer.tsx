@@ -10,7 +10,7 @@ import {
   getError,
 } from '@redux/common/table/reducer';
 import { TableReducerNameSubscribers } from '@redux/common/table/types';
-import FilterableBooksTable from '../components/Book/BookTable/FilterableBooksTable';
+import FilterableBooksTable from '@components/Book/BookTable/FilterableBooksTable';
 
 
 const prefix = TableReducerNameSubscribers.BOOKS;

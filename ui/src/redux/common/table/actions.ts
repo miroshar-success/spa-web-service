@@ -3,7 +3,7 @@ import {
   TableActions,
   Pagination,
   DataType,
-} from './types';
+} from '@redux/common/table/types';
 
 export const loadData = (prefix: string) => createAction(`${prefix}/${TableActions.LOAD_DATA}`, resolve => {
   return (pagination: Pagination) => resolve({ pagination })

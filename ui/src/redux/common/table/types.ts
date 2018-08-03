@@ -11,12 +11,12 @@ export enum TableActions {
   SORT_DATA = 'SORT_DATA',
   SORT_DATA_SUCCESS = 'SORT_DATA_SUCCESS',
   GENRE_SORT = 'GENRE_SORT',
-  COST_SORT = 'COST_SORT',
-
+  COST_SORT = 'COST_SORT'
 }
 
 export enum TableReducerNameSubscribers {  
-  BOOKS = '@@books'
+  BOOKS = '@@books',
+  AUTHORS = '@@authors'
 }
 
 export interface TableStateShape {

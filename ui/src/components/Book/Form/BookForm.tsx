@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Input, Icon, Form, Button, message, Upload, Select, Col, Row } from 'antd';
-import { BookFormProps } from '../BookTable/FilterableBooksTable';
+import { BookFormProps } from '@components/Book/BookTable/FilterableBooksTable';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

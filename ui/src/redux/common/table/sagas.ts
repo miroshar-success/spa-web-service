@@ -8,9 +8,9 @@ import {
   AddDataProps, 
   EditDataProps,
   SortDataProps
-  } from './types';
-import { getSearchString, getPagination } from './reducer';
-import * as Api from './api';
+  } from '@redux/common/table/types';
+import { getSearchString, getPagination } from '@redux/common/table/reducer';
+import * as Api from '@redux/common/table/api';
 
 // worker sagas
 function* loadData(params: LoadDataProps): IterableIterator<any> {

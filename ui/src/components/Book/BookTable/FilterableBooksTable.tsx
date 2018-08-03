@@ -1,9 +1,9 @@
 import * as React from 'react';
-import BookTable from './BookTable';
+import BookTable from '@components/Book/BookTable/BookTable';
 import SearchBar from '@components/Book/common/SearchBar/SearchBar';
 import { Pagination } from '@redux/common/table/types';
 import { Book } from '@redux/books/types';
-import BookForm from '../Form/BookForm';
+import BookForm from '@components/Book/Form/BookForm';
 import { Row, Col } from 'antd';
 import FilterPanel from '@components/Book/FilterPanel/FilterPanel';
 

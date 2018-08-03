@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Input, Icon, Form, Button, Col, Row, Checkbox, Radio } from 'antd';
-import { FilterPanelProps } from '../BookTable/FilterableBooksTable';
+import { FilterPanelProps } from '@components/Book/BookTable/FilterableBooksTable';
 
 
 
