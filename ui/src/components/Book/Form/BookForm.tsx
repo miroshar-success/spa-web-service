@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Input, Icon, Form, Button, message, Upload, Select, Col, Row } from 'antd';
 import { BookFormProps } from '@components/Book/BookTable/FilterableBooksTable';
+import axios from 'axios';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -23,8 +24,30 @@ export default class BookForm extends React.Component<BookFormProps> {
     authorError: "",
     costError: "",
     genreError: "",
+    
+    authorsOptions: []
   };
   
+  getAuthors = () => {
+     
+    axios.get(`http://localhost:4000/data/authors/all`).then(response => {
+      var newAuthors: any = [],
+          newAuthorsOptions: any = []
+
+      for(var i = 0; i < response.data.length; i++) {
+        newAuthors[i] = response.data[i].name + " " + response.data[i].surname
+      }
+      
+      newAuthorsOptions = newAuthors.map((author: any) => <Option key={author}>{author}</Option>);
+            
+      this.setState({
+        authorsOptions: newAuthorsOptions
+      });
+    })
+          
+  }
+
+
   validate = () => {
 
     let isError = false;       
@@ -79,13 +102,21 @@ export default class BookForm extends React.Component<BookFormProps> {
     });
   };
 
-  changeGenre = (value: any) => {          
+  changeGenre = (value: any) => {  
     this.setState({
       genre: value
     });    
   };
 
+  changeAuthor = (value: any) => {  
+    this.setState({
+      author: value
+    });    
+  };
+
+
   onSubmit = (e: any) => {
+
     this.setState({      
       validateStatusErrorName: undefined,
       validateStatusErrorAuthor: undefined,
@@ -121,6 +152,8 @@ export default class BookForm extends React.Component<BookFormProps> {
   };
       
   render() {
+        
+    //debugger    
     return(
       <Row>
       <Col span={12}> Registration Form
@@ -145,18 +178,22 @@ export default class BookForm extends React.Component<BookFormProps> {
                 name="name"
               />            
           </FormItem>
-          <FormItem 
+
+          <FormItem
             validateStatus={this.state.validateStatusErrorAuthor}
-            help={this.state.authorError}>            
-              <Input
-                prefix={<Icon type="user" />} 
-                value={this.state.author}
-                type="text"
-                onChange={e => this.change(e)}
-                placeholder="Enter the author" 
-                name="author"
-              />
+            help={this.state.authorError}>
+            <Select                                                  
+              placeholder="Select the author"                  
+              style={{ width: 218 }}
+              onFocus={() => this.getAuthors()}              
+              onChange={(value: any) => this.changeAuthor(value)}>
+                              
+                {this.state.authorsOptions}                  
+                                  
+              </Select>
+
           </FormItem>
+          
           <FormItem
             validateStatus={this.state.validateStatusErrorCost}
             help={this.state.costError}>
