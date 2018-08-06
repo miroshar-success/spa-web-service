@@ -68,7 +68,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
         <Form 
         className="login-form"
         style={{
-          padding: "20px",           
+          padding: "10px",           
           border: "1px solid",
           borderRadius: "5px",
           borderColor: "#ebedf0",
@@ -84,7 +84,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
             /> 
             <RadioGroup
                 name="order" 
-                style={{ marginLeft: 20 }}
+                style={{ marginLeft: 64 }}
                 options={radio2}
                 onChange={e => this.change(e)}
             />         

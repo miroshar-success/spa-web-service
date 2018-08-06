@@ -10,9 +10,9 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   state = {
     name: "",
-    author: "",
+    author: undefined,
     cost: "",
-    genre: "",
+    genre: undefined,
     url: "",
     
     validateStatusErrorName: undefined,
@@ -25,7 +25,9 @@ export default class BookForm extends React.Component<BookFormProps> {
     costError: "",
     genreError: "",
     
-    authorsOptions: []
+    authorsOptions: [],
+
+    
   };
   
   getAuthors = () => {
@@ -34,15 +36,12 @@ export default class BookForm extends React.Component<BookFormProps> {
       var newAuthors: any = [],
           newAuthorsOptions: any = []
 
-      for(var i = 0; i < response.data.length; i++) {
+      for(var i = 0; i < response.data.length; i++) 
         newAuthors[i] = response.data[i].name + " " + response.data[i].surname
-      }
-      
+            
       newAuthorsOptions = newAuthors.map((author: any) => <Option key={author}>{author}</Option>);
             
-      this.setState({
-        authorsOptions: newAuthorsOptions
-      });
+      this.setState({ authorsOptions: newAuthorsOptions });
     })
           
   }
@@ -60,13 +59,24 @@ export default class BookForm extends React.Component<BookFormProps> {
       });
     }
 
-    if(this.state.author.length < 3) {
+    if( typeof(this.state.author) == "undefined" ) {
       isError = true;
+
+      console.log(this.state.author);
+
       this.setState({
-        authorError: "Author needs to be atleast 3 characters long",
+        authorError: "Please select the author",
         validateStatusErrorAuthor: "error"
       });
-    }    
+    }
+    
+    // if(this.state.author.length < 3) {
+    //   isError = true;
+    //   this.setState({
+    //     authorError: "Author needs to be atleast 3 characters long",
+    //     validateStatusErrorAuthor: "error"
+    //   });
+    // }    
 
     if((Number.parseInt(this.state.cost) <= 0) || (this.state.cost.length == 0)) {
       isError = true;
@@ -76,17 +86,26 @@ export default class BookForm extends React.Component<BookFormProps> {
       });
     }
 
-    if(this.state.genre.length == 0) {
+    if( typeof(this.state.genre) == "undefined" ) {
       isError = true;
+      console.log(this.state.genre);
       this.setState({
         genreError: "Please, select the genre",
         validateStatusErrorGenre: "error"
       });
     }
+
+    // if(this.state.genre.length == 0 ) {
+    //   isError = true;
+    //   this.setState({
+    //     genreError: "Please, select the genre",
+    //     validateStatusErrorGenre: "error"
+    //   });
+    // }
     return isError;
   };
 
-  addBook = (name: string, author: string, cost: number, genre: string) => {
+  addBook = (name: string, author: any, cost: number, genre: any) => {
     const {
       pagination,
       addBook
@@ -126,18 +145,22 @@ export default class BookForm extends React.Component<BookFormProps> {
       authorError: "",
       costError: "",
       genreError: ""
+
     });
 
     e.preventDefault();
     const err = this.validate();
 
-    if(!err) {      
+    if(!err) {
+      
+      console.log(this.state);
+
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
       this.setState({        
         name: "",
-        author: "",
+        author: undefined,
         cost: "",        
-        genre: "",        
+        genre: undefined,        
         url: "",
         validateStatusErrorName: undefined,
         validateStatusErrorAuthor: undefined,
@@ -147,13 +170,12 @@ export default class BookForm extends React.Component<BookFormProps> {
         authorError: "",
         costError: "",
         genreError: ""
-      }); 
+      });
+      ///debugger 
     }       
   };
       
   render() {
-        
-    //debugger    
     return(
       <Row>
       <Col span={12}> Registration Form
@@ -182,8 +204,10 @@ export default class BookForm extends React.Component<BookFormProps> {
           <FormItem
             validateStatus={this.state.validateStatusErrorAuthor}
             help={this.state.authorError}>
-            <Select                                                  
-              placeholder="Select the author"                  
+            <Select              
+              allowClear={true}                                                 
+              placeholder="Select the author"
+              value={this.state.author}                 
               style={{ width: 218 }}
               onFocus={() => this.getAuthors()}              
               onChange={(value: any) => this.changeAuthor(value)}>
@@ -209,9 +233,11 @@ export default class BookForm extends React.Component<BookFormProps> {
           <FormItem 
             validateStatus={this.state.validateStatusErrorGenre}
             help={this.state.genreError}>
-              <Select                                  
+              <Select
+                allowClear={true}                                  
                 placeholder="Select the genre"                  
-                style={{ width: 218 }} 
+                style={{ width: 218 }}
+                value={this.state.genre} 
                 onChange={(value: any) => this.changeGenre(value)}>
                 <Option value="Fantasy">Fantasy</Option>
                 <Option value="Drama">Drama</Option>
