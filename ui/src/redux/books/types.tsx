@@ -1,6 +1,6 @@
-import { TableStateShape } from '@redux/common/table/types';
+import { TableStateShape } from "@redux/common/table/types";
 
-export interface BooksState extends TableStateShape { }
+export interface BooksState extends TableStateShape {}
 
 export interface Book {    
     key: string;
@@ -10,4 +10,10 @@ export interface Book {
     cost: number;
     genre: string;
     url: string;    
+}
+
+export interface Pagination {
+    pageSize: number;
+    current: number;
+    total?: number;
 }

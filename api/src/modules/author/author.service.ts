@@ -38,8 +38,11 @@ export default class AuthorService {
         return await this.authorModel.findByIdAndUpdate(_id, {name: _name, surname: _surname, lifetime: _lifetime});
     }
 
-    async findByNameAndSurname (_name: String, _surname: String): Promise<Author> {
-        return await this.authorModel.find({ name: _name, surname: _surname });
+    async search (searchString): Promise<Author> {
+        if (searchString.length === 0) {
+            return await this.authorModel.paginate({}, {limit: 10})
+        } else {
+            return await this.authorModel.paginate({$text: {$search: searchString}}, {limit: 10})
+        }
     }
-    
 }

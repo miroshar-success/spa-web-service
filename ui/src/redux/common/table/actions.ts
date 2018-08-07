@@ -35,24 +35,8 @@ export const editData = (prefix: string) => createAction(`${prefix}/${TableActio
 
 export const sortData = (prefix: string) => createAction(`${prefix}/${TableActions.SORT_DATA}`, resolve => {    
   return (field: string, order: string, genre: string, minValue: number, maxValue: number, pagination: Pagination) => 
-  
   resolve({field, order, genre, minValue, maxValue, pagination })
 });
-
-/*
-export const sortData = (prefix: string) => createAction(`${prefix}/${TableActions.SORT_DATA}`, resolve => {    // name, author
-  return (field: string, order: string, pagination: Pagination) => resolve({field, order, pagination })
-});
-
-export const sortData2 = (prefix: string) => createAction(`${prefix}/${TableActions.GENRE_SORT}`, resolve => {   // genre filter
-  return (genre: string, pagination: Pagination) => resolve({genre, pagination })
-});
-
-export const sortBookByCost = (prefix: string) => createAction(`${prefix}/${TableActions.COST_SORT}`, resolve => {    // cost
-  return (minValue: number, maxValue: number, pagination: Pagination) => resolve({minValue, maxValue, pagination })
-});
-*/
-
 
 
 

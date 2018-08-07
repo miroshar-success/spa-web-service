@@ -1,17 +1,20 @@
-import { TableStateShape } from '@redux/common/table/types';
+import { TableStateShape } from "@redux/common/table/types";
 
-export interface AuthorsState extends TableStateShape{ }
+export interface AuthorsState extends TableStateShape {}
 
 export interface Author  {    
     key: string;
     _id: string,
     name: string; 
     surname: string;
-    lifetime: Date;  
-    data: DataType;
-    searchString: string;
-    loading: boolean;
-    error: string;  
+    dob: string;
+    dod: string;  
 }
 
-export type DataType = Array<Author>
+export interface LoadDataProps {
+    prefix: string;
+    url: string;
+    needDelay: boolean;
+    payloadFunc: Function;
+    searchString: string;
+  }

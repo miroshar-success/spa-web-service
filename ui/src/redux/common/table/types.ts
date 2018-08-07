@@ -1,4 +1,5 @@
 import { Book } from '@redux/books/types';
+import { Author } from '@redux/authors/types';
 
 export enum TableActions {
   LOAD_DATA = 'LOAD_DATA',
@@ -14,10 +15,10 @@ export enum TableActions {
   COST_SORT = 'COST_SORT'
 }
 
-export enum TableReducerNameSubscribers {  
-  BOOKS = '@@books',
-  AUTHORS = '@@authors'
-}
+// export enum TableReducerNameSubscribers {  
+//   BOOKS = '@@books',
+//   AUTHORS = '@@authors'
+// }
 
 export interface TableStateShape {
   data: DataType;
@@ -25,8 +26,7 @@ export interface TableStateShape {
   searchString: string;
   loading: boolean;
   error: string;
-  field: string,
-  order: string
+  
 }
 
 export interface Pagination {
@@ -35,12 +35,12 @@ export interface Pagination {
   total?: number;
 }
 
-export type DataType = Array<Book>
-
+export type DataType = Array<Book> | Array<Author>
 
 export interface LoadDataProps {
   prefix: string;
   url: string;
+  searchString: string;
   currentPage: number;
   needDelay: boolean;
   payloadFunc: Function;

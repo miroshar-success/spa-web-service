@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Input, Icon, Form, Button, Col, Row, DatePicker } from 'antd';
-import { AuthorFormProps } from '../AuthorTable/FilterableAuthorsTable';
+import { AuthorFormProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY/MM/DD';
@@ -32,17 +32,17 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
     console.log(e)
   };
 
-  changeDoB = (value: any,  dateString: any) => {
+  changeDoB = (date: any,  dateString: any) => {
     this.state.dob = dateString;
     console.log(this.state.dob)
   };
-  changeDoD = (value: any,  dateString: any) => {
+  changeDoD = (date: any,  dateString: any) => {
     this.state.dod = dateString;
     console.log(this.state.dod)
   };
 
   onSubmit = (e: any) => {
-    e.preventDefault();
+    //e.preventDefault();
     this.setState({        
         name: "",
         surname: "",
@@ -86,13 +86,17 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
           <FormItem>
               <DatePicker 
                 format={dateFormat} 
-                onChange={(value, datePicker) => this.changeDoB(value, datePicker)}
+                style={{marginLeft: 5}}
+                //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
+                onChange={this.changeDoB}
                 placeholder={"Date of Birth"}
-                value={this.state.dob}
+               // value={this.state.dob}
+                
               />
                
               <DatePicker
                 format={dateFormat} 
+                style={{marginLeft: 5}}
                 onChange={(value, dateString) => this.changeDoD(value, dateString)}
                 placeholder={"Date of Death"}
                 value={this.state.dod}

@@ -12,7 +12,7 @@ export interface AuthorsTableProps {
     
     loadAuthors: () => object; 
     removeAuthor: (_id: string) => object; 
-    editAuthor: (_id: string, name: string, surname: string, lifetime: Date) => object;        
+    editAuthor: (_id: string, name: string, surname: string, lifetime: string) => object;        
   }
 
   export interface SearchBarProps {
@@ -23,9 +23,9 @@ export interface AuthorsTableProps {
     addAuthor: (name: string, surname: string, lifetime: Date) => object;
   }
 
-  type FilterableBooksTableProps = AuthorsTableProps & SearchBarProps & AuthorFormProps;
+  type FilterableAuthorsTableProps = AuthorsTableProps & SearchBarProps & AuthorFormProps;
 
-  export default class FilterableBooksTable extends React.Component<FilterableBooksTableProps> {
+  export default class FilterableAuthorsTable extends React.Component<FilterableAuthorsTableProps> {
 
     render() {
       const {

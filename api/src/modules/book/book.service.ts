@@ -4,7 +4,6 @@ import Book from './book.interface';
 //import Author from '../author/author.interface';
 
 import { ObjectID } from 'bson';
-import { isNull } from 'util';
 
 
 let nameFile = "";
@@ -12,9 +11,7 @@ let nameFile = "";
 @Component()
 export default class BookService {
     
-    constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>,
-                //@Inject('AuthorModelToken') private readonly authorModel: Model<Author>
-            ) {}
+constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>,) {}
         
     async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
                         
@@ -48,10 +45,8 @@ export default class BookService {
         }
     }   
     
-    async findBookByNameAndAuthor(_name: String, _author: String): Promise<Book[]> {
-         
-        return await this.bookModel.find({ name: _name, author: _author });
-        
+    async findBookByNameAndAuthor(_name: String, _author: String): Promise<Book[]> {    
+        return await this.bookModel.find({ name: _name, author: _author });  
     }
 
     async uploadBook(file: Buffer) {
@@ -74,7 +69,7 @@ export default class BookService {
         if (value.length > 0) {
             return await this.bookModel.paginate({$text: {$search: value}}, {offset, limit})
         }
-        return await this.bookModel.paginate({}, {offset, limit});
+        return await this.bookModel.paginate({}, {offset, limit});  
     }
 
     async search(searchString): Promise<Book[]> {
@@ -139,14 +134,3 @@ export default class BookService {
     }
     
 }
-
-// export class Author {
-//     constructor(@Inject('AuthorModelToken') private readonly authorModel: Model<Author>) {}
-
-//     async findByNameAndSurname (_name: String, _surname: String): Promise<Author> {
-//         return await this.authorModel.find({ name: _name, surname: _surname });
-//     }    
-
-// }
-
-

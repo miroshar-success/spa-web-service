@@ -1,23 +1,22 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
-import { loadAuthors, searchAuthor, removeAuthor, addAuthor, editAuthor
+import { loadAuthors, searchAuthors, removeAuthors, addAuthors, editAuthors
 } from '@redux/authors/actions';
 import {
   getData,
   getLoadingStatus,
+  getPagination,
   getError,
-} from '@redux/common/table/reducer';
-import { TableReducerNameSubscribers } from '@redux/common/table/types';
+} from '@redux/authors/reducer';
 import FilterableAuthorsTable from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 
-const prefix = TableReducerNameSubscribers.AUTHORS;
-
 const mapStateToProps = (state: RootState) => ({
-  authors: getData(state, prefix),
-  loading: getLoadingStatus(state, prefix),
-  error: getError(state, prefix),
+  authors: getData(state),
+  loading: getLoadingStatus(state),
+  pagination: getPagination(state),
+  error: getError(state),
 })
 
-export default connect(mapStateToProps, { loadAuthors, searchAuthor, removeAuthor, addAuthor, editAuthor
+export default connect(mapStateToProps, { loadAuthors, searchAuthors, removeAuthors, addAuthors, editAuthors
 })(FilterableAuthorsTable);

@@ -12,7 +12,8 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       _id: "",     
       name: "",
       surname:"",
-      lifetime: "",
+      dob: "",
+      dod: "",
      
       validateStatusErrorName: undefined,
       validateStatusErrorSurname: undefined,
@@ -58,7 +59,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         title: 'Lifetime',
         dataIndex: 'lifetime',
         key: 'lifetime', 
-        render: (text, record) => <span>{record.lifetime}</span>
+        render: (text, record) => <span>{record.dob + "-" + record.dod}</span>
       },
       { width: 100,
         title: "Delete",                               
@@ -112,7 +113,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
                     name="surname"
                   />
                 </FormItem>
-                <FormItem
+                {/* <FormItem
                   label="Lifetime"
                   validateStatus={this.state.validateStatusErrorLifetime}
                   help={this.state.lifetimeError}>
@@ -124,7 +125,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
                     onChange={e => this.change(e)}
                     name="lifetime"
                   /> 
-                </FormItem>                                 
+                </FormItem>                                  */}
               </Form>
             </Modal>         
               <Button 
@@ -198,7 +199,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         _id: record.key,
         name: record.name,
         author: record.surname,
-        lifetime: record.lifetime,
+        //lifetime: record.lifetime,
         visible: true
       });
     };
@@ -250,9 +251,11 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
     //   loadBooks({ pageSize, current });
     // };
   
-    // handleTableChange = ({ pageSize, current }: Pagination) => {
-    //   this.props.loadBooks({ pageSize, current });      
-    // };   
+    handleTableChange = () => {
+      const { loadAuthors} = this.props
+
+      loadAuthors();      
+    };   
   
     render() {
       const {
@@ -269,7 +272,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
             loading={loading}
             size='small'
             style={{ width: 1100 }}
-            //onChange={this.handleTableChange}
+            onChange={this.handleTableChange}
           />
         </div>                
       )

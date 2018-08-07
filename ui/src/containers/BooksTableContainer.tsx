@@ -1,27 +1,23 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
 import { loadBooks, searchBook, removeBook, addBook, editBook, sortBook, 
-  //sortBook2, sortAllBooksByCost 
 } from '@redux/books/actions';
 import {
   getData,
   getPagination,
   getLoadingStatus,
   getError,
-} from '@redux/common/table/reducer';
-import { TableReducerNameSubscribers } from '@redux/common/table/types';
+} from '@redux/books/reducer';
+
 import FilterableBooksTable from '@components/Book/BookTable/FilterableBooksTable';
 
 
-const prefix = TableReducerNameSubscribers.BOOKS;
-
 const mapStateToProps = (state: RootState) => ({
-  books: getData(state, prefix),
-  pagination: getPagination(state, prefix),
-  loading: getLoadingStatus(state, prefix),
-  error: getError(state, prefix),
+  books: getData(state),
+  pagination: getPagination(state),
+  loading: getLoadingStatus(state),
+  error: getError(state),
 })
 
-export default connect(mapStateToProps, { loadBooks, searchBook, removeBook, addBook, editBook, sortBook, 
-  //sortBook2, sortAllBooksByCost 
+export default connect(mapStateToProps, { loadBooks, searchBook, removeBook, addBook, editBook, sortBook
 })(FilterableBooksTable);
