@@ -1,17 +1,14 @@
 import { Model } from 'mongoose';
 import { Component, Inject } from '@nestjs/common';
 import Book from './book.interface';
-//import Author from '../author/author.interface';
-
 import { ObjectID } from 'bson';
-
 
 let nameFile = "";
 
 @Component()
 export default class BookService {
     
-constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>,) {}
+    constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>) {}
         
     async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
                         
@@ -72,12 +69,21 @@ constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>,) 
         return await this.bookModel.paginate({}, {offset, limit});  
     }
 
-    async search(searchString): Promise<Book[]> {
-        if (searchString.length === 0) {
+    async search(search): Promise<Book[]> {
+        
+        if (search.length === 0) {
             return await this.bookModel.paginate({}, {limit: 10})
         } else {
-            return await this.bookModel.paginate({$text: {$search: searchString}}, {limit: 10})
-        }
+
+            if((parseInt(search)) >= 0) {
+                console.log("number")
+                return await this.bookModel.paginate({ $or: [{cost: parseInt(search)}, {name: search}]  })
+            }
+            else {
+                console.log("string")
+                return await this.bookModel.paginate({$text: {$search: search}}, {limit: 10})
+            }
+        }    
     }
 
     async findAllBooks(): Promise<Book[]> {

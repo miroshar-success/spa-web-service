@@ -24,9 +24,10 @@ export const BookSchema = new mongoose.Schema(
 )
 
 BookSchema.index({
+  
   name: 'text',
   author: 'text',
-  genre: 'text',
+  genre: 'text'
 })
 
 BookSchema.plugin(mongoosePaginate);
