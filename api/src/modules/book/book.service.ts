@@ -1,11 +1,7 @@
 import { Model } from 'mongoose';
 import { Component, Inject } from '@nestjs/common';
 import Book from './book.interface';
-//import Author from '../author/author.interface';
-
 import { ObjectID } from 'bson';
-import { isNull, isNumber, isString } from 'util';
-
 
 let nameFile = "";
 
@@ -76,12 +72,6 @@ export default class BookService {
     }
 
     async search(search): Promise<Book[]> {
-
-        //console.log(search + " " + typeof(search))
-        
-        //var searchString = parseInt(search)
-        
-        //console.log(searchString + " " + typeof(searchString))
         
         if (search.length === 0) {
             return await this.bookModel.paginate({}, {limit: 10})
@@ -95,8 +85,6 @@ export default class BookService {
                 console.log("string")
                 return await this.bookModel.paginate({$text: {$search: search}}, {limit: 10})
             }
-
-            
         }    
     }
 
@@ -154,14 +142,3 @@ export default class BookService {
     }
     
 }
-
-// export class Author {
-//     constructor(@Inject('AuthorModelToken') private readonly authorModel: Model<Author>) {}
-
-//     async findByNameAndSurname (_name: String, _surname: String): Promise<Author> {
-//         return await this.authorModel.find({ name: _name, surname: _surname });
-//     }    
-
-// }
-
-
