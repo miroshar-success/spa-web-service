@@ -13,6 +13,7 @@ import {
   import BookService from './book.service';
   import Book from './book.interface';
 
+
   @Controller('data/books')  
   export default class BookController {
     constructor(private readonly bookService: BookService) { }
@@ -48,7 +49,8 @@ import {
 
     @ApiImplicitQuery({ name: "search", required: true, type: String })
     @Get('find')
-    async search(@Query('search') search: string): Promise<Book[]> {
+    async search(@Query('search') search: String): Promise<Book[]> {
+      //console.log(search)
       return await this.bookService.search(search);
     }    
 

@@ -4,7 +4,7 @@ import Book from './book.interface';
 //import Author from '../author/author.interface';
 
 import { ObjectID } from 'bson';
-import { isNull } from 'util';
+import { isNull, isNumber, isString } from 'util';
 
 
 let nameFile = "";
@@ -12,9 +12,7 @@ let nameFile = "";
 @Component()
 export default class BookService {
     
-    constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>,
-                //@Inject('AuthorModelToken') private readonly authorModel: Model<Author>
-            ) {}
+    constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>) {}
         
     async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
                         
@@ -77,12 +75,29 @@ export default class BookService {
         return await this.bookModel.paginate({}, {offset, limit});
     }
 
-    async search(searchString): Promise<Book[]> {
-        if (searchString.length === 0) {
+    async search(search): Promise<Book[]> {
+
+        //console.log(search + " " + typeof(search))
+        
+        //var searchString = parseInt(search)
+        
+        //console.log(searchString + " " + typeof(searchString))
+        
+        if (search.length === 0) {
             return await this.bookModel.paginate({}, {limit: 10})
         } else {
-            return await this.bookModel.paginate({$text: {$search: searchString}}, {limit: 10})
-        }
+
+            if((parseInt(search)) >= 0) {
+                console.log("number")
+                return await this.bookModel.paginate({cost: parseInt(search)})
+            }
+            else {
+                console.log("string")
+                return await this.bookModel.paginate({$text: {$search: search}}, {limit: 10})
+            }
+
+            
+        }    
     }
 
     async findAllBooks(): Promise<Book[]> {
