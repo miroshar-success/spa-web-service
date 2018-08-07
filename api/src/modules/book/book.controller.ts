@@ -49,7 +49,7 @@ import {
 
     @ApiImplicitQuery({ name: "search", required: true, type: String })
     @Get('find')
-    async search(@Query('search') search: String): Promise<Book[]> {
+    async search(@Query('search') search: String | Number): Promise<Book[]> {
       //console.log(search)
       return await this.bookService.search(search);
     }    
