@@ -17,10 +17,11 @@ import {
     @Post('newAuthor')
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "surname", required: true, type: String })
-    @ApiImplicitQuery({ name: "lifetime", required: false, type: Date }) 
+    @ApiImplicitQuery({ name: "dod", required: false, type: Date }) 
+    @ApiImplicitQuery({ name: "dob", required: false, type: Date }) 
     async newBook(@Query() params: any ): Promise<Author>{
       
-      return await this.authorService.newAuthor(params.name, params.surname, params.lifetime);
+      return await this.authorService.newAuthor(params.name, params.surname, params.dod, params.dob);
       
     } 
 
@@ -38,10 +39,11 @@ import {
     @ApiImplicitQuery({ name: "_id", required: true, type: String })
     @ApiImplicitQuery({ name: "name", required: true, type: String })
     @ApiImplicitQuery({ name: "surname", required: true, type: String })
-    @ApiImplicitQuery({ name: "lifetime", required: true, type: Date})    
+    @ApiImplicitQuery({ name: "dob", required: true, type: String}) 
+    @ApiImplicitQuery({ name: "dod", required: true, type: String})      
     @Put('edit')
     async edit(@Query() params: any): Promise <Author> {      
-      return await this.authorService.editById(params._id, params.name, params.surname, params.lifetime);
+      return await this.authorService.editById(params._id, params.name, params.surname, params.dob, params.dod);
     }
 
     @ApiImplicitQuery({ name: "search", required: true, type: String })

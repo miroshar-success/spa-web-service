@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Table, Button, Icon, Popconfirm, message, Input, Form, Modal} from 'antd';
 import { Author } from '@redux/authors/types';
 import { ColumnProps } from 'antd/lib/table';
+import { Pagination } from '@redux/common/table/types';
 import { AuthorsTableProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 const FormItem = Form.Item;
@@ -12,8 +13,9 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       _id: "",     
       name: "",
       surname:"",
-      dob: "",
       dod: "",
+      dob: "",
+      
      
       validateStatusErrorName: undefined,
       validateStatusErrorSurname: undefined,
@@ -24,14 +26,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       lifetimeError: "",
       
       visible: false,
-      // minValue: "",
-      // maxValue: "",
-
-      // previewImage: '',
-      // previewVisible: false,
-
-      
-      // checkedList: [''],
     };    
     
     handleCancel = () => this.setState({ previewVisible: false })
@@ -41,6 +35,21 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         previewVisible: true, 
       });
     }
+
+    editAuthor = (_id: string) => {  
+
+      const {        
+        editAuthor
+      } = this.props;
+
+      this.defaultState;
+      if(!this.validate()) {
+        editAuthor(this.state._id, this.state.name, this.state.surname, this.state.dod, this.state.dob);
+        this.defaultState;
+        this.state.visible = false;     
+        message.success('Edited!');
+      } 
+    };
 
     private readonly columns: ColumnProps<Author>[] = [ 
       {
@@ -66,7 +75,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         render: (text, record) =>
         <div> 
           <Popconfirm title="Are you sure?" 
-            //onConfirm={() => this.removeAuthor(record.key)}            
+            onConfirm={() => this.removeAuthor(record.key)}            
             onCancel={() => message.error('Cancel!')}
             okText="Yes"
             cancelText="No">
@@ -84,7 +93,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         render: (text, record) => 
         <div>
             <Modal
-                //onOk={() => this.editBook(record.key)}
+                onOk={() => this.editAuthor(record.key)}
                 onCancel={() =>  this.setState({ visible: false })}
                 visible={this.state.visible}  
                 title="Edit">
@@ -199,7 +208,8 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         _id: record.key,
         name: record.name,
         author: record.surname,
-        //lifetime: record.lifetime,
+        dob: record.dob,
+        dod: record.dod,
         visible: true
       });
     };
@@ -219,47 +229,38 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       });
     };  
 
-    // editAuthor = (_id: string) => {  
 
-    //   const {        
-    //     editAuthor
-    //   } = this.props;
-
-    //   this.defaultState;
-    //   if(!this.validate()) {
-    //     editAuthor(this.state._id, this.state.name, this.state.surname, this.state.lifetime);
-    //     this.defaultState;
-    //     this.state.visible = false;     
-    //     message.success('Edited!');
-    //   } 
-    // };
-
-    // removeAuthor = (_id: string) => {
-    //   const {        
-    //     removeAuthor
-    //   } = this.props;  
-    //   removeAuthor(_id);
-    //   message.success('Deleted!');      
-    // };
+    removeAuthor = (_id: string) => {
+      const {        
+        removeAuthor
+      } = this.props;  
+      removeAuthor(_id);
+      message.success('Deleted!');      
+    };
 
     
     
-    // componentDidMount() {     
-    //   const {
-    //     loadBooks,                
-    //   } = this.props;  
-    //   loadBooks({ pageSize, current });
-    // };
+    componentDidMount() {     
+      const {
+        pagination: {
+          pageSize,
+          current,
+        },
+        loadAuthors,                
+      } = this.props;  
+      loadAuthors({ pageSize, current });
+    };
   
-    handleTableChange = () => {
-      const { loadAuthors} = this.props
+    handleTableChange = ({ pageSize, current }: Pagination) => {
+  
 
-      loadAuthors();      
+      this.props.loadAuthors({ pageSize, current });      
     };   
   
     render() {
       const {
         loading,
+        pagination,
         authors               
       } = this.props;
   
@@ -270,6 +271,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
             columns={this.columns}
             dataSource={authors}          
             loading={loading}
+            pagination={pagination}
             size='small'
             style={{ width: 1100 }}
             onChange={this.handleTableChange}

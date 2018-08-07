@@ -41,8 +41,6 @@ export function authorReducer(state: TableStateShape  = initialState, action: an
 
     case `@@authors/LOAD_DATA_SUCCESS`: {
       const { data, pagination} = action.payload;
-      
-      //debugger
       return {
         ...state,
         data,

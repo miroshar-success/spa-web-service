@@ -274,7 +274,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     };  
 
-    editBook = (_id: string, ) => {  
+    editBook = (_id: string) => {  
 
       const {        
         editBook

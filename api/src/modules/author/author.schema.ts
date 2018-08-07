@@ -11,7 +11,10 @@ export const authorSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    lifetime: {
+    dob: {
+      type: Date
+    },
+    dod: {
       type: Date
     }
   }

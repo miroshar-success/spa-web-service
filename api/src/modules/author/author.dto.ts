@@ -9,5 +9,8 @@ export default class CreateAuthorDto {
     readonly surname: string;
 
     @ApiModelProperty()
-    readonly lifetime: Date;    
+    readonly dob: Date;   
+    
+    @ApiModelProperty()
+    readonly dod: Date;  
 }

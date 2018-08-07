@@ -8,7 +8,6 @@ import {
   getLoadingStatus,
   getError,
 } from '@redux/books/reducer';
-
 import FilterableBooksTable from '@components/Book/BookTable/FilterableBooksTable';
 
 

@@ -71,6 +71,10 @@ export interface AddDataProps {
   cost: number;
   genre: string;
   payloadFunc: Function;
+
+  surname: string;
+  dob: Date;
+  dod: Date;
 }
 
 export interface EditDataProps {
@@ -81,6 +85,10 @@ export interface EditDataProps {
   cost: number;
   genre: string;
   payloadFunc: Function;
+
+  surname: string;
+  dob: Date;
+  dod: Date;
 }
 
 
