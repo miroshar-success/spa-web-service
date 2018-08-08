@@ -1,7 +1,6 @@
 import { take, call, put, fork, cancel, select } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import { 
-  TableActions, 
   Pagination, 
   LoadDataProps, 
   RemoveDataProps, 
@@ -98,7 +97,7 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
       
     //debugger
     yield put({
-      type: `${prefix}/${TableActions.SORT_DATA_SUCCESS}`,            
+      type: `@@books/SORT_DATA_SUCCESS`,            
       payload: {
         data: payloadFunc(data),
         currentPage: newPagination.current,       
@@ -108,7 +107,7 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
   } catch (error) {
     console.log(error)
     yield put({
-      type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
+      type: `@@books/LOAD_DATA_FAILURE`,
       payload: {
         error: error.message,
       }

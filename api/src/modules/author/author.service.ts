@@ -9,7 +9,6 @@ export default class AuthorService {
     
     async newAuthor(_name: String, _surname: String, _dob: Date, _dod: Date): Promise<Author> {
         const author = new this.authorModel();
-        
         author.id = ObjectID;
         author.name = _name;
         author.surname = _surname;

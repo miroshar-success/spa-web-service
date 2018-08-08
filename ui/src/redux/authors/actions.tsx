@@ -5,7 +5,7 @@ import {
     searchData,
     removeData,
     addData,
-    editData,
+    editAuthorData
   } from '@redux/common/table/actions';
 
   
@@ -16,7 +16,8 @@ import {
   export const loadAuthorsFailure = loadDataFailure(prefix);
   
   export const searchAuthors = searchData(prefix);
-  export const removeAuthors = removeData(prefix);
+  export const removeAuthor = removeData(prefix);
   export const addAuthors = addData(prefix);
-  export const editAuthors = editData(prefix);
+  export const editAuthor = editAuthorData(prefix);
+  
   

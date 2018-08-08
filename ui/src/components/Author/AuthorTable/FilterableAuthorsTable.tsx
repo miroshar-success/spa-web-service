@@ -1,9 +1,10 @@
 import * as React from 'react';
 import AuthorTable from '@components/Author/AuthorTable/AuthorTable';
+import AuthorForm from '@components/Author/Form/AuthorForm';
 import SearchBar from '@components/Book/common/SearchBar/SearchBar';
 import { Pagination } from '@redux/common/table/types';
 import { Author } from '@redux/authors/types';
-import AuthorForm from '@components/Author/Form/AuthorForm';
+
 import { Row, Col } from 'antd';
 
 export interface AuthorsTableProps {
@@ -13,7 +14,7 @@ export interface AuthorsTableProps {
     readonly pagination: Pagination;  
     
     loadAuthors: (pagination: Pagination) => object; 
-    removeAuthor: (_id: string) => object; 
+    removeAuthor: (_id: string, pagination: Pagination) => object; 
     editAuthor: (_id: string, name: string, surname: string, dob: string, dod: string) => object;        
   }
 

@@ -38,6 +38,10 @@ export const sortData = (prefix: string) => createAction(`${prefix}/${TableActio
   resolve({field, order, genre, minValue, maxValue, pagination })
 });
 
+export const editAuthorData = (prefix: string) => createAction(`${prefix}/${TableActions.EDIT_DATA}`, resolve => {
+  return (_id: string, name: string, surname: string, dob: number, dod: string) => resolve({ _id, name, surname, dob, dod })
+});
+
 
 
 

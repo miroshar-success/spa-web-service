@@ -93,7 +93,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: "Удалить",                               
         render: (text, record) =>
         <div> 
-          <Popconfirm title="Are u sure delete this item?" 
+          <Popconfirm title="Are u sure?" 
             onConfirm={() => this.removeBook(record.key)}            
             onCancel={() => message.error('Cancel!')}
             okText="Yes"

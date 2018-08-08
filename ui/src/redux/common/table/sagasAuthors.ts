@@ -8,7 +8,7 @@ import {
   AddDataProps, 
   EditDataProps,
   } from '@redux/common/table/types';
-import { getSearchString, getPagination } from '@redux/books/reducer';
+import { getSearchString, getPagination } from '@redux/authors/reducer';
 import * as Api from '@redux/authors/api';
 
 // worker sagas
@@ -145,7 +145,7 @@ function* editData(params: EditDataProps): IterableIterator<any> {
   } = params;
 
   try {    
-    const { data } = yield call(Api.editAuthor, _id, name, surname,  dod, dob);
+    const { data } = yield call(Api.editAuthor,  dod, dob, surname, name,  _id);
     const pagination = yield select(getPagination, prefix);
     const newPagination = updatePaginationIfNeeded(pagination,  data)
     yield fork(loadData, {

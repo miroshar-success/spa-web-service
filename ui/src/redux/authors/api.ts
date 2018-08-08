@@ -18,6 +18,6 @@ export const removeAuthor = (_id: string) => {
     return axios.post(`data/authors/newAuthor?dob=${dob}&dod=${dod}&surname=${surname}&name=${name}`);  
   }
   
-  export const editAuthor = (_id: string, name: string, surname: string, dob: Date, dod: Date) => {
+  export const editAuthor = (dod: Date, dob: Date,  surname: string, name: string,  _id: string) => {
     return axios.put(`data/authors/edit?dod=${dod}&dob=${dob}&surname=${surname}&name=${name}&_id=${_id}`);
   }

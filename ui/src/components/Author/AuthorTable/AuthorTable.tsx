@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Table, Button, Icon, Popconfirm, message, Input, Form, Modal} from 'antd';
+import { Table, Button, Icon, Popconfirm, message, Input, Form, Modal, DatePicker} from 'antd';
 import { Author } from '@redux/authors/types';
 import { ColumnProps } from 'antd/lib/table';
 import { Pagination } from '@redux/common/table/types';
 import { AuthorsTableProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 const FormItem = Form.Item;
+const dateFormat = 'YYYY-MM-DD';
 
 export default class AuthorTable extends React.PureComponent<AuthorsTableProps> {
 
@@ -35,6 +36,15 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         previewVisible: true, 
       });
     }
+
+    changeDoB = (date: any,  dateString: any) => {
+      this.state.dob = dateString;
+      console.log(this.state.dob)
+    };
+    changeDoD = (date: any,  dateString: any) => {
+      this.state.dod = dateString;
+      console.log(this.state.dod)
+    };
 
     editAuthor = (_id: string) => {  
 
@@ -122,19 +132,27 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
                     name="surname"
                   />
                 </FormItem>
-                {/* <FormItem
+                <FormItem
                   label="Lifetime"
                   validateStatus={this.state.validateStatusErrorLifetime}
                   help={this.state.lifetimeError}>
-                  <Input 
-                    prefix={<Icon type="bars" />}
-                    placeholder="Edit the lifetime"
-                    type="date"  
-                    value={this.state.lifetime}
-                    onChange={e => this.change(e)}
-                    name="lifetime"
-                  /> 
-                </FormItem>                                  */}
+                   <DatePicker 
+                    format={dateFormat} 
+                    style={{marginLeft: 5}}
+                    //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
+                    onChange={this.changeDoB}
+                    placeholder={"Date of Birth"}
+                   // value={this.state.dob}
+                  />
+                   <DatePicker 
+                      format={dateFormat} 
+                      style={{marginLeft: 5}}
+                      //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
+                      onChange={this.changeDoB}
+                      placeholder={"Date of Birth"}
+                    // value={this.state.dob}  
+                    />
+                </FormItem>                                 
               </Form>
             </Modal>         
               <Button 
@@ -207,11 +225,12 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       this.setState({
         _id: record.key,
         name: record.name,
-        author: record.surname,
+        surname: record.surname,
         dob: record.dob,
         dod: record.dod,
         visible: true
       });
+      console.log(record.dob)
     };
 
     defaultState = () => {
@@ -231,10 +250,11 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
 
 
     removeAuthor = (_id: string) => {
-      const {        
+      const {     
+        pagination,
         removeAuthor
       } = this.props;  
-      removeAuthor(_id);
+      removeAuthor(_id, pagination);
       message.success('Deleted!');      
     };
 
