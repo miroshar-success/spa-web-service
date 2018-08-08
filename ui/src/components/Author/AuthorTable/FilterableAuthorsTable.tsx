@@ -23,7 +23,8 @@ export interface AuthorsTableProps {
   }
 
   export interface AuthorFormProps {
-    addAuthor: (name: string, surname: string, lifetime: Date) => object;
+    //readonly pagination: Pagination;
+    addAuthor: (name: string, surname: string, dob: string, dod: string) => object;
   }
 
   type FilterableAuthorsTableProps = AuthorsTableProps & SearchBarProps & AuthorFormProps;
@@ -50,6 +51,7 @@ export interface AuthorsTableProps {
                   <SearchBar               
                     onSearch={searchAuthors}/>
                   <AuthorForm
+                    ///pagination={pagination}
                     addAuthor={addAuthor}
                     />
                 </Col>
