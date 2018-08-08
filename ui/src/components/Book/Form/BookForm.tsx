@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, message, Upload, Select, Col, Row } from 'antd';
+import { Input, Icon, Form, Button, Upload, Select, Col, Row, message } from 'antd';
 import { BookFormProps } from '@components/Book/BookTable/FilterableBooksTable';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   state = {
     name: "",
-    author: undefined,
+    author: "",
     cost: "",
     genre: undefined,
     url: "",
@@ -42,14 +42,24 @@ export default class BookForm extends React.Component<BookFormProps> {
       newAuthorsOptions = newAuthors.map((author: any) => <Option key={author}>{author}</Option>);
             
       this.setState({ authorsOptions: newAuthorsOptions });
-    })
-          
+    })       
   }
 
-
-  validate = () => {
-
+  validate = (name: string, author: string) => {
+    let result: string[] = [];
     let isError = false;       
+
+    axios.get(`http://localhost:4000/data/books/findbook?author=${author}&name=${name}`).then(response => {
+        result = response.data
+        if(result.length > 0) {
+          isError = true,
+          this.setState({
+            nameError: "Such book already exists",
+            validateStatusErrorName: "error"
+          });
+        }   
+    })
+
 
     if(this.state.name.length == 0 ) {
       isError = true;
@@ -62,7 +72,15 @@ export default class BookForm extends React.Component<BookFormProps> {
     if( typeof(this.state.author) == "undefined" ) {
       isError = true;
 
-      //console.log(this.state.author);
+      this.setState({
+        authorError: "Please, select the author",
+        validateStatusErrorAuthor: "error"
+      });
+    }
+    console.log(this.state.author)
+    console.log(this.state.author.length)
+    if( this.state.author.length == 0 ) {
+      isError = true;
 
       this.setState({
         authorError: "Please, select the author",
@@ -80,12 +98,13 @@ export default class BookForm extends React.Component<BookFormProps> {
 
     if( typeof(this.state.genre) == "undefined" ) {
       isError = true;
-      //console.log(this.state.genre);
       this.setState({
         genreError: "Please, select the genre",
         validateStatusErrorGenre: "error"
       });
     }
+
+    
     return isError;
   };
 
@@ -96,7 +115,6 @@ export default class BookForm extends React.Component<BookFormProps> {
     } = this.props;   
         
     addBook(name, author, cost, genre, pagination);
-    message.success('Added!');
   }  
 
   change = (e: any) => {            
@@ -129,33 +147,16 @@ export default class BookForm extends React.Component<BookFormProps> {
       authorError: "",
       costError: "",
       genreError: ""
-
     });
 
     e.preventDefault();
-    const err = this.validate();
+    const err = this.validate(this.state.name, this.state.author);
+   
 
     if(!err) {
-      
-      //console.log(this.state);
-
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
-      this.setState({        
-        name: "",
-        author: undefined,
-        cost: "",        
-        genre: undefined,        
-        url: "",
-        validateStatusErrorName: undefined,
-        validateStatusErrorAuthor: undefined,
-        validateStatusErrorCost: undefined,
-        validateStatusErrorGenre: undefined,
-        nameError: "",    
-        authorError: "",
-        costError: "",
-        genreError: ""
-      });
-      ///debugger 
+      this.state;
+      message.success("Success");
     }       
   };
       
@@ -194,14 +195,10 @@ export default class BookForm extends React.Component<BookFormProps> {
               value={this.state.author}                 
               style={{ width: 218 }}
               onFocus={() => this.getAuthors()}              
-              onChange={(value: any) => this.changeAuthor(value)}>
-                              
-                {this.state.authorsOptions}                  
-                                  
+              onChange={(value: any) => this.changeAuthor(value)}>               
+              {this.state.authorsOptions}                                    
               </Select>
-
           </FormItem>
-          
           <FormItem
             validateStatus={this.state.validateStatusErrorCost}
             help={this.state.costError}>
