@@ -78,7 +78,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         title: 'Lifetime',
         dataIndex: 'lifetime',
         key: 'lifetime', 
-        render: (text, record) => <span>{record.dob + "-" + record.dod}</span>
+        render: (text, record) => <span>{record.dob + " — " + record.dod}</span>
       },
       { 
         title: "Delete",                               

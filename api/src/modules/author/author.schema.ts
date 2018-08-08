@@ -12,10 +12,10 @@ export const authorSchema = new mongoose.Schema(
       required: true,
     },
     dob: {
-      type: Date
+      type: Date,     
     },
     dod: {
-      type: Date
+      type: Date,     
     }
   }
 )
