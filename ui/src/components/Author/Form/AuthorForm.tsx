@@ -11,7 +11,11 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
     name: "",
     surname: "",
     dob: "",
-    dod: ""
+    dod: "",
+    validateStatusErrorName: undefined,
+    validateStatusErrorSurname: undefined,
+    nameError: "",
+    surnameError: ""
   };
 
   change = (e: any) => {    
@@ -30,26 +34,59 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
     console.log(this.state.dod)
   };
 
+  validate = () => {
+
+    let isError = false;       
+
+    if(this.state.name.length == 0 ) {
+      isError = true;
+      this.setState({
+        nameError: "Please, fill the field",
+        validateStatusErrorName: "error"
+      });
+    }
+
+    if(this.state.surname.length == 0 ) {
+      isError = true;
+      this.setState({
+        surnameError: "Please, fill the field",
+        validateStatusErrorSurname: "error"
+      });
+    }
+
+    return isError;
+  };
+
   onSubmit = (e: any) => {
   
     this.setState({        
         name: "",
         surname: "",
         dob: "",
-        dod: ""
+        dod: "",
+        validateStatusErrorName: undefined,
+        validateStatusErrorSurname: undefined,
+        nameError: "",
+        surnameError: ""
     }); 
 
     e.preventDefault();
-    //const err = this.validate();
-   // console.log(this.state.lifetime)    // output data   ["2018-08-27", "2018-08-29"]  
-   this.addAuthor(this.state.name, this.state.surname, this.state.dob, this.state.dod);
-   this.setState({        
-      name: "",
-      surname: "",
-      dob: "",
-      dod: ""
-   });
-  
+    const err = this.validate();
+
+    if(!err) {
+      console.log(this.state)  
+      this.addAuthor(this.state.name, this.state.surname, this.state.dob, this.state.dod);
+      this.setState({        
+          name: "",
+          surname: "",
+          dob: "",
+          dod: "",
+          validateStatusErrorName: undefined,
+          validateStatusErrorSurname: undefined,
+          nameError: "",
+          surnameError: ""
+      });
+    }
   };
 
   addAuthor = (name: string, surname: string, dob: string, dod: string) => {
@@ -76,7 +113,9 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
           borderColor: "#ebedf0",
           width: "390px"
           }}>
-          <FormItem>
+          <FormItem
+            validateStatus={this.state.validateStatusErrorName}
+            help={this.state.nameError}>
               <Input                           
                 prefix={<Icon type="user-add" />}
                 value={this.state.name}
@@ -85,7 +124,9 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
                 name="name"
               />            
           </FormItem>
-          <FormItem>            
+          <FormItem
+              validateStatus={this.state.validateStatusErrorSurname}
+              help={this.state.surnameError}>            
               <Input
                 prefix={<Icon type="user-add" />} 
                 value={this.state.surname}
@@ -98,10 +139,9 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
               <DatePicker 
                 format={dateFormat} 
                 style={{marginLeft: 5}}
-                //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
                 onChange={this.changeDoB}
                 placeholder={"Date of Birth"}
-                //value={this.state.dob}
+                
                 
               />
               <DatePicker
@@ -109,7 +149,6 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
                 style={{marginLeft: 5}}
                 onChange={(value, dateString) => this.changeDoD(value, dateString)}
                 placeholder={"Date of Death"}
-                //value={this.state.dod}
               />
           </FormItem>
           <FormItem>
