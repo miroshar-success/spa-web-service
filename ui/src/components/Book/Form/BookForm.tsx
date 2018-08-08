@@ -70,14 +70,6 @@ export default class BookForm extends React.Component<BookFormProps> {
       });
     }
     
-    // if(this.state.author.length < 3) {
-    //   isError = true;
-    //   this.setState({
-    //     authorError: "Author needs to be atleast 3 characters long",
-    //     validateStatusErrorAuthor: "error"
-    //   });
-    // }    
-
     if((Number.parseInt(this.state.cost) <= 0) || (this.state.cost.length == 0)) {
       isError = true;
       this.setState({

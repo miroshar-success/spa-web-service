@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, Col, Row, DatePicker } from 'antd';
+import { Input, Icon, Form, Button, Col, Row, DatePicker, message } from 'antd';
 import { AuthorFormProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 const FormItem = Form.Item;
@@ -10,22 +10,11 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
   state = {
     name: "",
     surname: "",
-    dob: undefined,
-    dod: undefined
+    dob: "",
+    dod: ""
   };
 
-
-  // addBook = (name: string, surname: string, lifetime: string) => {
-  //   const {
-  //     addBook
-  //   } = this.props;   
-        
-  //   addBook(name, surname, lifetime);
-  //   message.success('Added!');
-  // }  
-
-  change = (e: any) => {   
-           
+  change = (e: any) => {    
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -42,14 +31,36 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
   };
 
   onSubmit = (e: any) => {
-    //e.preventDefault();
+  
     this.setState({        
         name: "",
         surname: "",
-        lifetime: [],
+        dob: "",
+        dod: ""
     }); 
+
+    e.preventDefault();
+    //const err = this.validate();
    // console.log(this.state.lifetime)    // output data   ["2018-08-27", "2018-08-29"]  
+   this.addAuthor(this.state.name, this.state.surname, this.state.dob, this.state.dod);
+   this.setState({        
+      name: "",
+      surname: "",
+      dob: "",
+      dod: ""
+   });
+  
   };
+
+  addAuthor = (name: string, surname: string, dob: string, dod: string) => {
+    const {
+      //pagination,
+      addAuthor
+    } = this.props;   
+        
+    addAuthor(name, surname, dob, dod);
+    message.success('Added!');
+  }  
       
   render() {
     return(
@@ -90,16 +101,15 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
                 //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
                 onChange={this.changeDoB}
                 placeholder={"Date of Birth"}
-               // value={this.state.dob}
+                //value={this.state.dob}
                 
               />
-               
               <DatePicker
                 format={dateFormat} 
                 style={{marginLeft: 5}}
                 onChange={(value, dateString) => this.changeDoD(value, dateString)}
                 placeholder={"Date of Death"}
-                value={this.state.dod}
+                //value={this.state.dod}
               />
           </FormItem>
           <FormItem>

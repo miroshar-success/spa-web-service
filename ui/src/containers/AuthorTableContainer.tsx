@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
-import { loadAuthors, searchAuthors, removeAuthor, addAuthors, editAuthor
+import { loadAuthors, searchAuthors, removeAuthor, addAuthor, editAuthor
 } from '@redux/authors/actions';
 import {
   getData,
@@ -18,5 +18,5 @@ const mapStateToProps = (state: RootState) => ({
   error: getError(state),
 })
 
-export default connect(mapStateToProps, { loadAuthors, searchAuthors, removeAuthor, addAuthors, editAuthor
+export default connect(mapStateToProps, { loadAuthors, searchAuthors, removeAuthor, addAuthor, editAuthor
 })(FilterableAuthorsTable);
