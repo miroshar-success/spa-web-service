@@ -80,7 +80,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         key: 'lifetime', 
         render: (text, record) => <span>{record.dob + "-" + record.dod}</span>
       },
-      { width: 100,
+      { 
         title: "Delete",                               
         render: (text, record) =>
         <div> 
@@ -98,7 +98,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
           </Popconfirm>                              
         </div>
       },
-      { width: 150,
+      {
         title: 'Edit',
         render: (text, record) => 
         <div>
@@ -139,18 +139,14 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
                    <DatePicker 
                     format={dateFormat} 
                     style={{marginLeft: 5}}
-                    //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
                     onChange={this.changeDoB}
                     placeholder={"Date of Birth"}
-                   // value={this.state.dob}
                   />
                    <DatePicker 
                       format={dateFormat} 
                       style={{marginLeft: 5}}
-                      //onChange={(date, datePicker) => this.changeDoB(date, datePicker)}
                       onChange={this.changeDoB}
                       placeholder={"Date of Birth"}
-                    // value={this.state.dob}  
                     />
                 </FormItem>                                 
               </Form>
@@ -171,29 +167,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         checkedList,
       });
     }
-
-    // handleCostSort = (minValue: number, maxValue: number) => {
-    //   const {        
-    //     pagination,
-    //     sortAllBooksByCost,
-    //   } = this.props;  
-    //   sortAllBooksByCost(minValue, maxValue, pagination);
-    //   message.success('sorted!');      
-    // };
-    
-    // handleReset(e: any) {
-    //   const {
-    //     pagination: {
-    //       pageSize,
-    //       current,
-    //     },
-    //     loadBooks,                
-    //   } = this.props;  
-    //   loadBooks({ pageSize, current });
-    //   this.setState({
-    //     checkedList: e.target.checked ? options : [],
-    //   });  
-    // };
 
     validate = () => {      
       let isError = false;

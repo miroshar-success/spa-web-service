@@ -19,10 +19,8 @@ import {
     @ApiImplicitQuery({ name: "surname", required: true, type: String })
     @ApiImplicitQuery({ name: "dod", required: false, type: Date }) 
     @ApiImplicitQuery({ name: "dob", required: false, type: Date }) 
-    async newBook(@Query() params: any ): Promise<Author>{
-      
+    async newBook(@Query() params: any ): Promise<Author>{ 
       return await this.authorService.newAuthor(params.name, params.surname, params.dod, params.dob);
-      
     } 
 
     @Get('all')

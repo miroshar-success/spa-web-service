@@ -8,6 +8,7 @@ export default class AuthorService {
     constructor(@Inject('AuthorModelToken') private readonly authorModel: Model<Author>) {}
     
     async newAuthor(_name: String, _surname: String, _dob: Date, _dod: Date): Promise<Author> {
+
         const author = new this.authorModel();
         author.id = ObjectID;
         author.name = _name;

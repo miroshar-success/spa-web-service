@@ -25,15 +25,15 @@ export const removeData = (prefix: string) => createAction(`${prefix}/${TableAct
   return (_id: string) => resolve({ _id })
 });
 
-export const addData = (prefix: string) => createAction(`${prefix}/${TableActions.ADD_DATA}`, resolve => {
+export const addBookData = (prefix: string) => createAction(`${prefix}/${TableActions.ADD_DATA}`, resolve => {
   return (name: string, author: string, cost: number, genre: string) => resolve({ name, author, cost, genre })
 });
 
-export const editData = (prefix: string) => createAction(`${prefix}/${TableActions.EDIT_DATA}`, resolve => {
+export const editBookData = (prefix: string) => createAction(`${prefix}/${TableActions.EDIT_DATA}`, resolve => {
   return (_id: string, name: string, author: string, cost: number, genre: string) => resolve({ _id, name, author, cost, genre })
 });
 
-export const sortData = (prefix: string) => createAction(`${prefix}/${TableActions.SORT_DATA}`, resolve => {    
+export const sortBookData = (prefix: string) => createAction(`${prefix}/${TableActions.SORT_DATA}`, resolve => {    
   return (field: string, order: string, genre: string, minValue: number, maxValue: number, pagination: Pagination) => 
   resolve({field, order, genre, minValue, maxValue, pagination })
 });

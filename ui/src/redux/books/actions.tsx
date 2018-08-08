@@ -4,9 +4,9 @@ import {
     loadDataFailure,
     searchData,
     removeData,
-    addData,
-    editData,
-    sortData,
+    addBookData,
+    editBookData,
+    sortBookData,
   } from '@redux/common/table/actions';
 
   
@@ -18,7 +18,7 @@ import {
   
   export const searchBook = searchData(prefix);
   export const removeBook = removeData(prefix);
-  export const addBook = addData(prefix);
-  export const editBook = editData(prefix);
-  export const sortBook = sortData(prefix);
+  export const addBook = addBookData(prefix);
+  export const editBook = editBookData(prefix);
+  export const sortBook = sortBookData(prefix);
   
