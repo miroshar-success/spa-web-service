@@ -20,7 +20,20 @@ export default class AuthorService {
 
 
     async findAllAuthors(): Promise<Author[]> {
-        return await this.authorModel.find().exec();
+
+        //return await this.authorModel.find().exec();
+        return await this.authorModel.aggregate(
+            [  
+                {   
+                    $project: {
+                        name: "$name",
+                        surname: "$surname",                        
+                        dob: { $dateToString: { format: "%d.%m.%Y", date: "$dob" } },
+                        dod: { $dateToString: { format: "%d.%m.%Y", date: "$dod" } },                        
+                     }
+                }
+            ]
+        );
     }
 
     async removeById(_id: String): Promise<Author> {

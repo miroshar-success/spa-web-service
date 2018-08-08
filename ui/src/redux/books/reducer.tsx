@@ -4,7 +4,7 @@ import { TableStateShape } from '@redux/common/table/types';
 export const initialState: TableStateShape = {
   data: [],
   pagination: {
-    pageSize: 10,
+    pageSize: 10000,
     current: 1,
   },
   searchString: '',
