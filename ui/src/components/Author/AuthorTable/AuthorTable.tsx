@@ -4,7 +4,7 @@ import { Author } from '@redux/authors/types';
 import { ColumnProps } from 'antd/lib/table';
 import { Pagination } from '@redux/common/table/types';
 import { AuthorsTableProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
-
+import LazyLoad from 'react-lazyload';
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
@@ -47,15 +47,14 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         editAuthor
       } = this.props;
 
-      this.defaultState;
+      this.state;
       if(!this.validate()) {
         editAuthor(this.state._id, this.state.name, this.state.surname, this.state.dod, this.state.dob);
-        this.defaultState;
+        this.state;
         this.state.visible = false;     
         message.success('Edited!');
       } 
     };
-
 
     private readonly columns: ColumnProps<Author>[] = [ 
       {
@@ -63,18 +62,24 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         dataIndex: 'name',           
         key: 'name',         
         render: (text, record) => 
-        
+        <LazyLoad
+          height="25px"          
+          debounce={true}
+          once>
           <span>{record.name}</span>
-        
-        
+        </LazyLoad>  
       },      
       {
         title: 'Surname',
         dataIndex: 'surname',
         key: 'surname',
         render: (text, record) => 
-        
+        <LazyLoad
+          height="25px"          
+          debounce={true}
+          once>
         <span>{record.surname}</span>
+        </LazyLoad>
       },
       {
         title: 'Lifetime',
@@ -92,17 +97,25 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
             fieldDeath = "Date of death unknown";
           } else {
             fieldDeath = record.dod;
-          }        
-
-          return(<span>{fieldBirth + " — " + fieldDeath}</span>);
-        }
-        
-         
-        
+          }
+          return(
+            <LazyLoad
+            height="25px"          
+            debounce={true}
+            once>
+              <span>
+                {fieldBirth + " — " + fieldDeath}
+              </span>
+          </LazyLoad>);
+        }  
       },
       { 
         title: "Delete",                               
         render: (text, record) =>
+        <LazyLoad
+          height="25px"          
+          debounce={true}
+          once>
         <div> 
           <Popconfirm title="Are you sure?" 
             onConfirm={() => this.removeAuthor(record.key)}            
@@ -117,10 +130,15 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
               </Button>              
           </Popconfirm>                              
         </div>
+        </LazyLoad>
       },
       {
         title: 'Edit',
         render: (text, record) => 
+        <LazyLoad
+          height="25px"          
+          debounce={true}
+          once>
         <div>
             <Modal
                 onOk={() => this.editAuthor(record.key)}
@@ -165,19 +183,20 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
                    <DatePicker 
                       format={dateFormat} 
                       style={{marginLeft: 5}}
-                      onChange={this.changeDoB}
+                      onChange={this.changeDoD}
                       placeholder={"Date of Birth"}
                     />
                 </FormItem>                                 
               </Form>
             </Modal>         
-              <Button 
-                size="small"
-                onClick={() => this.startEdit(record)}>
-                Edit
-                <Icon type="edit" />
-              </Button>          
+            <Button 
+              size="small"
+              onClick={() => this.startEdit(record)}>
+              Edit
+              <Icon type="edit" />
+            </Button>          
         </div>
+        </LazyLoad>
       }
     ]
     
@@ -225,21 +244,20 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       });
     };
 
-    defaultState = () => {
-      this.setState({
-        _id: "",
-        name: "",
-        surname: "",
-        lifetime: "",        
-        validateStatusErrorName: undefined,
-        validateStatusErrorAuthor: undefined,
-        validateStatusErrorLifetime: undefined,
-        nameError: "",    
-        authorError: "",
-        lifetimeError: ""
-      });
-    };  
-
+    // defaultState = () => {
+    //   this.setState({
+    //     _id: "",
+    //     name: "",
+    //     surname: "",
+    //     lifetime: "",        
+    //     validateStatusErrorName: undefined,
+    //     validateStatusErrorAuthor: undefined,
+    //     validateStatusErrorLifetime: undefined,
+    //     nameError: "",    
+    //     authorError: "",
+    //     lifetimeError: ""
+    //   });
+    // };  
 
     removeAuthor = (_id: string) => {
       const {     
@@ -249,8 +267,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       removeAuthor(_id, pagination);
       message.success('Deleted!');      
     };
-
-    
     
     componentDidMount() {     
       const {
@@ -264,9 +280,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
     };
   
     handleTableChange = ({ pageSize, current }: Pagination) => {
-  
-
-      this.props.loadAuthors({ pageSize, current });      
+        this.props.loadAuthors({ pageSize, current });      
     };   
   
     render() {
@@ -277,8 +291,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       } = this.props;
   
       return (
-        <div>   
-                
+        <div>    
           <Table          
             bordered
             columns={this.columns}
@@ -288,16 +301,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
             size='small'
             style={{ width: 1100 }}
             onChange={this.handleTableChange}
-          />
-          
-           {/* <LazyLoad
-            once
-            offset={200}
-            debounce={true}
-            >  
-            
-            </LazyLoad> */}
-            
+          />    
         </div>                
       )
     }
