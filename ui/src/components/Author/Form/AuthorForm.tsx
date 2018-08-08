@@ -18,16 +18,16 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
     this.setState({
       [e.target.name]: e.target.value
     });
-    console.log(e)
+    //console.log(e)
   };
 
   changeDoB = (date: any,  dateString: any) => {
     this.state.dob = dateString;
-    console.log(this.state.dob)
+    //console.log(this.state.dob)
   };
   changeDoD = (date: any,  dateString: any) => {
     this.state.dod = dateString;
-    console.log(this.state.dod)
+    //console.log(this.state.dod)
   };
 
   onSubmit = (e: any) => {

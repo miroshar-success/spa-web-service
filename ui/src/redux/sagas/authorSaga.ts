@@ -25,7 +25,7 @@ export function* editAuthorSaga(): IterableIterator<any> {
 }
 
 const getSuccessPayload = (authors: Array<Author>) => {
-  console.log(authors)
+  //console.log(authors)
   return authors.map(( {_id, name, surname, dob, dod} : Author) => ({
     key: _id,
     name,

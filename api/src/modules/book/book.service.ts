@@ -76,11 +76,9 @@ export default class BookService {
         } else {
 
             if((parseInt(search)) >= 0) {
-                console.log("number")
                 return await this.bookModel.paginate({ $or: [{cost: parseInt(search)}, {name: search}]  })
             }
             else {
-                console.log("string")
                 return await this.bookModel.paginate({$text: {$search: search}}, {limit: 10})
             }
         }    

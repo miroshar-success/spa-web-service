@@ -92,7 +92,7 @@ function* removeData(params: RemoveDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `@@authors/LOAD_DATA_FAILURE`,
       payload: {
@@ -123,7 +123,7 @@ function* addData(params: AddDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `@@authors/LOAD_DATA_FAILURE`,
       payload: {
@@ -156,7 +156,7 @@ function* editData(params: EditDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `${prefix}/${TableActions.LOAD_DATA_FAILURE}`,
       payload: {
@@ -169,11 +169,11 @@ function* editData(params: EditDataProps): IterableIterator<any> {
 // helpers
 const buildUrlForLoadData = (params: Pagination | string): string => {
   if (typeof params === 'string') {
-    console.log(params)
+    //console.log(params)
     return `http://localhost:4000/data/authors/find?search=${encodeURIComponent(params)}`
     
   } else {
-   console.log(params)
+   //console.log(params)
    return `http://localhost:4000/data/authors/all`
     
   } 

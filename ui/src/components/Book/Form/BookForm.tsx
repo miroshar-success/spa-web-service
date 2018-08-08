@@ -62,7 +62,7 @@ export default class BookForm extends React.Component<BookFormProps> {
     if( typeof(this.state.author) == "undefined" ) {
       isError = true;
 
-      console.log(this.state.author);
+      //console.log(this.state.author);
 
       this.setState({
         authorError: "Please select the author",
@@ -80,7 +80,7 @@ export default class BookForm extends React.Component<BookFormProps> {
 
     if( typeof(this.state.genre) == "undefined" ) {
       isError = true;
-      console.log(this.state.genre);
+      //console.log(this.state.genre);
       this.setState({
         genreError: "Please, select the genre",
         validateStatusErrorGenre: "error"
@@ -145,7 +145,7 @@ export default class BookForm extends React.Component<BookFormProps> {
 
     if(!err) {
       
-      console.log(this.state);
+      //console.log(this.state);
 
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
       this.setState({        

@@ -39,7 +39,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
     this.setState({
       [e.target.name]: e.target.value
     });
-    console.log(e);
+    //console.log(e);
   };
 
   onChange = (checkedList: any) => { 
@@ -47,7 +47,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
       genre: checkedList,
       checkedList,
     });
-    console.log(checkedList);
+    //console.log(checkedList);
   }
  
     onSubmit = (field: string, order: string, genre: string, minValue: number, maxValue: number) => {
@@ -56,7 +56,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
         sortBook
       } = this.props;
       
-      console.log(this.state);
+      //console.log(this.state);
 
       sortBook(field, order, genre, minValue, maxValue, pagination);  
     };

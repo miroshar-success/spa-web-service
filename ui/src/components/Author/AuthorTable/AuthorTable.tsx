@@ -16,16 +16,12 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       surname:"",
       dod: "",
       dob: "",
-      
-     
       validateStatusErrorName: undefined,
       validateStatusErrorSurname: undefined,
       validateStatusErrorLifetime: undefined,
-
       nameError: "",    
       surnameError: "",
       lifetimeError: "",
-      
       visible: false,
     };    
     
@@ -39,11 +35,9 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
 
     changeDoB = (date: any,  dateString: any) => {
       this.state.dob = dateString;
-      console.log(this.state.dob)
     };
     changeDoD = (date: any,  dateString: any) => {
       this.state.dod = dateString;
-      console.log(this.state.dod)
     };
 
     editAuthor = (_id: string) => {  
@@ -60,6 +54,8 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         message.success('Edited!');
       } 
     };
+
+
 
     private readonly columns: ColumnProps<Author>[] = [ 
       {
@@ -78,7 +74,25 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         title: 'Lifetime',
         dataIndex: 'lifetime',
         key: 'lifetime', 
-        render: (text, record) => <span>{record.dob + " — " + record.dod}</span>
+        render: (text, record) => {
+          let fieldBirth, fieldDeath;
+          if(record.dob === null) {
+            fieldBirth = "Date of birth unknown";
+          } else {
+            fieldBirth = record.dob;
+          }
+
+          if(record.dod === null) {
+            fieldDeath = "Date of death unknown";
+          } else {
+            fieldDeath = record.dod;
+          }        
+
+          return(<span>{fieldBirth + " — " + fieldDeath}</span>);
+        }
+        
+         
+        
       },
       { 
         title: "Delete",                               
@@ -203,7 +217,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         dod: record.dod,
         visible: true
       });
-      console.log(record.dob)
     };
 
     defaultState = () => {

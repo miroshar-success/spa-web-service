@@ -105,7 +105,7 @@ function* sortData(params: SortDataProps): IterableIterator<any> {
       },
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
       payload: {
@@ -133,7 +133,7 @@ function* removeData(params: RemoveDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
       payload: {
@@ -164,7 +164,7 @@ function* addData(params: AddDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
       payload: {
@@ -195,7 +195,7 @@ function* editData(params: EditDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
       payload: {
