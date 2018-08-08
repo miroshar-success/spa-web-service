@@ -4,7 +4,7 @@ import { Author } from '@redux/authors/types';
 import { ColumnProps } from 'antd/lib/table';
 import { Pagination } from '@redux/common/table/types';
 import { AuthorsTableProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
-import LazyLoad from 'react-lazyload';
+
 
 const FormItem = Form.Item;
 const dateFormat = 'YYYY-MM-DD';
@@ -57,19 +57,24 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
     };
 
 
-
     private readonly columns: ColumnProps<Author>[] = [ 
       {
         title: 'Name',
         dataIndex: 'name',           
         key: 'name',         
-        render: (text, record) => <span>{record.name}</span>
+        render: (text, record) => 
+        
+          <span>{record.name}</span>
+        
+        
       },      
       {
         title: 'Surname',
         dataIndex: 'surname',
         key: 'surname',
-        render: (text, record) => <span>{record.surname}</span>
+        render: (text, record) => 
+        
+        <span>{record.surname}</span>
       },
       {
         title: 'Lifetime',
@@ -273,11 +278,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
   
       return (
         <div>   
-          <LazyLoad
-            once
-            offset={200}
-            debounce={true}
-            >      
+                
           <Table          
             bordered
             columns={this.columns}
@@ -288,28 +289,15 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
             style={{ width: 1100 }}
             onChange={this.handleTableChange}
           />
-           </LazyLoad>
-           <LazyLoad
+          
+           {/* <LazyLoad
             once
             offset={200}
             debounce={true}
             >  
-            <img src={require('../assets/images/EpolSoft.png')} height="200px" />
-            </LazyLoad>
-            <LazyLoad
-            once
-            offset={200}
-            debounce={true}
-            >  
-            <img src={require('./../assets/images/EpolSoft.png')} height="200px" />
-            </LazyLoad>
-            <LazyLoad
-            once
-            offset={200}
-            debounce={true}
-            >  
-            <img src={require('./../assets/images/EpolSoft.png')} height="200px" />
-          </LazyLoad>
+            
+            </LazyLoad> */}
+            
         </div>                
       )
     }

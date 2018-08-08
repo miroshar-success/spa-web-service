@@ -1,9 +1,14 @@
 import * as React from 'react';
-import { Table, Button, Icon, Popconfirm, message, Input, Form, Upload, Select, Modal} from 'antd';
+import { Table, 
+  Button, Icon, Popconfirm, 
+  message, 
+  Input, Form, Upload, Select, Modal
+} from 'antd';
 import { Book } from '@redux/books/types';
 import { Pagination } from '@redux/common/table/types';
 import { ColumnProps } from 'antd/lib/table';
 import { BooksTableProps } from '@components/Book/BookTable/FilterableBooksTable';
+import LazyLoad from 'react-lazyload';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -49,6 +54,11 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     }
 
+    // <Modal visible={this.state.previewVisible} footer={null}  onCancel={this.handleCancel}>
+    //   <img src={'http://127.0.0.1:8887/ZmrLMKlc.jpg' } style={{ width: '100%' }} />
+    //   <img src={'http://127.0.0.1:8887/' + record.url} style={{ width: '100%' }} />
+    // </Modal>
+
     private readonly columns: ColumnProps<Book>[] = [ 
       {
         width: 120,
@@ -56,61 +66,100 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         dataIndex: 'img',
         key: 'img',        
         render: (text, record) =>
-        <div>
-          <img src={'http://127.0.0.1:8887/' + record.url} onClick={this.handlePreview} width="100%" height="100%" />
-         
-          <Modal visible={this.state.previewVisible} footer={null}  onCancel={this.handleCancel}>
-              <img src={'http://127.0.0.1:8887/ZmrLMKlc.jpg' } style={{ width: '100%' }} />
-              <img src={'http://127.0.0.1:8887/' + record.url} style={{ width: '100%' }} />
-          </Modal>
-        </div>              
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
+          <img src={'http://127.0.0.1:8887/' + record.url} 
+                onClick={this.handlePreview} 
+                width="100px" 
+                height="120px" />
+        </LazyLoad>              
       },
       {
         title: 'Name',
         dataIndex: 'name',           
-        key: 'name',                 
-        render: (text, record) => <span>{record.name}</span>
+        key: 'name',
+
+        render: (text, record) => 
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
+          <span>{record.name}</span>
+        </LazyLoad>
       },      
       {
         title: 'Автор',
         dataIndex: 'author',
         key: 'author',        
-        render: (text, record) => <span>{record.author}</span>
+        render: (text, record) => 
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
+          <span>{record.author}</span>
+        </LazyLoad>
       },
       {
         title: 'Цена',
         dataIndex: 'cost',
-        key: 'cost',        
-        render: (text, record) => <span>{record.cost}</span>
+        key: 'cost',
+                
+        render: (text, record) => 
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
+          <span>{record.cost}</span>
+        </LazyLoad> 
       },
       {
         title: 'Жанр',
         dataIndex: 'genre',
         key: 'genre',        
-        render: (text, record) => <span>{record.genre}</span>
+        render: (text, record) => 
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
+        <span>{record.genre}</span>
+        </LazyLoad>
       },
       { width: 100,
         title: "Удалить",                               
         render: (text, record) =>
-        <div> 
-          <Popconfirm title="Are u sure?" 
-            onConfirm={() => this.removeBook(record.key)}            
-            onCancel={() => message.error('Cancel!')}
-            okText="Yes"
-            cancelText="No">
-              <Button
-                size="small"
-                type="danger">                
-                Удалить
-                <Icon type="warning" /> 
-              </Button>              
-          </Popconfirm>                              
-        </div>
-      },
-      { width: 150,
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
+          <div> 
+            <Popconfirm title="Are u sure?" 
+              onConfirm={() => this.removeBook(record.key)}            
+              onCancel={() => message.error('Cancel!')}
+              okText="Yes"
+              cancelText="No">
+                <Button
+                  size="small"
+                  type="danger">                
+                  Удалить
+                  <Icon type="warning" /> 
+                </Button>              
+            </Popconfirm>                              
+          </div>
+        </LazyLoad>
+      },     
+      
+      
+      { width: 100,
         title: 'Редактировать',
-        render: (text, record) => 
+        render: (text, record) =>
+        <LazyLoad
+          height="120px"          
+          debounce={true}
+          once>
         <div>
+
             <Modal
                 onOk={() => this.editBook(record.key)}
                 onCancel={() =>  this.setState({ visible: false })}
@@ -178,14 +227,17 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                   </Upload>
                 </FormItem>                                    
               </Form>
-            </Modal>         
-              <Button 
-                size="small"
-                onClick={() => this.startEdit(record)}>
-                Редактировать
-                <Icon type="edit" />
-              </Button>          
+            </Modal>
+
+          <Button 
+            size="small"
+            onClick={() => this.startEdit(record)}>
+            Редактировать
+            <Icon type="edit" />
+          </Button>                      
         </div>
+        </LazyLoad>
+               
       }
     ]
     
@@ -329,3 +381,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       )
     }
   }
+
+
+
