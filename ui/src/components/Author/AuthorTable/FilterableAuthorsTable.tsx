@@ -5,8 +5,9 @@ import SearchBar from '@components/Book/common/SearchBar/SearchBar';
 import { Pagination } from '@redux/common/table/types';
 import { Author } from '@redux/authors/types';
 
-import { Row, Col } from 'antd';
 
+
+import { Row, Col } from 'antd';
 export interface AuthorsTableProps {
     readonly authors: Array<Author>;
     readonly loading: boolean;
@@ -29,6 +30,7 @@ export interface AuthorsTableProps {
 
   type FilterableAuthorsTableProps = AuthorsTableProps & SearchBarProps & AuthorFormProps;
 
+ 
   export default class FilterableAuthorsTable extends React.Component<FilterableAuthorsTableProps> {
 
     render() {
@@ -56,6 +58,7 @@ export interface AuthorsTableProps {
                     />
                 </Col>
                 <Col span={16}>
+                
                   <AuthorTable        
                     authors={authors}
                     loading={loading}
@@ -65,6 +68,8 @@ export interface AuthorsTableProps {
                     removeAuthor={removeAuthor}
                     editAuthor={editAuthor}               
                   />
+                  
+                
                 </Col>                
               </Row>
           </div>        

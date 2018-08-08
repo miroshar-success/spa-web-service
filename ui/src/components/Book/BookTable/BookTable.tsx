@@ -213,19 +213,11 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
     
     validate = () => {      
       let isError = false;
-      if(this.state.name.length < 3 ) {
+      if(this.state.name.length < 0 ) {
         isError = true;
         this.setState({
-          nameError: "Name needs to be atleast 3 characters long",
+          nameError: "Please, fill the field",
           validateStatusErrorName: "error"
-        });
-      }
-  
-      if(this.state.author.length < 3) {
-        isError = true;
-        this.setState({
-          authorError: "Author needs to be atleast 3 characters long",
-          validateStatusErrorAuthor: "error"
         });
       }
   

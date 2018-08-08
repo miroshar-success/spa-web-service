@@ -51,10 +51,10 @@ export default class BookForm extends React.Component<BookFormProps> {
 
     let isError = false;       
 
-    if(this.state.name.length < 3 ) {
+    if(this.state.name.length == 0 ) {
       isError = true;
       this.setState({
-        nameError: "Name needs to be atleast 3 characters long",
+        nameError: "Please, fill the field",
         validateStatusErrorName: "error"
       });
     }
@@ -65,7 +65,7 @@ export default class BookForm extends React.Component<BookFormProps> {
       //console.log(this.state.author);
 
       this.setState({
-        authorError: "Please select the author",
+        authorError: "Please, select the author",
         validateStatusErrorAuthor: "error"
       });
     }
@@ -86,14 +86,6 @@ export default class BookForm extends React.Component<BookFormProps> {
         validateStatusErrorGenre: "error"
       });
     }
-
-    // if(this.state.genre.length == 0 ) {
-    //   isError = true;
-    //   this.setState({
-    //     genreError: "Please, select the genre",
-    //     validateStatusErrorGenre: "error"
-    //   });
-    // }
     return isError;
   };
 
