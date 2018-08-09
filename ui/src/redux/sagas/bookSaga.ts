@@ -1,7 +1,7 @@
 import { fork } from 'redux-saga/effects';
 import { Book } from '@redux/books/types';
 import { loadDataSaga, searchDataSaga, removeDataSaga, addDataSaga, editDataSaga, sortDataSaga  
-} from '@redux/common/table/sagasBooks';
+} from '@redux/books/sagasBooks';
 
 export function* loadBooksSaga(): IterableIterator<any> {
   yield fork(loadDataSaga, getSuccessPayload);

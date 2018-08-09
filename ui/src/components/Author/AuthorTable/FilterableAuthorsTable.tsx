@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AuthorTable from '@components/Author/AuthorTable/AuthorTable';
 import AuthorForm from '@components/Author/Form/AuthorForm';
-import SearchBar from '@components/Book/common/SearchBar/SearchBar';
+import SearchBar from '@components/common/SearchBar/SearchBar';
 import { Pagination } from '@redux/common/table/types';
 import { Author } from '@redux/authors/types';
 

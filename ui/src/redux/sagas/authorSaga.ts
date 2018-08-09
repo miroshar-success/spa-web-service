@@ -1,7 +1,7 @@
 import { fork } from 'redux-saga/effects';
 import { Author } from '@redux/authors/types';
 import { loadDataSaga, searchDataSaga, removeDataSaga, addDataSaga, editDataSaga
-} from '@redux/common/table/sagasAuthors';
+} from '@redux/authors/sagasAuthors';
 
 
 export function* loadAuthorsSaga(): IterableIterator<any> {
