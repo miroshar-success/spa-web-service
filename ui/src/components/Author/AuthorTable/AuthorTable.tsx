@@ -47,8 +47,20 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         editAuthor
       } = this.props;
 
-      this.state;
-      if(!this.validate()) {
+      this.setState({        
+        name: "",
+        surname: "",
+        dob: "",
+        dod: "",
+        validateStatusErrorName: undefined,
+        validateStatusErrorSurname: undefined,
+        nameError: "",
+        surnameError: ""
+    }); 
+
+      const err = this.validate();
+
+      if(!err) {
         editAuthor(this.state._id, this.state.name, this.state.surname, this.state.dod, this.state.dob);
         this.state;
         this.state.visible = false;     
@@ -209,7 +221,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
 
     validate = () => {      
       let isError = false;
-      if(this.state.name.length < 0 ) {
+      if(this.state.name.length <= 0 ) {
         isError = true;
         this.setState({
           nameError: "Please, enter the Name",
@@ -217,11 +229,11 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         });
       }
   
-      if(this.state.surname.length < 0) {
+      if(this.state.surname.length <= 0) {
         isError = true;
         this.setState({
-          authorError: "Please, enter the Surname",
-          validateStatusErrorAuthor: "error"
+          surnameError: "Please, enter the Surname",
+          validateStatusErrorSurname: "error"
         });
       } 
       return isError;
@@ -243,21 +255,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         visible: true
       });
     };
-
-    // defaultState = () => {
-    //   this.setState({
-    //     _id: "",
-    //     name: "",
-    //     surname: "",
-    //     lifetime: "",        
-    //     validateStatusErrorName: undefined,
-    //     validateStatusErrorAuthor: undefined,
-    //     validateStatusErrorLifetime: undefined,
-    //     nameError: "",    
-    //     authorError: "",
-    //     lifetimeError: ""
-    //   });
-    // };  
 
     removeAuthor = (_id: string) => {
       const {     

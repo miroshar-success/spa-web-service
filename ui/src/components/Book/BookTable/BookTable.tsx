@@ -54,11 +54,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       });
     }
 
-    // <Modal visible={this.state.previewVisible} footer={null}  onCancel={this.handleCancel}>
-    //   <img src={'http://127.0.0.1:8887/ZmrLMKlc.jpg' } style={{ width: '100%' }} />
-    //   <img src={'http://127.0.0.1:8887/' + record.url} style={{ width: '100%' }} />
-    // </Modal>
-
     private readonly columns: ColumnProps<Book>[] = [ 
       {
         width: 120,
@@ -265,7 +260,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
     
     validate = () => {      
       let isError = false;
-      if(this.state.name.length < 0 ) {
+      this.defaultState;
+      if(this.state.name.length <= 0 ) {
         isError = true;
         this.setState({
           nameError: "Please, fill the field",
@@ -279,7 +275,15 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           costError: "Cost must be more than 0",
           validateStatusErrorCost: "error"
         });
-      }  
+      } 
+      
+      if(this.state.author.length <= 0 ) {
+        isError = true;
+        this.setState({
+          authorError: "Please, fill the field",
+          validateStatusErrorAuthor: "error"
+        });
+      }
       return isError;
     };
 
@@ -324,10 +328,24 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         editBook
       } = this.props;
 
-      this.defaultState;
-      if(!this.validate()) {
+      this.setState({
+        _id: "",
+        name: "",
+        author: "",
+        cost: "",       
+        validateStatusErrorName: undefined,
+        validateStatusErrorAuthor: undefined,
+        validateStatusErrorCost: undefined,
+        nameError: "",    
+        authorError: "",
+        costError: "",
+      });
+  
+      const err = this.validate(); 
+
+      if(!err) {
         editBook(this.state._id, this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
-        this.defaultState;
+        this.state;
         this.state.visible = false;     
         message.success('Edited!');
       } 
