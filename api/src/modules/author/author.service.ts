@@ -11,22 +11,16 @@ export default class AuthorService {
 
         const author = new this.authorModel();
 
-
         author.id = ObjectID;
         author.name = _name;
         author.surname = _surname;
         author.dob = _dob;           
         author.dod = _dod;              
         
-        console.log(author)
-
         return await author.save();
     }   
 
-
     async findAllAuthors(): Promise<Author[]> {
-
-        //return await this.authorModel.find().exec();
         return await this.authorModel.aggregate(
             [  
                 {   
@@ -50,10 +44,9 @@ export default class AuthorService {
     }
 
     async search (searchString): Promise<Author> {
-        if (searchString.length === 0) {
+        if (searchString.length === 0) 
             return await this.authorModel.paginate({}, {limit: 10000})
-        } else {
-            return await this.authorModel.paginate({$text: {$search: searchString}}, {limit: 10000})
-        }
+        else 
+            return await this.authorModel.paginate({$text: {$search: searchString}}, {limit: 10000})        
     }
 }

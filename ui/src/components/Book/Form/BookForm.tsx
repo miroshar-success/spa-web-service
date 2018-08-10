@@ -40,7 +40,7 @@ export default class BookForm extends React.Component<BookFormProps> {
     })       
   }
 
-  validate2 = (name: string, author: string | any) => {
+  validate2 = (name: string, author: string | any) => {    
     let result: string[] = [];
     let isErr = false;       
     let isErr2 = false;

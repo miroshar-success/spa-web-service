@@ -44,14 +44,8 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       checkedList: [''],
     };    
     
-    handleCancel = () => this.setState({ previewVisible: false })
+    //handleCancel = () => this.setState({ previewVisible: false })
     
-    handlePreview = () => {
-      this.setState({
-        previewVisible: true, 
-      });
-    }
-
     private readonly columns: ColumnProps<Book>[] = [ 
       {
         width: 120,
@@ -64,7 +58,7 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           debounce={true}
           once>
           <img src={'http://127.0.0.1:8887/' + record.url} 
-                onClick={this.handlePreview} 
+                onClick={() => this.setState({ previewVisible: true })} 
                 width="100px" 
                 height="120px" />
         </LazyLoad>              
