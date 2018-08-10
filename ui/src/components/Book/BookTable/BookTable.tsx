@@ -41,8 +41,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       maxValue: "",
       previewImage: '',
       previewVisible: false,
-
-      //checkAll: false,
       checkedList: [''],
     };    
     
@@ -75,7 +73,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Name',
         dataIndex: 'name',           
         key: 'name',
-
         render: (text, record) => 
         <LazyLoad
           height="120px"          
@@ -100,7 +97,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         title: 'Цена',
         dataIndex: 'cost',
         key: 'cost',
-                
         render: (text, record) => 
         <LazyLoad
           height="120px"          
@@ -144,8 +140,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           </div>
         </LazyLoad>
       },     
-      
-      
       { width: 100,
         title: 'Редактировать',
         render: (text, record) =>
@@ -154,7 +148,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           debounce={true}
           once>
         <div>
-
             <Modal
                 onOk={() => this.editBook(record.key)}
                 onCancel={() =>  this.setState({ visible: false })}
@@ -223,7 +216,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
                 </FormItem>                                    
               </Form>
             </Modal>
-
           <Button 
             size="small"
             onClick={() => this.startEdit(record)}>
@@ -232,7 +224,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
           </Button>                      
         </div>
         </LazyLoad>
-               
       }
     ]
     
@@ -256,7 +247,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         checkedList: e.target.checked ? options : [],
       });  
     };
-
     
     validate = () => {      
       let isError = false;
@@ -328,24 +318,13 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
         editBook
       } = this.props;
 
-      this.setState({
-        _id: "",
-        name: "",
-        author: "",
-        cost: "",       
-        validateStatusErrorName: undefined,
-        validateStatusErrorAuthor: undefined,
-        validateStatusErrorCost: undefined,
-        nameError: "",    
-        authorError: "",
-        costError: "",
-      });
+      this.defaultState();
   
       const err = this.validate(); 
 
       if(!err) {
         editBook(this.state._id, this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
-        this.state;
+        this.defaultState();
         this.state.visible = false;     
         message.success('Edited!');
       } 
@@ -359,7 +338,6 @@ export default class BookTable extends React.PureComponent<BooksTableProps> {
       removeBook(_id, pagination);
       message.success('Deleted!');      
     };
-    
     
     componentDidMount() {     
       const {

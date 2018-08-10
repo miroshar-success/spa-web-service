@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import BookTable from '@components/Book/BookTable/BookTable';
-import SearchBar from '@components/Book/common/SearchBar/SearchBar';
+import SearchBar from '../../common/SearchBar/SearchBar';
 import FilterPanel from '@components/Book/FilterPanel/FilterPanel';
 import BookForm from '@components/Book/Form/BookForm';
 
