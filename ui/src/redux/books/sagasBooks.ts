@@ -167,12 +167,12 @@ function* addData(params: AddDataProps): IterableIterator<any> {
     })
   } catch (error) {
     message.error(error.message)
-    // yield put({
-    //   type: `@@books/ADD_DATA_FAILURE`,
-    //   payload: {
-    //     error: error.message,
-    //   }
-    // })
+     yield put({
+       type: `@@books/ADD_DATA_FAILURE`,
+       payload: {
+         error: error.message,
+       }
+     })
   }
 }
 

@@ -72,7 +72,7 @@ export interface AddDataProps {
   cost: number;
   genre: string;
   payloadFunc: Function;
-
+  error: string;
   surname: string;
   dob: Date;
   dod: Date;

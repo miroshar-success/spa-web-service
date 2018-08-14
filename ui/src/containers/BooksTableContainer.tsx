@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { RootState } from '@redux/rootReducer';
-import { loadBooks, searchBook, removeBook, addBook, addBookError, editBook, sortBook, 
+import { loadBooks, searchBook, removeBook, addBook,  editBook, sortBook, addBookFail
 } from '@redux/books/actions';
 import {
   getData,
@@ -16,7 +16,8 @@ const mapStateToProps = (state: RootState) => ({
   pagination: getPagination(state),
   loading: getLoadingStatus(state),
   error: getError(state),
+  
 })
 
-export default connect(mapStateToProps, { loadBooks, searchBook, removeBook, addBook, addBookError, editBook, sortBook
+export default connect(mapStateToProps, { loadBooks, searchBook, removeBook, addBook, addBookFail, editBook, sortBook
 })(FilterableBooksTable);

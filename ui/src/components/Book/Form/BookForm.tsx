@@ -31,7 +31,7 @@ export default class BookForm extends React.Component<BookFormProps> {
     axios.get(`http://localhost:4000/data/authors/allAuthors`).then(response => {
       var newAuthors: any = [],
           newAuthorsOptions: any = []
-      console.log(response.data.docs)
+      //console.log(response.data.docs)
       for(var i = 0; i < response.data.docs.length; i++) 
         newAuthors[i] = response.data.docs[i].name + " " + response.data.docs[i].surname
         
@@ -109,9 +109,30 @@ export default class BookForm extends React.Component<BookFormProps> {
   addBook = (name: string, author: any, cost: number, genre: any) => {
     const {
       pagination,
-      addBook
+      addBook,
+     // addBookFail,
+      error                     // what is in here???
     } = this.props;   
     addBook(name, author, cost, genre, pagination);
+    if (error != undefined) {
+      this.setState({
+        name: "",
+        author: undefined,
+        cost: cost,
+        genre: genre,
+        url: pagination,    
+        validateStatusErrorName: undefined,
+        validateStatusErrorAuthor: undefined,
+        validateStatusErrorCost: undefined,
+        validateStatusErrorGenre: undefined,    
+        nameError: "",    
+        authorError: "",
+        costError: "",
+        genreError: ""
+      });
+    } else {
+      this.defaultState();
+    }
   }   
 
   change = (e: any) => {            
@@ -145,10 +166,11 @@ export default class BookForm extends React.Component<BookFormProps> {
     
     const err = this.validate();
     //const err2 = this.validate2(this.state.name, this.state.author);
-
+    
     if(err!=true ) {
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
-      this.defaultState();
+      
+      //this.defaultState();
      
     }  
   };
