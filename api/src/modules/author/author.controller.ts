@@ -50,4 +50,9 @@ import {
       return await this.authorService.search(search);
     }
 
+    @Get('allAuthors')
+    async allAuthors(): Promise<Author> {
+      return await this.authorService.searchBook();
+    }
+
 }

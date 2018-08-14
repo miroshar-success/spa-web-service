@@ -32,6 +32,15 @@ export function authorReducer(state: TableStateShape  = initialState, action: an
 
     case `@@authors/EDIT_DATA`:
 
+    case `@@authors/ADD_DATA_FAILURE`: {
+      const { error } = action.payload;
+      return {
+        ...state,
+        loading: false,
+        error,
+      }
+    }
+
     case `@@authors/LOAD_DATA`: {           
       return {        
         ...state,        

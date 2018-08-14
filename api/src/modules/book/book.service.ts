@@ -4,6 +4,7 @@ import Book from './book.interface';
 import { ObjectID } from 'bson';
 
 let nameFile = "";
+
 export class ForbiddenException extends HttpException {
     constructor() {
       super('Forbidden', HttpStatus.FORBIDDEN);
@@ -15,7 +16,7 @@ export default class BookService {
     
     constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>) {}
         
-    async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
+    async newBook(_name: String, _author: String, _cost: Number, _genre: String) {
                         
         var checkBooks = await this.findBookByNameAndAuthor(_name, _author);
         const   book = new this.bookModel();
@@ -35,9 +36,7 @@ export default class BookService {
             nameFile = "";
             return await book.save();
         } else {
-
-            // var e = new Error("asdf");
-            // console.log(e)
+           
             throw new ForbiddenException();
         }
     }   
@@ -68,7 +67,7 @@ export default class BookService {
         }
         return await this.bookModel.paginate({}, {offset, limit});  
     }
-
+    
     async search(search): Promise<Book[]> {
         
         if (search.length === 0) {

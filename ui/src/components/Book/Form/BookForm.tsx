@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, Upload, Select, Col, Row,  } from 'antd';
+import { Input, Icon, Form, Button, Upload, Select, Col, Row  } from 'antd';
 import { BookFormProps } from '@components/Book/BookTable/FilterableBooksTable';
 import axios from 'axios';
 
@@ -23,17 +23,18 @@ export default class BookForm extends React.Component<BookFormProps> {
     costError: "",
     genreError: "",    
     authorsOptions: [],
+    error: ""
   };
   
   getAuthors = () => {
      
-    axios.get(`http://localhost:4000/data/authors/all`).then(response => {
+    axios.get(`http://localhost:4000/data/authors/allAuthors`).then(response => {
       var newAuthors: any = [],
           newAuthorsOptions: any = []
-
-      for(var i = 0; i < response.data.length; i++) 
-        newAuthors[i] = response.data[i].name + " " + response.data[i].surname
-            
+      console.log(response.data.docs)
+      for(var i = 0; i < response.data.docs.length; i++) 
+        newAuthors[i] = response.data.docs[i].name + " " + response.data.docs[i].surname
+        
       newAuthorsOptions = newAuthors.map((author: any) => <Option key={author}>{author}</Option>);
             
       this.setState({ authorsOptions: newAuthorsOptions });
@@ -46,7 +47,6 @@ export default class BookForm extends React.Component<BookFormProps> {
   //   let backResponse = false;
   //   axios.get(`http://localhost:4000/data/books/findbook?author=${author}&name=${name}`).then(response => {
   //       result = response.data
-  //       console.log(result);
   //       if(result.length > 0) {
   //         backResponse = true
   //         this.setState({
@@ -61,7 +61,8 @@ export default class BookForm extends React.Component<BookFormProps> {
   // };
 
   validate = () => {
-    let isError = false;       
+    let isError = false; 
+    
 
     if(this.state.name.length == 0 ) {
       isError = true;
@@ -111,7 +112,7 @@ export default class BookForm extends React.Component<BookFormProps> {
       addBook
     } = this.props;   
     addBook(name, author, cost, genre, pagination);
-  }  
+  }   
 
   change = (e: any) => {            
     this.setState({
@@ -140,16 +141,16 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   onSubmit = () => {
     
-    //this.defaultState();
+    this.defaultState();
     
     const err = this.validate();
     //const err2 = this.validate2(this.state.name, this.state.author);
 
-    if(err != true) {
+    if(err!=true ) {
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
       this.defaultState();
-      // message.success("Success");
-    }       
+     
+    }  
   };
       
   render() {
@@ -180,14 +181,17 @@ export default class BookForm extends React.Component<BookFormProps> {
           <FormItem
             validateStatus={this.state.validateStatusErrorAuthor}
             help={this.state.authorError}>
-            <Select              
+            <Select  
+              showSearch 
+              filterOption={(input, option: any) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}         
               allowClear={true}                                                 
               placeholder="Select the author"
               value={this.state.author}                 
               style={{ width: 218 }}
               onFocus={() => this.getAuthors()}              
-              onChange={(value: any) => this.setState({ author: value })}>               
-              {this.state.authorsOptions}                                    
+              onChange={(value: any) => this.setState({ author: value })}
+              >   
+                {this.state.authorsOptions}                    
               </Select>
           </FormItem>
           <FormItem

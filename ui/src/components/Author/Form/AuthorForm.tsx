@@ -95,7 +95,14 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
       addAuthor
     } = this.props;   
         
-    addAuthor(name, surname, dob, dod);
+    var res = addAuthor(name, surname, dob, dod);
+    console.log(res)
+    // if (re
+    //  == 403){
+    //   message.success('Error!');
+    // } else {
+    //   message.success('Added!');
+    // }
     message.success('Added!');
   }  
       

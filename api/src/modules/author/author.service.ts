@@ -59,4 +59,8 @@ export default class AuthorService {
         else 
             return await this.authorModel.paginate({$text: {$search: searchString}}, {limit: 10000})        
     }
+
+    async searchBook (): Promise<Author> {
+        return await this.authorModel.paginate({}, {limit: 10})        
+    }
 }
