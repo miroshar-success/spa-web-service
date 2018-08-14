@@ -24,6 +24,7 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       surnameError: "",
       lifetimeError: "",
       visible: false,
+
     };    
     
     handleCancel = () => this.setState({ previewVisible: false })
@@ -68,17 +69,21 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       } 
     };
 
+   
     private readonly columns: ColumnProps<Author>[] = [ 
       {
         title: 'Name',
         dataIndex: 'name',           
-        key: 'name',         
+        key: 'name',  
+        width: '300px',  
         render: (text, record) => 
         <LazyLoad
           height="25px"          
           debounce={true}
           once>
-          <span>{record.name}</span>
+          <span>
+          {record.name }
+          </span>
         </LazyLoad>  
       },      
       {
@@ -279,6 +284,8 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
     handleTableChange = ({ pageSize, current }: Pagination) => {
         this.props.loadAuthors({ pageSize, current });      
     };   
+
+    
   
     render() {
       const {

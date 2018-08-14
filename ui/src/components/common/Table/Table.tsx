@@ -32,7 +32,7 @@ export default class Table extends React.Component<TableProps> {
         loading={loading}
         pagination={pagination}
         size='small'
-        style={style || { width: 1200, lineHeight: 1.8 }}
+        style={style || { width: 1200, lineHeight: 1.8, columnWidth: 200 }}
         onChange={handleTableChange}
       />
     )

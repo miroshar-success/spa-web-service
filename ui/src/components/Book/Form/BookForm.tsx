@@ -47,24 +47,22 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   validate2 = (name: string, author: string) => {
     let result: string[] = [];
-    let isErr = false;       
-    let isErr2 =false
+    let isError = false;       
+    let backResponse =false
     axios.get(`http://localhost:4000/data/books/findbook?author=${author}&name=${name}`).then(response => {
         result = response.data
-        console.log(result)
-        console.log(result.length)
         if(result.length > 0) {
-          isErr2 = true
+          backResponse = true
           this.setState({
             nameError: "Such book already exists",
             validateStatusErrorName: "error"
           });
         } 
-        return isErr2;  
+        return backResponse;  
     })
 
-    isErr = isErr2
-   return isErr
+    isError = backResponse
+   return isError
   };
 
   validate = () => {
@@ -86,8 +84,6 @@ export default class BookForm extends React.Component<BookFormProps> {
         validateStatusErrorAuthor: "error"
       });
     }
-    console.log(this.state.author)
-    console.log(this.state.author.length)
     if( this.state.author.length == 0 ) {
       isError = true;
 
@@ -161,8 +157,6 @@ export default class BookForm extends React.Component<BookFormProps> {
     e.preventDefault();
     const err = this.validate();
     const err2 = this.validate2(this.state.name, this.state.author);
-   console.log(err);
-   console.log(err2)
 
     if(err==true && err2==true) {
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
@@ -206,8 +200,9 @@ export default class BookForm extends React.Component<BookFormProps> {
               value={this.state.author}                 
               style={{ width: 218 }}
               onFocus={() => this.getAuthors()}              
-              onChange={(value: any) => this.changeAuthor(value)}>               
-              {this.state.authorsOptions}                                    
+              onChange={(value: any) => this.changeAuthor(value)}
+            >               
+                {this.state.authorsOptions}                                    
               </Select>
           </FormItem>
           <FormItem
@@ -227,10 +222,11 @@ export default class BookForm extends React.Component<BookFormProps> {
             help={this.state.genreError}>
               <Select
                 allowClear={true}                                  
-                placeholder="Select the genre"                  
+                placeholder="Select the genre"
+                value={this.state.genre}                  
                 style={{ width: 218 }}
-                value={this.state.genre} 
-                onChange={(value: any) => this.changeGenre(value)}>
+                onChange={(value: any) => this.changeGenre(value)}
+              >
                 <Option value="Fantasy">Fantasy</Option>
                 <Option value="Drama">Drama</Option>
                 <Option value="Humor">Humor</Option>
