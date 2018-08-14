@@ -74,7 +74,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
           borderColor: "#ebedf0",
           width: "260px"
           }}>
-            <FormItem> Sort by
+            <FormItem style={{margin: 0}}> Sort by
               
             <RadioGroup
                 name="field" 
@@ -91,7 +91,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
           </FormItem>
 
 
-          <FormItem> Cost
+          <FormItem style={{margin: 0}}> Cost
               
               <Input                           
                 prefix={<Icon type="wallet" />}
@@ -111,7 +111,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
               />          
           </FormItem>
 
-          <FormItem> Genres
+          <FormItem style={{margin: 0}}> Genres
             <CheckboxGroup 
                 options={options} 
                 style={{ height: 120}}
@@ -120,7 +120,7 @@ export default class FilterPanel extends React.Component<FilterPanelProps> {
                 /> 
             </FormItem>          
           
-          <FormItem>
+          <FormItem style={{margin: 0}}>
             <Button 
               type="primary" 
               htmlType="submit" 
