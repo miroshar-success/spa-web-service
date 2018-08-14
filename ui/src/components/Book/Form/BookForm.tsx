@@ -40,24 +40,25 @@ export default class BookForm extends React.Component<BookFormProps> {
     })       
   }
 
-  validate2 = (name: string, author: string | any) => {    
-    let result: string[] = [];
-    let isErr = false;       
-    let backResponse = false;
-    axios.get(`http://localhost:4000/data/books/findbook?author=${author}&name=${name}`).then(response => {
-        result = response.data
-        if(result.length > 0) {
-          backResponse = true
-          this.setState({
-            nameError: "Such book already exists",
-            validateStatusErrorName: "error"
-          });
-        } 
-        return backResponse;  
-    })
-    isErr = backResponse
-    return isErr
-  };
+  // validate2 = (name: string, author: string | any) => {    
+  //   let result: string[] = [];
+  //   let isErr = false;       
+  //   let backResponse = false;
+  //   axios.get(`http://localhost:4000/data/books/findbook?author=${author}&name=${name}`).then(response => {
+  //       result = response.data
+  //       console.log(result);
+  //       if(result.length > 0) {
+  //         backResponse = true
+  //         this.setState({
+  //           nameError: "Such book already exists",
+  //           validateStatusErrorName: "error"
+  //         });
+  //       } 
+  //       return backResponse;  
+  //   })
+  //   isErr = backResponse
+  //   return isErr
+  // };
 
   validate = () => {
     let isError = false;       
@@ -139,12 +140,12 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   onSubmit = () => {
     
-    this.defaultState();
+    //this.defaultState();
     
     const err = this.validate();
-    const err2 = this.validate2(this.state.name, this.state.author);
+    //const err2 = this.validate2(this.state.name, this.state.author);
 
-    if(err!=true && err2!=true) {
+    if(err != true) {
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
       this.defaultState();
       // message.success("Success");

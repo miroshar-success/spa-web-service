@@ -1,7 +1,13 @@
 import { Model, mongoose } from 'mongoose';
-import { Component, Inject } from '@nestjs/common';
+import { Component, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import Author from './author.interface';
 import { ObjectID } from 'bson';
+
+export class ForbiddenException extends HttpException {
+    constructor() {
+      super('Forbidden', HttpStatus.FORBIDDEN);
+    }
+}
 
 @Component()
 export default class AuthorService {
@@ -9,15 +15,19 @@ export default class AuthorService {
     
     async newAuthor(_name: String, _surname: String, _dob: Date, _dod: Date): Promise<Author> {
 
-        const author = new this.authorModel();
-
-        author.id = ObjectID;
-        author.name = _name;
-        author.surname = _surname;
-        author.dob = _dob;           
-        author.dod = _dod;              
+        var checkAuthor = await this.authorModel.find({name: _name, surname: _surname});
+        if(checkAuthor.length == 0) {
+            const author = new this.authorModel();
+            author.id = ObjectID;
+            author.name = _name;
+            author.surname = _surname;
+            author.dob = _dob;           
+            author.dod = _dod;
+            return await author.save();
+        } else {
+            throw new ForbiddenException();
+        }
         
-        return await author.save();
     }   
 
     async findAllAuthors(): Promise<Author[]> {
