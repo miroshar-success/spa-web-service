@@ -1,9 +1,15 @@
 import { Model } from 'mongoose';
-import { Component, Inject } from '@nestjs/common';
+import { Component, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import Book from './book.interface';
 import { ObjectID } from 'bson';
 
 let nameFile = "";
+export class ForbiddenException extends HttpException {
+    constructor() {
+      super('Forbidden', HttpStatus.FORBIDDEN);
+    }
+  }
+
 
 @Component()
 export default class BookService {
@@ -13,9 +19,9 @@ export default class BookService {
     async newBook(_name: String, _author: String, _cost: Number, _genre: String): Promise<Book> {
                         
         var checkBooks = await this.findBookByNameAndAuthor(_name, _author);
-        
+        const   book = new this.bookModel();
         if(checkBooks.length == 0) {
-            const   book = new this.bookModel();        
+                    
             book.id = ObjectID;
             book.name = _name;
             book.author =_author;
@@ -31,14 +37,9 @@ export default class BookService {
             return await book.save();
         } else {
 
-            var emptyBook: Book = {
-                name: "",
-                author: "",
-                cost: 0,
-                genre: "",
-                url: ""
-            };
-            return await emptyBook;
+            // var e = new Error("asdf");
+            // console.log(e)
+            throw new ForbiddenException();
         }
     }   
     
