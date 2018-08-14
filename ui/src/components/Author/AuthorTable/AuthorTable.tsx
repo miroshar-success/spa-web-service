@@ -7,7 +7,7 @@ import { AuthorsTableProps } from '@components/Author/AuthorTable/FilterableAuth
 import LazyLoad from 'react-lazyload';
 
 const FormItem = Form.Item;
-const dateFormat = 'YYYY-MM-DD';
+const dateFormat = 'YYYY.MM.DD';
 
 export default class AuthorTable extends React.PureComponent<AuthorsTableProps> {
 
@@ -152,10 +152,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
       {
         title: 'Edit',
         render: (text, record) => 
-        <LazyLoad
-          height="25px"          
-          debounce={true}
-          once>
         <div>
             <Modal
                 onOk={() => this.editAuthor(record.key)}
@@ -195,13 +191,15 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
                     format={dateFormat} 
                     style={{marginLeft: 5}}
                     onChange={this.changeDoB}
+                    //onChange={(value, dateString) => this.changeDoD(value, dateString)}
                     placeholder={"Date of Birth"}
                   />
                    <DatePicker 
                       format={dateFormat} 
                       style={{marginLeft: 5}}
                       onChange={this.changeDoD}
-                      placeholder={"Date of Birth"}
+                     // onChange={(value, dateString) => this.changeDoD(value, dateString)}
+                      placeholder={"Date of Death"}
                     />
                 </FormItem>                                 
               </Form>
@@ -213,7 +211,6 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
               <Icon type="edit" />
             </Button>          
         </div>
-        </LazyLoad>
       }
     ]
     

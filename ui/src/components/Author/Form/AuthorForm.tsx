@@ -3,7 +3,7 @@ import { Input, Icon, Form, Button, Col, Row, DatePicker, message } from 'antd';
 import { AuthorFormProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 const FormItem = Form.Item;
-const dateFormat = 'YYYY/MM/DD';
+const dateFormat = 'YYYY.MM.DD';
 
 export default class AuthorForm extends React.Component<AuthorFormProps> {
 
@@ -146,7 +146,8 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
               <DatePicker 
                 format={dateFormat} 
                 style={{marginLeft: 5}}
-                onChange={this.changeDoB}
+                //onChange={this.changeDoB}
+                onChange={(value, dateString) => this.changeDoD(value, dateString)}
                 placeholder={"Date of Birth"}
                 
                 

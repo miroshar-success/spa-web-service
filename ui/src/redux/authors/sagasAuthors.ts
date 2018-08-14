@@ -145,7 +145,7 @@ function* editData(params: EditDataProps): IterableIterator<any> {
   } = params;
 
   try {    
-    const { data } = yield call(Api.editAuthor,  dod, dob, surname, name,  _id);
+    const { data } = yield call(Api.editAuthor,  dob, dod, surname, name,  _id);
     const pagination = yield select(getPagination, prefix);
     const newPagination = updatePaginationIfNeeded(pagination,  data)
     yield fork(loadData, {

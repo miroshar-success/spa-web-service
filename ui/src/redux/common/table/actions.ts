@@ -43,11 +43,11 @@ export const sortBookData = (prefix: string) => createAction(`${prefix}/${TableA
 });
 
 export const editAuthorData = (prefix: string) => createAction(`${prefix}/${TableActions.EDIT_DATA}`, resolve => {
-  return (_id: string, name: string, surname: string, dob: number, dod: string) => resolve({ _id, name, surname, dob, dod })
+  return (_id: string, name: string, surname: string, dob: string, dod: string) => resolve({ _id, name, surname, dob, dod })
 });
 
 export const addAuthorData = (prefix: string) => createAction(`${prefix}/${TableActions.ADD_DATA}`, resolve => {
-  return (name: string, surname: string, dob: number, dod: string) => resolve({ name, surname, dob, dod })
+  return (name: string, surname: string, dob: string, dod: string) => resolve({ name, surname, dob, dod })
 });
 
 
