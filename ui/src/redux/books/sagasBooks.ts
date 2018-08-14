@@ -282,7 +282,7 @@ export function* sortDataSaga(getSuccessPayload: Function): IterableIterator<any
 
 
 export function* addDataSaga(getSuccessPayload: Function): IterableIterator<any> {
-  while (true) {
+  
     const { payload: { name, author, cost, genre } } = yield take(`@@books/ADD_DATA`);
     yield fork(addData, {
       name,
@@ -290,8 +290,16 @@ export function* addDataSaga(getSuccessPayload: Function): IterableIterator<any>
       cost,
       genre,
       payloadFunc: getSuccessPayload,
+      
     });
-  }
+}
+
+export function* addDataFailSaga(): IterableIterator<any> {
+  
+  const { payload: { error } } = yield take(`@@books/ADD_DATA_FAILURE`);
+  yield fork(addData, {
+    error
+  });
 }
 
 export function* editDataSaga(getSuccessPayload: Function): IterableIterator<any> {

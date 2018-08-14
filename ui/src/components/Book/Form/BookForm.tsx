@@ -110,29 +110,14 @@ export default class BookForm extends React.Component<BookFormProps> {
     const {
       pagination,
       addBook,
-     // addBookFail,
+      addBookFailure,
       error                     // what is in here???
     } = this.props;   
     addBook(name, author, cost, genre, pagination);
-    if (error != undefined) {
-      this.setState({
-        name: "",
-        author: undefined,
-        cost: cost,
-        genre: genre,
-        url: pagination,    
-        validateStatusErrorName: undefined,
-        validateStatusErrorAuthor: undefined,
-        validateStatusErrorCost: undefined,
-        validateStatusErrorGenre: undefined,    
-        nameError: "",    
-        authorError: "",
-        costError: "",
-        genreError: ""
-      });
-    } else {
-      this.defaultState();
-    }
+    addBookFailure(error)
+
+    this.defaultState();
+    
   }   
 
   change = (e: any) => {            
