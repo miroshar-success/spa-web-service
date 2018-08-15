@@ -110,11 +110,11 @@ export default class BookForm extends React.Component<BookFormProps> {
     const {
       pagination,
       addBook,
-      addBookFailure,
-      error                     // what is in here???
+      //addBookFailure,
+      //error                     // what is in here???
     } = this.props;   
     addBook(name, author, cost, genre, pagination);
-    addBookFailure(error)
+    //addBookFailure(error)
 
     this.defaultState();
     
@@ -152,11 +152,9 @@ export default class BookForm extends React.Component<BookFormProps> {
     const err = this.validate();
     //const err2 = this.validate2(this.state.name, this.state.author);
     
-    if(err!=true ) {
+    if(err != true ) {
       this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
-      
-      //this.defaultState();
-     
+      this.defaultState();     
     }  
   };
       

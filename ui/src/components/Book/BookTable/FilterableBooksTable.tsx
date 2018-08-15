@@ -29,7 +29,7 @@ export interface BooksTableProps {
     readonly error: string; 
     readonly pagination: Pagination;
     addBook: (name: string, author: string, cost: number, genre: string, pagination: Pagination) => object;
-    addBookFailure: (error: string) => object;
+    //addBookFailure: (error: string) => object;
   }
 
   export interface FilterPanelProps {
@@ -51,7 +51,7 @@ export interface BooksTableProps {
         searchBook,
         removeBook,
         addBook,
-        addBookFailure,
+        //addBookFailure,
         editBook,
         sortBook,                  
       } = this.props
@@ -65,7 +65,7 @@ export interface BooksTableProps {
                   <BookForm
                     error={error}
                     addBook={addBook}
-                    addBookFailure={addBookFailure}
+                    //addBookFailure={addBookFailure}
                     pagination={pagination} 
                     />
                 </Col>
@@ -83,8 +83,7 @@ export interface BooksTableProps {
                     //error={error}
                     loadBooks={loadBooks}            
                     removeBook={removeBook}
-                    editBook={editBook}  
-                               
+                    editBook={editBook}
                   />
                 </Col>                
               </Row>
