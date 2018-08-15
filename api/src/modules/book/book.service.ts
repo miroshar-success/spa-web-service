@@ -19,26 +19,19 @@ export default class BookService {
     async newBook(_name: String, _author: String, _cost: Number, _genre: String) {
                         
         var checkBooks = await this.findBookByNameAndAuthor(_name, _author);
-        const   book = new this.bookModel();
+        const book = new this.bookModel();
         if(checkBooks.length == 0) {
-                    
             book.id = ObjectID;
             book.name = _name;
             book.author =_author;
             book.cost = _cost;
-            book.genre = _genre;                
-                
-            if(nameFile.length === 0)
-                book.url = "NO_IMAGE.png";
-            else
-                book.url = nameFile;
+            book.genre = _genre;             
+            book.url = (nameFile.length === 0) ? "NO_IMAGE.png" : nameFile;
 
             nameFile = "";
             return await book.save();
-        } else {
-           
-            throw new ForbiddenException();
-        }
+        } else throw new ForbiddenException();
+        
     }   
     
     async findBookByNameAndAuthor(_name: String, _author: String): Promise<Book[]> {    
@@ -46,11 +39,10 @@ export default class BookService {
     }
 
     async uploadBook(file: Buffer) {
-
-        var fs = require('fs'), randomstring = require('randomstring');
-
-            nameFile = randomstring.generate(8) + '.jpg';
-        var wstream = fs.createWriteStream('../../../images/' + nameFile);
+        var fs = require('fs'), 
+            randomstring = require('randomstring'),
+            nameFile = randomstring.generate(8) + '.jpg',
+            wstream = fs.createWriteStream('../../../images/' + nameFile);
             
         wstream.write(file.buffer);        
         wstream.end();        
@@ -68,18 +60,14 @@ export default class BookService {
         return await this.bookModel.paginate({}, {offset, limit});  
     }
     
-    async search(search): Promise<Book[]> {
-        
+    async search(search): Promise<Book[]> {        
         if (search.length === 0) {
             return await this.bookModel.paginate({}, {limit: 10})
         } else {
-
-            if((parseInt(search)) >= 0) {
-                return await this.bookModel.paginate({ $or: [{cost: parseInt(search)}, {name: search}]  })
-            }
-            else {
-                return await this.bookModel.paginate({$text: {$search: search}}, {limit: 10})
-            }
+            if((parseInt(search)) >= 0) 
+                return await this.bookModel.paginate({ $or: [{cost: parseInt(search)}, {name: search}] })            
+            else 
+                return await this.bookModel.paginate({$text: {$search: search}}, {limit: 10})            
         }    
     }
 
@@ -110,18 +98,11 @@ export default class BookService {
     
     async commonSort(field: string, order: string, genre: string, startCost: number, endCost: number): Promise<Book> {
                 
-        var sort, genreNames;
-      
-        if (typeof(genre) != "undefined")      
-            genreNames = genre.split(',');
-        else
-            genreNames = ["Folklore", "Horror", "Humor", "Drama", "Fantasy"];
-            
-        if (typeof(startCost) == "undefined") 
-            startCost = 0;        
-         
-        if (typeof(endCost) == "undefined") 
-            endCost = Number.MAX_VALUE;
+        var sort;        
+        var genreNames = (typeof(genre) != "undefined") ? genre.split(',') : ["Folklore", "Horror", "Humor", "Drama", "Fantasy"];    
+
+        if (typeof(startCost) == "undefined") startCost = 0;       
+        if (typeof(endCost) == "undefined") endCost = Number.MAX_VALUE;
          
         if (field == "name")         
             sort = {name: order};
@@ -132,8 +113,6 @@ export default class BookService {
         if (field == "cost")
             sort = {cost: order};  
         
-        return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost}, genre:genreNames }).sort(sort);
-        
-    }
-    
+        return await this.bookModel.find({ cost: {$gte: startCost, $lte: endCost}, genre:genreNames }).sort(sort);        
+    }    
 }

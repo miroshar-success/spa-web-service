@@ -23,7 +23,7 @@ import {
     @ApiImplicitQuery({ name: "author", required: true, type: String })
     @ApiImplicitQuery({ name: "cost", required: true, type: Number }) 
     @ApiImplicitQuery({ name: "genre", required: true, type: String})
-    async newBook(@Query() params: any ){
+    async newBook(@Query() params: any) {
       return await this.bookService.newBook(params.name, params.author, params.cost, params.genre);
     }
 
@@ -37,7 +37,7 @@ import {
     @ApiImplicitQuery({ name: "_id", required: true, type: String })
     @UseInterceptors(FileInterceptor('file'))
     async postloadFile(@UploadedFile() file: Buffer, @Query('_id') _id) {      
-      this.bookService.postloadBook(file, _id);
+      await this.bookService.postloadBook(file, _id);
     }
 
     @ApiImplicitQuery({ name: "offset", required: true, type: Number })
