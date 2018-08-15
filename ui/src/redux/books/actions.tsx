@@ -7,7 +7,7 @@ import {
     addBookData,
     editBookData,
     sortBookData,
-    addBookFailure,
+    //addBookFailure,
   } from '@redux/common/table/actions';
 
   
@@ -20,7 +20,7 @@ import {
   export const searchBook = searchData(prefix);
   export const removeBook = removeData(prefix);
   export const addBook = addBookData(prefix);
-  export const addBookFail = addBookFailure(prefix);
+  //export const addBookFail = addBookFailure(prefix);
   export const editBook = editBookData(prefix);
   export const sortBook = sortBookData(prefix);
   

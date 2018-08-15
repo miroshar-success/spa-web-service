@@ -53,14 +53,14 @@ export function booksReducer(state: TableStateShape  = initialState, action: any
         error: '',        
       }
     }
-    case `@@books/LOAD_DATA_FAILURE`: {
-      const { error } = action.payload;
-      return {
-        ...state,
-        loading: false,
-        error,
-      }
-    }
+    // case `@@books/LOAD_DATA_FAILURE`: {
+    //   const { error } = action.payload;
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error,
+    //   }
+    // }
     case `@@books/ADD_DATA_FAILURE`: {
       const { error } = action.payload;
       return {

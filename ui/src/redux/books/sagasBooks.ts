@@ -38,6 +38,7 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
         //}
       },
     })
+    console.log("try clause load data")
   } catch (error) {
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
@@ -45,6 +46,7 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
         error: error.message,
       }
     })
+    console.log("catch clause load data")
   }
 }
 
@@ -165,10 +167,12 @@ function* addData(params: AddDataProps): IterableIterator<any> {
       needDelay: false,
       payloadFunc,
     })
+    console.log("try clause")
   } catch (error) {
+    console.log("catch clause")
     message.error(error.message)
      yield put({
-       type: `@@books/ADD_DATA_FAILURE`,
+       type: `@@books/LOAD_DATA_FAILURE`,
        payload: {
          error: error.message,
        }
@@ -295,13 +299,12 @@ export function* addDataSaga(getSuccessPayload: Function): IterableIterator<any>
     
 }
 
-export function* addDataFailSaga(): IterableIterator<any> {
-  
-  const { payload: { error } } = yield take(`@@books/ADD_DATA_FAILURE`);
-  yield fork(addData, {
-    error
-  });
-}
+// export function* addDataFailSaga(): IterableIterator<any> {  
+//   const { payload: { error } } = yield take(`@@books/ADD_DATA_FAILURE`);
+//   yield fork(addData, {
+//     error
+//   });
+// }
 
 export function* editDataSaga(getSuccessPayload: Function): IterableIterator<any> {
   while (true) {
