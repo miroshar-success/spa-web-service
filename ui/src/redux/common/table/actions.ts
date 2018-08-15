@@ -17,9 +17,9 @@ export const loadDataFailure = (prefix: string) => createAction(`${prefix}/${Tab
   return (error: string) => resolve({ error })
 });
 
-export const addBookFailure = (prefix: string) => createAction(`${prefix}/${TableActions.ADD_DATA_FAILURE}`, resolve => {
-  return (error: string) => resolve({ error })
-});
+// export const addBookFailure = (prefix: string) => createAction(`${prefix}/${TableActions.ADD_DATA_FAILURE}`, resolve => {
+//   return (error: string) => resolve({ error })
+// });
 
 export const searchData = (prefix: string) => createAction(`${prefix}/${TableActions.SEARCH_DATA}`, resolve => {
   return (value: string) => resolve({ value })
