@@ -11,7 +11,7 @@ export interface RootState {
 
 const rootReducer: Reducer<RootState> = combineReducers<RootState>({  
   authors: authorReducer,
-  books: booksReducer 
+  books: booksReducer
   
 })
 

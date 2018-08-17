@@ -38,7 +38,7 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
         //}
       },
     })
-    console.log("try clause load data")
+    //console.log("try clause load data")
   } catch (error) {
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
@@ -46,7 +46,7 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
         error: error.message,
       }
     })
-    console.log("catch clause load data")
+    //console.log("catch clause load data")
   }
 }
 
@@ -155,9 +155,11 @@ function* addData(params: AddDataProps): IterableIterator<any> {
     payloadFunc,
   } = params;
 
-  try {
-    
+  try {    
     const { data } = yield call(Api.addBooks, name, author, cost, genre);
+    
+    //console.log(data);
+
     const pagination = yield select(getPagination);
     const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
     message.success("Success");
@@ -167,9 +169,9 @@ function* addData(params: AddDataProps): IterableIterator<any> {
       needDelay: false,
       payloadFunc,
     })
-    console.log("try clause")
+    //console.log("try clause")
   } catch (error) {
-    console.log("catch clause")
+    //console.log("catch clause")
     message.error(error.message)
      yield put({
        type: `@@books/LOAD_DATA_FAILURE`,

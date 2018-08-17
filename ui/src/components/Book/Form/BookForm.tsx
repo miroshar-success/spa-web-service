@@ -61,9 +61,19 @@ export default class BookForm extends React.Component<BookFormProps> {
   // };
 
   validate = () => {
-    let isError = false; 
-    
 
+    this.setState({          
+      validateStatusErrorName: undefined,
+      validateStatusErrorAuthor: undefined,
+      validateStatusErrorCost: undefined,
+      validateStatusErrorGenre: undefined,    
+      nameError: "",    
+      authorError: "",
+      costError: "",
+      genreError: ""
+    });
+
+    let isError = false;    
     if(this.state.name.length == 0 ) {
       isError = true;
       this.setState({
@@ -115,9 +125,7 @@ export default class BookForm extends React.Component<BookFormProps> {
     } = this.props;   
     addBook(name, author, cost, genre, pagination);
     //addBookFailure(error)
-
-    this.defaultState();
-    
+    //this.defaultState();    
   }   
 
   change = (e: any) => {            
@@ -147,13 +155,14 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   onSubmit = () => {
     
-    this.defaultState();
-    
     const err = this.validate();
     //const err2 = this.validate2(this.state.name, this.state.author);
     
-    if(err != true ) {
-      this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
+    if(err != true) {
+      var res = this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
+      
+      console.log("res: " + res);
+
       this.defaultState();     
     }  
   };
