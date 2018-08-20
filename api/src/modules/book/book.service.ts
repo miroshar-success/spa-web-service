@@ -17,7 +17,7 @@ export default class BookService {
     constructor(@Inject('BookModelToken') private readonly bookModel: Model<Book>) {}
         
     async newBook(_name: String, _author: String, _cost: Number, _genre: String) {
-                        
+        console.log(_name, _author, _genre, _cost)                
         var checkBooks = await this.findBookByNameAndAuthor(_name, _author);
         const book = new this.bookModel();
         if(checkBooks.length == 0) {

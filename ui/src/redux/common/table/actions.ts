@@ -14,6 +14,7 @@ export const loadDataSuccess = (prefix: string) => createAction(`${prefix}/${Tab
 });
 
 export const loadDataFailure = (prefix: string) => createAction(`${prefix}/${TableActions.LOAD_DATA_FAILURE}`, resolve => {
+  
   return (error: string) => resolve({ error })
 });
 

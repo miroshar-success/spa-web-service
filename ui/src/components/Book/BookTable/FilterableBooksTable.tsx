@@ -64,7 +64,7 @@ export interface BooksTableProps {
                     onSearch={searchBook} />
                   <BookForm
                     error={error}
-                    addBook={addBook}
+                    addBook={addBook}                    
                     //addBookFailure={addBookFailure}
                     pagination={pagination} 
                     />
@@ -83,8 +83,7 @@ export interface BooksTableProps {
                     //error={error}
                     loadBooks={loadBooks}            
                     removeBook={removeBook}
-                    editBook={editBook}  
-                               
+                    editBook={editBook}
                   />
                 </Col>                
               </Row>
