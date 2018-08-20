@@ -14,6 +14,7 @@ export const searchBooks = (search: string) => {
   return axios.get(`/data/books/find?search=${search}`);
 }
 
+<<<<<<< HEAD
 export const addBooks = (name: string, author: string, cost: number, genre: string,) => {    
   return axios.post(`data/books/newbook?genre=${genre}&cost=${cost}&author=${author}&name=${name}`)
   .then(response => {
