@@ -19,7 +19,11 @@ module.exports = merge(common, {
     },
 
     proxy: {
-      '*': {
+      '/data/books': {
+        target: 'http://localhost:3000',
+        secure: false,
+      },
+      '/data/authors': {
         target: 'http://localhost:3000',
         secure: false,
       },

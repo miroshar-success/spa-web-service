@@ -30,7 +30,7 @@ export default class AuthorService {
         
     }   
 
-    async findAllAuthors(): Promise<Author[]> {
+    async findAllAuthors(): Promise<Author[]> {  
         return await this.authorModel.aggregate(
             [  
                 {   
@@ -38,11 +38,13 @@ export default class AuthorService {
                         name: "$name",
                         surname: "$surname",                        
                         dob: { $dateToString: { format: "%d.%m.%Y", date: "$dob" } },
-                        dod: { $dateToString: { format: "%d.%m.%Y", date: "$dod" } },                        
+                        dod: { $dateToString: { format: "%d.%m.%Y", date: "$dod" } },  
+                                          
                      }
                 }
             ]
         );
+        
     }
 
     async removeById(_id: String): Promise<Author> {
@@ -55,9 +57,9 @@ export default class AuthorService {
 
     async search (searchString): Promise<Author> {
         if (searchString.length === 0) 
-            return await this.authorModel.paginate({}, {limit: 10000})
+            return await this.authorModel.paginate({}, {limit: 10})
         else 
-            return await this.authorModel.paginate({$text: {$search: searchString}}, {limit: 10000})        
+            return await this.authorModel.paginate({$text: {$search: searchString}}, {limit: 10})        
     }
 
     async searchBook (): Promise<Author> {

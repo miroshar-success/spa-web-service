@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, Col, Row, DatePicker, message } from 'antd';
+import { Input, Icon, Form, Button, Col, Row, DatePicker, message, Card } from 'antd';
 import { AuthorFormProps } from '@components/Author/AuthorTable/FilterableAuthorsTable';
 
 const FormItem = Form.Item;
@@ -168,6 +168,10 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
               Add author
             </Button>
           </FormItem>
+          <Card title="Card title" extra={<a href="#">More</a>} style={{ width: 300 }}>
+            <p>Card content</p>
+            
+          </Card>
         </Form> 
       </Col>      
     </Row>

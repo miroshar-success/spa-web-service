@@ -23,7 +23,8 @@ export default class BookForm extends React.Component<BookFormProps> {
     costError: "",
     genreError: "",    
     authorsOptions: [],
-    error: ""
+    error: "",
+
   };
   
   getAuthors = () => {

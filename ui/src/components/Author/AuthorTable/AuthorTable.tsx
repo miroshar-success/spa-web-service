@@ -77,26 +77,20 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
         key: 'name',  
         width: '300px',  
         render: (text, record) => 
-        <LazyLoad
-          height="25px"          
-          debounce={true}
-          once>
+        
           <span>
           {record.name }
           </span>
-        </LazyLoad>  
+        
       },      
       {
         title: 'Surname',
         dataIndex: 'surname',
         key: 'surname',
         render: (text, record) => 
-        <LazyLoad
-          height="25px"          
-          debounce={true}
-          once>
+        
         <span>{record.surname}</span>
-        </LazyLoad>
+        
       },
       {
         title: 'Lifetime',
@@ -116,15 +110,12 @@ export default class AuthorTable extends React.PureComponent<AuthorsTableProps> 
             fieldDeath = record.dod;
           }
           return(
-            <LazyLoad
-            height="25px"          
-            debounce={true}
-            once>
+            
               <span>
                 {fieldBirth + " — " + fieldDeath}
               </span>
-          </LazyLoad>);
-        }  
+          )
+        } 
       },
       { 
         title: "Delete",                               

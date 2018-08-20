@@ -24,9 +24,9 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
     if (needDelay) {
       yield call(delay, 500);
     }
-   
+
     const docs = yield call(Api.fetchData, url);
-    
+
     yield put({
       type: `@@books/LOAD_DATA_SUCCESS`,
       payload: {        
