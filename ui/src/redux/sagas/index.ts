@@ -13,7 +13,6 @@ export default function* rootSaga() {
     fork(addBookSaga),
     fork(editBookSaga),
     fork(sortBookSaga),
-    //fork(addBookFailSaga),
 
     fork(loadAuthorsSaga),
     fork(searchAuthorSaga),

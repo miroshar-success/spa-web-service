@@ -91,18 +91,10 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
 
   addAuthor = (name: string, surname: string, dob: string, dod: string) => {
     const {
-      //pagination,
       addAuthor
     } = this.props;   
         
-    var res = addAuthor(name, surname, dob, dod);
-    console.log(res)
-    // if (re
-    //  == 403){
-    //   message.success('Error!');
-    // } else {
-    //   message.success('Added!');
-    // }
+    addAuthor(name, surname, dob, dod);
     message.success('Added!');
   }  
       
@@ -172,6 +164,7 @@ export default class AuthorForm extends React.Component<AuthorFormProps> {
             <p>Card content</p>
             
           </Card>
+          
         </Form> 
       </Col>      
     </Row>

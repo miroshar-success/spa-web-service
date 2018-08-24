@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Icon, Form, Button, Upload, Select, Col, Row  } from 'antd';
+import { Input, Icon, Form, Button, Upload, Select, Col, Row, message  } from 'antd';
 import { BookFormProps } from '@components/Book/BookTable/FilterableBooksTable';
 import axios from 'axios';
 
@@ -119,14 +119,12 @@ export default class BookForm extends React.Component<BookFormProps> {
 
   addBook = (name: string, author: any, cost: number, genre: any) => {
     const {
-      pagination,
+     // pagination,
       addBook,
-      //addBookFailure,
-      //error                     // what is in here???
-    } = this.props;   
-    addBook(name, author, cost, genre, pagination);
-    //addBookFailure(error)
-    //this.defaultState();    
+    } = this.props;
+
+    addBook(name, author, cost, genre);
+    message.success('Added!');  
   }   
 
   change = (e: any) => {            
@@ -159,11 +157,10 @@ export default class BookForm extends React.Component<BookFormProps> {
     const err = this.validate();
     //const err2 = this.validate2(this.state.name, this.state.author);
     
-    if(err != true) {
-      var res = this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
+    if(!err) {
+      console.log(err)
+      this.addBook(this.state.name, this.state.author, Number.parseInt(this.state.cost), this.state.genre);
       
-      console.log("res: " + res);
-
       this.defaultState();     
     }  
   };

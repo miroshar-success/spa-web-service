@@ -1,5 +1,4 @@
 import { take, call, put, fork, cancel, select } from 'redux-saga/effects';
-import {message} from 'antd'; 
 import { delay } from 'redux-saga';
 import { 
   Pagination, 
@@ -38,7 +37,6 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
         //}
       },
     })
-    //console.log("try clause load data")
   } catch (error) {
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
@@ -46,7 +44,6 @@ function* loadData(params: LoadDataProps): IterableIterator<any> {
         error: error.message,
       }
     })
-    //console.log("catch clause load data")
   }
 }
 
@@ -156,23 +153,16 @@ function* addData(params: AddDataProps): IterableIterator<any> {
   } = params;
 
   try {    
-    const { data } = yield call(Api.addBooks, name, author, cost, genre);
-    
-    //console.log(data);
-
+    const { data } =yield call(Api.addBooks, name, author, cost, genre);
     const pagination = yield select(getPagination);
-    const newPagination = updatePaginationIfNeeded(pagination, typeof data === 'object' ? data.total : data)
-    message.success("Success");
+    const newPagination = updatePaginationIfNeeded(pagination, data)
     yield fork(loadData, {
       url: buildUrlForLoadData(newPagination),
       currentPage: newPagination.current,
       needDelay: false,
       payloadFunc,
     })
-    //console.log("try clause")
   } catch (error) {
-    //console.log("catch clause")
-    message.error(error.message)
      yield put({
        type: `@@books/LOAD_DATA_FAILURE`,
        payload: {
@@ -203,7 +193,6 @@ function* editData(params: EditDataProps): IterableIterator<any> {
       payloadFunc,
     })
   } catch (error) {
-    //console.log(error)
     yield put({
       type: `@@books/LOAD_DATA_FAILURE`,
       payload: {
@@ -215,17 +204,10 @@ function* editData(params: EditDataProps): IterableIterator<any> {
 
 // helpers
 const buildUrlForLoadData = (params: Pagination | string): string => {
- // const fullPrefix = `data/${prefix.slice(2)}`;
-  
   if (typeof params === 'string') { 
-    return `http://localhost:4000/data/books/find?search=${encodeURIComponent(params)}`
-    
+    return `http://localhost:4000/data/books/find?search=${encodeURIComponent(params)}` 
   } else {
-    //const { pageSize, current } = params;
-   // return `${fullPrefix}?value=&offset=${current > 1 ? pageSize * (current - 1) : 0}&limit=${pageSize}`
-   
-   return `http://localhost:4000/data/books/all`
-    
+    return `http://localhost:4000/data/books/all`
   } 
 }
 

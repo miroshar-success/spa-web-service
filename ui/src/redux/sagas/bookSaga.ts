@@ -19,10 +19,6 @@ export function* addBookSaga(): IterableIterator<any> {
   yield fork(addDataSaga, getSuccessPayload)
 }
 
-// export function* addBookFailSaga(): IterableIterator<any> {
-//   yield fork(addDataFailSaga)
-// }
-
 export function* editBookSaga(): IterableIterator<any> {
   yield fork(editDataSaga,  getSuccessPayload)
 }
